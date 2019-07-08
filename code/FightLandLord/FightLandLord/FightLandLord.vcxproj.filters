@@ -43,10 +43,16 @@
     <ClCompile Include="window.cpp">
       <Filter>windowview\window</Filter>
     </ClCompile>
+    <ClCompile Include="app.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="window.h">
       <Filter>windowview\window</Filter>
+    </QtMoc>
+    <QtMoc Include="app.h">
+      <Filter>app</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
