@@ -380,3 +380,6 @@ MigrationBackup/
 *.exe
 *.out
 *.app
+
+# Qt Generated Files
+FightLandLord/GeneratedFiles
