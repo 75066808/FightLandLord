@@ -43,8 +43,13 @@
     <ClCompile Include="window.cpp">
       <Filter>windowview\window</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="app.cpp">
       <Filter>app</Filter>
+=======
+    <ClCompile Include="common.cpp">
+      <Filter>utility\common</Filter>
+>>>>>>> dev
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
