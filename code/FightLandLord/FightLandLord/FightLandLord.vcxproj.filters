@@ -43,6 +43,9 @@
     <ClCompile Include="window.cpp">
       <Filter>windowview\window</Filter>
     </ClCompile>
+    <ClCompile Include="common.cpp">
+      <Filter>utility\common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="window.h">
