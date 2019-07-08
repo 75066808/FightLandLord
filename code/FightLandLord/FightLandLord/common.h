@@ -24,7 +24,6 @@ struct CARD {
 	CARD& operator=(const CARD& r);
 };
 
-
 class CARDSET{
 public:
 	CARDSET();
