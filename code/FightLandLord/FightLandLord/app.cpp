@@ -18,196 +18,259 @@ int App::run(void)
 	return app.exec();
 }
 
-void App::connectSlot(void)
-{
-	if (state == UNENTER_STATE)
-	{
-		tcpSocket->abort(); // disconnect current connection
-		tcpSocket->connectToHost(QHostAddress(IP_NUM), PORT_NUM); // send connect request
-	}
-}
-
-void App::disconnectSlot(void)
-{
-	if (state != UNENTER_STATE)
-	{
-		tcpSocket->disconnectFromHost(); // disconnect from host
-	}
-}
-
-void App::readySlot(void)
-{
-	if (state == UNREADY_STATE) // in unready state
-	{
-		QByteArray data;
-		data[0] = READY;
-		tcpSocket->write(data); // send ready signal
-	}
-}
-
-void App::chooseLandLordSlot(void)
-{
-	if (state == CHOOSE_TURN_STATE) // in choose turn
-	{
-		QByteArray data;
-		data[0] = CHOOSE_LANDLORD;
-		tcpSocket->write(data);
-	}
-}
-
-void App::skipLandLordSlot(void)
-{
-	if (state == CHOOSE_TURN_STATE) // in choose turn
-	{
-		QByteArray data;
-		data[0] = SKIP_LANDLORD;
-		tcpSocket->write(data); // send skip landlord signal
-	}
-}
-
-void App::playCardSlot(QByteArray card)
-{
-	if (state == PLAY_TURN_NO_SKIP_STATE || state == PLAY_TURN_STATE) // in play turn
-	{
-		QByteArray data;
-		data[0] = PLAY_CARD;
-		tcpSocket->write(data); // send play card signal
-	}
-}
-
-void App::skipCardSlot(void)
-{
-	if (state == PLAY_TURN_STATE) // in play turn ( enable skipping )
-	{
-		QByteArray data;
-		data[0] = SKIP_CARD;
-		tcpSocket->write(data); // send skip card signal
-	}
-}
-
-void App::dealCardOverSlot(void) 
+void App::windowToAppSlot(Singal &signal)
 {
 	QByteArray data;
-	data[0] = DEAL_CARD_OVER;
-	tcpSocket->write(data); // send deal over signal
+
+	switch (signal.signalType)
+	{
+	case ORIGIN:
+		switch (signal.signalCotent)
+		{
+		case CONNECT:
+			if (state == UNENTER_STATE)
+			{
+				tcpSocket->abort(); // disconnect current connection
+				tcpSocket->connectToHost(QHostAddress(IP_NUM), PORT_NUM); // send connect request
+			}
+			break;
+		case DISCONNECT:
+			if (state != UNENTER_STATE)
+			{
+				tcpSocket->disconnectFromHost(); // disconnect from host
+			}
+			break;
+		case READY:
+			if (state == UNREADY_STATE) // in unready state
+			{
+				data[0] = BROADCAST;
+				data[1] = READY;
+				tcpSocket->write(data); // broadcast ready signal
+			}
+			break;
+		case CHOOSE_LANDLORD:
+			if (state == CHOOSE_TURN_STATE) // in choose turn
+			{
+				data[0] = BROADCAST;
+				data[1] = CHOOSE_LANDLORD;
+				tcpSocket->write(data);
+			}
+			break;
+		case SKIP_LANDLORD:
+			if (state == CHOOSE_TURN_STATE) // in choose turn
+			{
+				data[0] = BROADCAST;
+				data[1] = SKIP_LANDLORD;
+				tcpSocket->write(data); // broadcast skip landlord
+			}
+			break;
+		case PLAY_CARD:
+			if (state == PLAY_TURN_NO_SKIP_STATE || state == PLAY_TURN_STATE) // in play turn
+			{
+				signal.signalType = CHECK;
+				emit appToViewModelSignal(signal); // send to viewmodel to check
+			}
+			break;
+		case SKIP_CARD:
+			if (state == PLAY_TURN_STATE) // in play turn ( enable skipping )
+			{
+				signal.signalType = CHECK;
+				emit appToViewModelSignal(signal); // send to viewmodel to check
+			}
+			break;
+		default:
+			return;
+		}
+		break;
+
+	case MODIFY_FEEDBACK:
+		if (signal.playerType == SELF)
+		{
+			switch (signal.signalCotent)
+			{
+			case CONNECT_SUCCESS:
+				state = UNREADY_STATE;
+				break;
+			case READY:
+				state = READY_STATE;
+				break;
+			case PLAY_TURN:
+				state = PLAY_TURN_STATE;
+				break;
+			case PLAY_TURN_NO_SKIP:
+				state = PLAY_PRE_NO_SKIP_STATE;
+				break;
+			case CHOOSE_TURN:
+				state = CHOOSE_TURN_STATE;
+				break;
+			case LOSE_GAME:
+			case WIN_GAME:
+			case PLAYER_QUIT:
+				state = UNREADY_STATE;
+				break;
+			default:
+				return;
+			}
+		}
+		
+
+		data[0] = ALL_FINISH;
+		data[1] = signal.signalCotent;
+		tcpSocket->write(data); // signal chain is finished
+		break;
+
+	default:
+		return;
+	}
 }
 
-void App::dealLandLordCardOverSlot(void)
+
+void App::viewModelToAppSlot(Singal &signal)
 {
 	QByteArray data;
-	data[0] = DEAL_LANLOARD_OVER;
-	tcpSocket->write(data); // send deal landlord over signal
+
+	switch (signal.signalType)
+	{
+	case CHECK_FEEDBACK:
+		if (signal.legal == 1) // legal
+		{
+			data[0] = BROADCAST;
+			data[1] = signal.signalCotent;
+			tcpSocket->write(data); // broadcast signal
+		}
+		break;
+	case MODIFY_FEEDBACK:
+		signal.signalType = MODIFY;
+		emit appToWindowSignal(signal); // send modify signal to window
+		break;
+	default:
+		return;
+	}
 }
+
+
+
+
 
 void App::readServerData(void)
 {
+	Singal signal;
 	QByteArray data = tcpSocket->readAll(); // read from server
+
+	signal.signalType = MODIFY;
+	signal.playerType = data[0];
+	signal.signalCotent = data[1];
 
 	switch (data.at(1)) // check signal type
 	{
 	case CONNECT_SUCCESS:
-		if (data.at(0) == 0) // for self player
-			state = UNREADY_STATE; // enter the room
-		emit connectSignal(data[1]);
+		if (data.at(0) == SELF) // for self player
+			state = ENTER_FINISH_STATE; // enter the room	
+		emit appToViewModelSignal(signal);
 		break;
 
 	case CONNECT_FAILED:
-		emit disconnectSignal(data[1]);
+		emit appToViewModelSignal(signal);
 		break;
 
 	case READY:
-		if (data.at(0) == 0) // for self player
-			state = READY_STATE; // ready for play
-		emit readySignal(data[1]);
+		if (data.at(0) == SELF) // for self player
+			state = READY_FINISH_STATE; // ready for play
+		emit appToViewModelSignal(signal);
 		break;
 
 	case PLAY_TURN:
-		if (data.at(0) == 0) // for self player
-			state = PLAY_TURN_STATE; // in play turn ( can skip )
-		emit playTurnSignal(data[1]);
+		if (data.at(0) == SELF) // for self player
+			state = PLAY_PRE_STATE; // in play turn ( can skip )
+		emit appToViewModelSignal(signal);
 		break;
 
 	case PLAY_TURN_NO_SKIP:
-		if (data.at(0) == 0) // for self player
-			state = PLAY_TURN_NO_SKIP_STATE; // in play turn ( can't skip )
-		emit playTurnNoSkipSignal(data[1]);
+		if (data.at(0) == SELF) // for self player
+			state = PLAY_PRE_NO_SKIP_STATE; // in play turn ( can't skip )
+		emit appToViewModelSignal(signal);
 		break;
 
 	case CHOOSE_TURN:
-		if (data.at(0) == 0) // for self player
-			state = CHOOSE_TURN_STATE; // in choose turn
-		emit chooseTurnSignal(data[1]);
+		if (data.at(0) == SELF) // for self player
+			state = CHOOSE_PRE_STATE; // in choose turn
+		emit appToViewModelSignal(signal);
 		break;
 
 	case PLAY_CARD:
-		if (data.at(0) == 0) // for self player
+		if (data.at(0) == SELF) // for self player
 			state = TURN_FINISH_STATE; // play turn finished
-		emit playCardSignal(data[1], data);
+		emit appToViewModelSignal(signal);
 		break;
 
 	case SKIP_CARD:
-		if (data.at(0) == 0) // for self player
+		if (data.at(0) == SELF) // for self player
 			state = TURN_FINISH_STATE; // play turn finished
-		emit skipCardSignal(data[1]);
+		emit appToViewModelSignal(signal);
 		break;
 
 	case CHOOSE_LANDLORD:
-		if (data.at(0) == 0)  // for self player
+		if (data.at(0) == SELF)  // for self player
 			state = TURN_FINISH_STATE; // choose turn finished
-		emit chooseLandLordSignal(data[1]);
+		emit appToViewModelSignal(signal);
 		break;
 
 	case SKIP_LANDLORD:
-		if (data.at(0) == 0) // for self player
+		if (data.at(0) == SELF) // for self player
 			state = TURN_FINISH_STATE; // choose turn finished
-		emit skipLandLordSignal(data[1]);
+		emit appToViewModelSignal(signal);
 		break;
 
 	case DEAL_CARD:
-		state = DEAL_CARD_STATE; // start dealing 
-		emit dealCardSignal(data);
+		emit appToViewModelSignal(signal); // start dealing 
 		break;
 
 	case DEAL_LANDLORD:
-		if (data.at(0) == 0)
-		{
-			state = DEAL_CARD_STATE; // start dealing landlord card
-			emit dealLandLordCardSignal(data);
-		}
+		if (data.at(0) == SELF)
+			emit appToViewModelSignal(signal); // start dealing landlord card
 		break;
 
 	case LOSE_GAME:
-		state = UNREADY_STATE; // lose game
-		emit loseGameSignal();
+		state = ENTER_FINISH_STATE; // lose game
+		emit appToViewModelSignal(signal);
 		break;
 
 	case WIN_GAME:
-		state = UNREADY_STATE; // win game
-		emit winGameSignal();
+		state = ENTER_FINISH_STATE; // win game
+		emit appToViewModelSignal(signal);
 		break;
 
 	case PLAYER_QUIT:
-		state = UNREADY_STATE; // set player to unready
-		emit quitSignal(data[0]);
+		state = ENTER_FINISH_STATE; // set player to unready
+		emit appToViewModelSignal(signal);
 		break;
 
 
 	case TIME_OUT:
-		if (state == PLAY_TURN_NO_SKIP_STATE || state == PLAY_TURN_STATE)
+		switch (state)
 		{
-			QByteArray data;
-			data[0] = PLAY_CARD;    // complusorily play card ( or skip )
-			tcpSocket->write(data); // send play card signal
+		case PLAY_TURN_STATE:
 			state = TURN_FINISH_STATE;
-		}
-		else if(state == CHOOSE_TURN_STATE)
-		{
-			QByteArray data;
-			data[0] = SKIP_LANDLORD; // complusorily choose landlord 
-			tcpSocket->write(data);  // send skip landlord signal
-			state = TURN_FINISH_STATE;
-		}
+			signal.playerType = SELF;
+			signal.signalCotent = COM_PLAY;
+			emit appToViewModelSignal(signal); // compulsory to play ( can skip )
 
+		case PLAY_TURN_NO_SKIP_STATE:
+			state = TURN_FINISH_STATE;
+			signal.playerType = SELF;
+			signal.signalCotent = COM_PLAY_NO_SKIP;
+			emit appToViewModelSignal(signal); // compulsory to play ( no skip )
+
+		case CHOOSE_TURN_STATE:
+			state = TURN_FINISH_STATE;
+			signal.playerType = SELF;
+			signal.signalCotent = COM_CHOOSE;
+			emit appToViewModelSignal(signal); // compulsory to choose
+
+		default:
+			return;
+
+		}
 	default:
 		return;
 	}

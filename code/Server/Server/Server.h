@@ -29,6 +29,6 @@ private slots:
 	void readClientData(void);
 
 private:
-	void dealClientData(qint32 sender, qint8 signal);
+	void dealClientData(qint32 sender, QByteArray &data);
 
 };

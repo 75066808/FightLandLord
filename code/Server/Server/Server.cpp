@@ -39,52 +39,80 @@ void Server::readClientData(void)
 		if (data.isEmpty())
 			continue;
 
-		room.broadCastData(index, data); // broad cast to all players
-		QThread::msleep(100);
-		dealClientData(index, data[0]);  // deal the special notify
+		dealClientData(index, data);  // deal the special notify
 	}
 }
 
 
 
 
-void Server::dealClientData(qint32 sender, qint8 signal)
+void Server::dealClientData(qint32 sender, QByteArray &data)
 {
 	QByteArray transData;
-	
-	switch (signal)
+
+	qint8 signalType = data[0];
+	qint8 signalContent = data[1];
+
+	switch (signalType)
 	{
 
-	case READY: // player ready
-		room.ready();
+	case BROADCAST:
+		switch (signalContent)
+		{
+		case READY: // player ready
+			room.readyStart(sender);
+			break;
+
+		case PLAY_CARD: // player plays card
+			room.playCard(sender);
+			break;
+
+		case SKIP_CARD: // play skips card
+			room.skipCard(sender);
+			break;
+
+		case CHOOSE_LANDLORD: // player chooses landlord
+			room.chooseLandLord(sender);
+			break;
+
+		case SKIP_LANDLORD: // player skips landlord
+			room.skipLandLord(sender);
+			break;
+
+		default:
+			return;
+		}
 		break;
 
-	case PLAY_CARD: // player plays card
-		room.playCard();
-		break;
+	case ALL_FINISH:
+		switch (signalContent)
+		{
+		case READY: // player ready
+			room.readyFinish();
+			break;
 
-	case SKIP_CARD: // play skips card
-		room.skipCard();
-		break;
+		case PLAY_CARD: // player plays card
+		case SKIP_CARD: // play skips card
+			room.playNextTurn();
+			break;
 
-	case CHOOSE_LANDLORD: // player chooses landlord
-		room.chooseLandLord(sender);
-		break;
+		case CHOOSE_LANDLORD: // player chooses landlord
+		case SKIP_LANDLORD: // player skips landlord
+			room.chooseNextTurn();
+			break;
 
-	case SKIP_LANDLORD: // player skips landlord
-		room.skipLandLord();
-		break;
+		case DEAL_CARD: // player deals card
+			room.dealCardFinish();
+			break;
+		case DEAL_LANDLORD: // player deals landlord card
+			room.dealLandLordFinish();
+			break;
 
-	case DEAL_CARD_OVER: // finish dealing the card to player
-		room.dealCardOver();
+		default:
+			return;
+		}
 		break;
-
-	case DEAL_LANLOARD_OVER: // finish dealing the landlord card to player
-		room.dealLandLordOver();
-		break;
-
-	default:
-		break;
+	
 	}
 
 }
