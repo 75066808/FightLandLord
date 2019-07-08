@@ -13,8 +13,7 @@ public:
 
 private:
 	Ui::FightLandLordClass* ui;
-public slots:
-	void SignalComing();
+
 };
 
 #endif

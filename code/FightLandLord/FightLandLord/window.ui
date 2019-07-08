@@ -13,21 +13,7 @@
   <property name="windowTitle">
    <string>FightLandLord</string>
   </property>
-  <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="pushButtonTestSignal">
-    <property name="geometry">
-     <rect>
-      <x>810</x>
-      <y>670</y>
-      <width>161</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>SendMySignal</string>
-    </property>
-   </widget>
-  </widget>
+  <widget class="QWidget" name="centralWidget"/>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
