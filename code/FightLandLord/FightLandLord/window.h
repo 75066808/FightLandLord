@@ -1,5 +1,6 @@
 #pragma once
-
+#ifndef WINDOW_H
+#define WINDOW_H
 #include <QtWidgets/QMainWindow>
 #include "ui_window.h"
 
@@ -11,5 +12,9 @@ public:
 	Window(QWidget *parent = Q_NULLPTR);
 
 private:
-	Ui::FightLandLordClass ui;
+	Ui::FightLandLordClass* ui;
+public slots:
+	void SignalComing();
 };
+
+#endif

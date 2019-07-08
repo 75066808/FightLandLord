@@ -45,11 +45,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="window.h">
-      <Filter>windowview\window</Filter>
-    </QtMoc>
-  </ItemGroup>
-  <ItemGroup>
     <QtUic Include="window.ui">
       <Filter>windowview\window</Filter>
     </QtUic>
@@ -58,5 +53,10 @@
     <ClInclude Include="common.h">
       <Filter>utility\common</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="window.h">
+      <Filter>windowview\window</Filter>
+    </QtMoc>
   </ItemGroup>
 </Project>
