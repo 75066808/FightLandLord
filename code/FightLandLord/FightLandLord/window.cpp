@@ -73,7 +73,7 @@ void Window::showCardsInHand()
 
 void Window::addCardInScene(qreal x, qreal y, QPixmap* cardTempPixmap, QGraphicsScene* Scene)
 {
-	cardTempPixmap->load("joker", "jpg");
+	cardTempPixmap->load("poker_resource/joker1", "jpg");
 	Scene->addPixmap(*cardTempPixmap)->setPos(x, y);
 
 }
