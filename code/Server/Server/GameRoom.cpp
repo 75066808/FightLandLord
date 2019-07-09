@@ -118,17 +118,16 @@ void GameRoom::playNextTurn(void)
 	QByteArray data;
 	turnNum = (turnNum + 1) % 3;
 
-	data[0] = 0x00;
 	if (skipPlayNum == 2) // if skips twice
 	{
 		skipPlayNum = 0;
-		data[1] = PLAY_TURN_NO_SKIP; // next player can't skip
-		tcpClient[turnNum]->write(data); // notify next player
+		data[0] = PLAY_TURN_NO_SKIP; // next player can't skip
+		broadCastData(turnNum, data);
 	}
 	else
 	{
-		data[1] = PLAY_TURN; // next play also can skip 
-		tcpClient[turnNum]->write(data); // notify next player
+		data[0] = PLAY_TURN; // next play also can skip 
+		broadCastData(turnNum, data);
 	}
 }
 
@@ -136,7 +135,6 @@ void GameRoom::playNextTurn(void)
 void GameRoom::skipLandLord(qint8 index)
 {
 	QByteArray data;
-
 	data[0] = SKIP_LANDLORD;
 	broadCastData(turnNum, data);
 	skipLandLordNum++;
