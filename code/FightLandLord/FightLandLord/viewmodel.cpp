@@ -15,6 +15,8 @@ void Player::appToViewModelSlot(Singal& signal) {
 	if (signal.signalCotent == CONNECT_SUCCESS) {
 		*status = 1;
 		signal.signalType = MODIFY_FEEDBACK;
+		RuleCardSet zero;
+		(*onHand) = zero + RuleCardSet(signal.cardTransfer);
 		emit viewModelToAppSignal( signal);
 	}
 

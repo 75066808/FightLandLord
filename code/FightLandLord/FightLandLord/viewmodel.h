@@ -6,11 +6,11 @@ class Player : public QObject {
 public:
 	Player();
 	~Player();
-	std::shared_ptr<RuleCardSet> getSelected() {
-		return selected;
+	const qint8* const getSelected() {
+		return selected->getArr();
 	}
-	std::shared_ptr<RuleCardSet> getOnHand() {
-		return selected;
+	const qint8* const getOnHand() {
+		return onHand->getArr();
 	}
 signals:
 	void viewModelToAppSignal(Singal& signal);
@@ -27,11 +27,11 @@ class Table : public QObject {
 public:
 	Table();
 	~Table();
-	std::shared_ptr<RuleCardSet> getOnTable() {
-		return onTable;
+	const qint8* const getOnTable() {
+		return onTable->getArr();
 	}
-	std::shared_ptr<RuleCardSet> getLandLord() {
-		return landLord;
+	const qint8* const getLandLord() {
+		return landLord->getArr();
 	}
 signals:
 	void viewModelToAppSignal(Singal& signal);
