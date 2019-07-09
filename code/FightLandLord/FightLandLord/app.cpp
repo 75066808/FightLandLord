@@ -5,7 +5,15 @@
 App::App(int argc, char *argv[]): app(argc, argv)
 {
 	state = UNENTER_STATE;
-	connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readSeverData()));
+	tcpSocket = new QTcpSocket(this);
+
+	connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readServerData()));
+	connect(&window, SIGNAL(windowToAppSignal(Singal&)), this, SLOT(windowToAppSlot(Singal&)));
+	connect(&player, SIGNAL(viewModelToAppSignal(Singal&)), this, SLOT(viewModelToAppSlot(Singal&)));
+	connect(this, SIGNAL(appToWindowSignal(Singal&)), &window, SLOT(appToWindowSlot(Singal&)));
+	connect(this, SIGNAL(appToViewModelSignal(Singal&)), &player, SLOT(appToViewModelSlot(Singal&)));
+		
+	window.setCurrentCardsInHand(player.getOnHand());
 }
 
 App::~App()
@@ -156,15 +164,18 @@ void App::viewModelToAppSlot(Singal &signal)
 void App::readServerData(void)
 {
 	QByteArray data = tcpSocket->readAll(); // read from server
-
-	QString str(data);
+	QByteArray temp;
 
 	Singal *osignal = new Singal;
 
 	osignal->signalType = MODIFY;
 	osignal->playerType = data[0];
 	osignal->signalCotent = data[1];
-	osignal->cardTransfer = str.mid(2).toLatin1();
+
+	for (qint32 i = 2;i < data.size();i++)
+		temp[i - 2] = data[i];
+
+	osignal->cardTransfer = temp;
 
 	switch (data.at(1)) // check signal type
 	{

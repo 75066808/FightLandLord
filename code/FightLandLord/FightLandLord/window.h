@@ -23,17 +23,17 @@ class Window : public QMainWindow
 
 public:
 	Window(QWidget *parent = Q_NULLPTR);
-	void setCurrentCardsInHand(qint8* cards);
+	void setCurrentCardsInHand(const qint8* cards);
 
 private:
 	Ui::FightLandLordClass ui;
-	qint8* currentCardsInHand;
+	const qint8 *currentCardsInHand;
 	// QPixmap* cardTempPixmap ;
 	// QGraphicsPixmapItem* cardTempPixmapItem;
 	// QGraphicsScene* Scene;
 	void addCardInScene(qreal x, qreal y, QPixmap *cardTempPixmap, QGraphicsScene* scene);
 public slots:
-	void showCardsInHand(Singal &signal);
+	void buttonClick(void);
 	void appToWindowSlot(Singal& signal);
 signals:
 	void windowToAppSignal(Singal &signal);

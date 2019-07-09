@@ -47,6 +47,7 @@ bool GameRoom::connectSocket(QTcpSocket *tcpSocket)
 			if (tcpConnect[i] == 0)
 			{
 				tcpClient[i] = tcpSocket;
+				tcpConnect[i] = 1;
 				break;
 			}
 		}

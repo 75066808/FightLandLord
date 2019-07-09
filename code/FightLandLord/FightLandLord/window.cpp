@@ -7,28 +7,25 @@ Window::Window(QWidget *parent)
 	ui.setupUi(this);
 
 
-	connect(ui.btnShowCard, SIGNAL(clicked()), this, SLOT(appToWindowSlot()));
+	connect(ui.btnShowCard, SIGNAL(clicked()), this, SLOT(buttonClick()));
 
 }
 
-void Window::setCurrentCardsInHand(qint8* cards)
+void Window::setCurrentCardsInHand(const qint8* cards)
 {
 	currentCardsInHand = cards;
 }
 
-void Window::showCardsInHand(Singal &signal)
+
+void Window::appToWindowSlot(Singal& signal)
 {
-
-
-
-
 	QPixmap *cardTempPixmap = new QPixmap();
 
 	QGraphicsScene *Scene = new QGraphicsScene();
 
 	qreal init_x = 10;
 	qreal init_y = 10;
-	
+
 	//int cardNum = 15;
 
 	size_t cardCnt = 0;
@@ -184,21 +181,9 @@ void Window::showCardsInHand(Singal &signal)
 
 
 	ui.graphicsView->setScene(Scene);
-	
+
 	ui.graphicsView->show();
-
-
 	
-
-}
-
-
-void Window::appToWindowSlot(Singal& signal)
-{
-	signal.signalType = ORIGIN;
-	signal.signalCotent = CONNECT;
-
-	emit windowToAppSignal(signal);
 }
 
 void Window::addCardInScene(qreal x, qreal y, QPixmap* cardTempPixmap, QGraphicsScene* Scene)
@@ -208,4 +193,12 @@ void Window::addCardInScene(qreal x, qreal y, QPixmap* cardTempPixmap, QGraphics
 
 }
 
+void Window::buttonClick(void)
+{
+	Singal *signal = new Singal;
 
+	signal->signalType = ORIGIN;
+	signal->signalCotent = CONNECT;
+
+	emit windowToAppSignal(*signal);
+}
