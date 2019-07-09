@@ -28,7 +28,6 @@ public:
 		}
 		return tmp;
 	}
-
 	friend const RuleCardSet operator+(const RuleCardSet& left, const RuleCardSet& right);
 	friend const RuleCardSet operator-(const RuleCardSet& left, const RuleCardSet& right);
 	friend int operator<(const RuleCardSet& left, const RuleCardSet& right);
