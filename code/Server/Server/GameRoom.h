@@ -1,6 +1,7 @@
 #pragma once
 #include <QtNetwork/QTcpSocket>
-#include <QTimerEvent>  
+
+#include <QTimer>  
 #include "common.h"
 
 #define TIMEOUT 15000
@@ -38,7 +39,6 @@ public:
 	void dealLandLordFinish(void);
 
 	void broadCastData(qint8 sender, QByteArray data);
-	virtual void timerEvent(QTimerEvent *event);
 
 private:
 	QTcpSocket *tcpClient[3];   // clients
@@ -51,11 +51,19 @@ private:
 	qint8 dealCardOverNum;     // number of players who finish dealing card
 	qint8 dealLandLordOverNum; // number of players who finish dealing landlord card
 
-	qint32 timerID;             // timer for each turn
-	qint8 curNum;               // current player ( start timing )
-	qint8 timeOut;              // time out signal
+	CARDSET person1;
+	CARDSET person2;
+	CARDSET person3;
+	CARDSET landlord;
 
+	CARDSET card;
 
-	//qint32 card[54]; // card
+	QTimer *playTimer;
+	QTimer *chooseTimer;
+
+private slots:
+	void playTimeOut(void);
+	void chooseTimeOut(void);
+
 };
 

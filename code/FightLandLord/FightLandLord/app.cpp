@@ -1,6 +1,7 @@
 #include "app.h"
 
 
+
 App::App(int argc, char *argv[]): app(argc, argv)
 {
 	state = UNENTER_STATE;
@@ -154,95 +155,99 @@ void App::viewModelToAppSlot(Singal &signal)
 
 void App::readServerData(void)
 {
-	Singal signal;
 	QByteArray data = tcpSocket->readAll(); // read from server
 
-	signal.signalType = MODIFY;
-	signal.playerType = data[0];
-	signal.signalCotent = data[1];
+	QString str(data);
+
+	Singal *osignal = new Singal;
+
+	osignal->signalType = MODIFY;
+	osignal->playerType = data[0];
+	osignal->signalCotent = data[1];
+	osignal->cardTransfer = str.mid(2).toLatin1();
 
 	switch (data.at(1)) // check signal type
 	{
 	case CONNECT_SUCCESS:
 		if (data.at(0) == SELF) // for self player
 			state = ENTER_FINISH_STATE; // enter the room	
-		emit appToViewModelSignal(signal);
+		emit appToViewModelSignal(*osignal);
 		break;
 
 	case CONNECT_FAILED:
-		emit appToViewModelSignal(signal);
+		emit appToViewModelSignal(*osignal);
 		break;
 
 	case READY:
 		if (data.at(0) == SELF) // for self player
 			state = READY_FINISH_STATE; // ready for play
-		emit appToViewModelSignal(signal);
+		emit appToViewModelSignal(*osignal);
 		break;
 
 	case PLAY_TURN:
 		if (data.at(0) == SELF) // for self player
 			state = PLAY_PRE_STATE; // in play turn ( can skip )
-		emit appToViewModelSignal(signal);
+		emit appToViewModelSignal(*osignal);
 		break;
 
 	case PLAY_TURN_NO_SKIP:
 		if (data.at(0) == SELF) // for self player
 			state = PLAY_PRE_NO_SKIP_STATE; // in play turn ( can't skip )
-		emit appToViewModelSignal(signal);
+		emit appToViewModelSignal(*osignal);
 		break;
 
 	case CHOOSE_TURN:
 		if (data.at(0) == SELF) // for self player
 			state = CHOOSE_PRE_STATE; // in choose turn
-		emit appToViewModelSignal(signal);
+		emit appToViewModelSignal(*osignal);
 		break;
 
 	case PLAY_CARD:
 		if (data.at(0) == SELF) // for self player
 			state = TURN_FINISH_STATE; // play turn finished
-		emit appToViewModelSignal(signal);
+		emit appToViewModelSignal(*osignal);
 		break;
 
 	case SKIP_CARD:
 		if (data.at(0) == SELF) // for self player
 			state = TURN_FINISH_STATE; // play turn finished
-		emit appToViewModelSignal(signal);
+		emit appToViewModelSignal(*osignal);
 		break;
 
 	case CHOOSE_LANDLORD:
 		if (data.at(0) == SELF)  // for self player
 			state = TURN_FINISH_STATE; // choose turn finished
-		emit appToViewModelSignal(signal);
+		emit appToViewModelSignal(*osignal);
 		break;
 
 	case SKIP_LANDLORD:
 		if (data.at(0) == SELF) // for self player
 			state = TURN_FINISH_STATE; // choose turn finished
-		emit appToViewModelSignal(signal);
+		emit appToViewModelSignal(*osignal);
 		break;
 
 	case DEAL_CARD:
-		emit appToViewModelSignal(signal); // start dealing 
+		emit appToViewModelSignal(*osignal); // start dealing 
 		break;
 
 	case DEAL_LANDLORD:
 		if (data.at(0) == SELF)
-			emit appToViewModelSignal(signal); // start dealing landlord card
+			emit appToViewModelSignal(*osignal); // start dealing landlord card
 		break;
 
 	case LOSE_GAME:
 		state = ENTER_FINISH_STATE; // lose game
-		emit appToViewModelSignal(signal);
+		emit appToViewModelSignal(*osignal);
 		break;
 
 	case WIN_GAME:
 		state = ENTER_FINISH_STATE; // win game
-		emit appToViewModelSignal(signal);
+		emit appToViewModelSignal(*osignal);
 		break;
 
 	case PLAYER_QUIT:
 		state = ENTER_FINISH_STATE; // set player to unready
-		emit appToViewModelSignal(signal);
+		emit appToViewModelSignal(*osignal);
 		break;
 
 
@@ -251,21 +256,21 @@ void App::readServerData(void)
 		{
 		case PLAY_TURN_STATE:
 			state = TURN_FINISH_STATE;
-			signal.playerType = SELF;
-			signal.signalCotent = COM_PLAY;
-			emit appToViewModelSignal(signal); // compulsory to play ( can skip )
+			osignal->playerType = SELF;
+			osignal->signalCotent = COM_PLAY;
+			emit appToViewModelSignal(*osignal); // compulsory to play ( can skip )
 
 		case PLAY_TURN_NO_SKIP_STATE:
 			state = TURN_FINISH_STATE;
-			signal.playerType = SELF;
-			signal.signalCotent = COM_PLAY_NO_SKIP;
-			emit appToViewModelSignal(signal); // compulsory to play ( no skip )
+			osignal->playerType = SELF;
+			osignal->signalCotent = COM_PLAY_NO_SKIP;
+			emit appToViewModelSignal(*osignal); // compulsory to play ( no skip )
 
 		case CHOOSE_TURN_STATE:
 			state = TURN_FINISH_STATE;
-			signal.playerType = SELF;
-			signal.signalCotent = COM_CHOOSE;
-			emit appToViewModelSignal(signal); // compulsory to choose
+			osignal->playerType = SELF;
+			osignal->signalCotent = COM_CHOOSE;
+			emit appToViewModelSignal(*osignal); // compulsory to choose
 
 		default:
 			return;
