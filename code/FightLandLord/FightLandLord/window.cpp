@@ -25,7 +25,7 @@ void Window::showCardsInHand()
 	//QRect sceneRect;
 	//QSize rectSize;
 	//QPoint rectTopLeftPoint;
-	QGraphicsScene *Scene = new QGraphicsScene(ui.graphicsView);
+	QGraphicsScene *Scene = new QGraphicsScene();
 	qreal init_x = 10;
 	qreal init_y = 10;
 	
