@@ -4,7 +4,7 @@
 Window::Window(QWidget *parent)
 	: QMainWindow(parent)
 {
-	ui->setupUi(this);
+	ui.setupUi(this);
 
 	// this->Scene = new QGraphicsScene(ui->graphicsView);
 
@@ -12,7 +12,7 @@ Window::Window(QWidget *parent)
 
 	// this->cardTempPixmap = new QPixmap();
 
-	connect(ui->btnShowCard, SIGNAL(clicked()), this, SLOT(showCardsInHand()));
+	connect(ui.btnShowCard, SIGNAL(clicked()), this, SLOT(showCardsInHand()));
 
 }
 
@@ -25,7 +25,7 @@ void Window::showCardsInHand()
 	//QRect sceneRect;
 	//QSize rectSize;
 	//QPoint rectTopLeftPoint;
-	QGraphicsScene *Scene = new QGraphicsScene(ui->graphicsView);
+	QGraphicsScene *Scene = new QGraphicsScene(ui.graphicsView);
 
 	//rectSize.setHeight(200);
 	//rectSize.setWidth(200);
@@ -52,9 +52,9 @@ void Window::showCardsInHand()
 	Scene->addPixmap(*cardTempPixmap)->setPos(30,10);
 	//Scene->addText("Hello World!");
 	//ui->graphicsView->setSceneRect(sceneRect);
-	ui->graphicsView->setScene(Scene);
+	ui.graphicsView->setScene(Scene);
 	
-	ui->graphicsView->show();
+	ui.graphicsView->show();
 
 	//delete cardTempPixmap;
 	//delete cardTempPixmapItem;

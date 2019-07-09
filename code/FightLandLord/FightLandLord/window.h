@@ -24,7 +24,7 @@ public:
 	Window(QWidget *parent = Q_NULLPTR);
 
 private:
-	Ui::FightLandLordClass* ui;
+	Ui::FightLandLordClass ui;
 	std::vector<QImage> cards; 
 	// QPixmap* cardTempPixmap ;
 	// QGraphicsPixmapItem* cardTempPixmapItem;
