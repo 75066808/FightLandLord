@@ -35,7 +35,7 @@ void Window::showCardsInHand()
 	//sceneRect.setTopLeft(rectTopLeftPoint);
 
 
-	QMessageBox::information(this, tr("Signal"), tr("Signal Received!"));
+	
 
 	//cardTempImg->load("joker", "jpg");
 	//*cardTempPixmap = QPixmap::fromImage(*cardTempImg);
@@ -44,7 +44,7 @@ void Window::showCardsInHand()
 	//cardTempPixmapItem->setPixmap(*cardTempPixmap);
 	//cardTempPixmapItem->setPos(20, 20);
 
-	Scene->setSceneRect(300, 300, 1, 1);
+	Scene->setSceneRect(-300, 100, 1, 1);
 	//Scene->addItem(cardTempPixmapItem);
 	Scene->addPixmap(*cardTempPixmap);
 	//Scene->addPixmap(QPixmap::fromImage(*cardTempImg));
