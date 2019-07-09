@@ -117,11 +117,8 @@
     <ClCompile Include="common.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="viewmodel.cpp" />
-    <ClCompile Include="window.cpp" />
     <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="window.h" />
+    <ClCompile Include="window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="window.ui" />
@@ -131,6 +128,7 @@
     <QtMoc Include="model.h" />
     <QtMoc Include="app.h" />
     <ClInclude Include="common.h" />
+    <QtMoc Include="window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
