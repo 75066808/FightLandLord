@@ -118,17 +118,16 @@ void GameRoom::playNextTurn(void)
 	QByteArray data;
 	turnNum = (turnNum + 1) % 3;
 
-	data[0] = 0x00;
 	if (skipPlayNum == 2) // if skips twice
 	{
 		skipPlayNum = 0;
-		data[1] = PLAY_TURN_NO_SKIP; // next player can't skip
-		tcpClient[turnNum]->write(data); // notify next player
+		data[0] = PLAY_TURN_NO_SKIP; // next player can't skip
+		broadCastData(turnNum, data);
 	}
 	else
 	{
-		data[1] = PLAY_TURN; // next play also can skip 
-		tcpClient[turnNum]->write(data); // notify next player
+		data[0] = PLAY_TURN; // next play also can skip 
+		broadCastData(turnNum, data);
 	}
 }
 
@@ -164,14 +163,13 @@ void GameRoom::chooseNextTurn(void)
 	else if (skipLandLordNum == -1) // player choose to be the landlord
 	{
 		skipLandLordNum = 0;
-		data[1] = DEAL_LANDLORD;
+		data[0] = DEAL_LANDLORD;
 		broadCastData(turnNum, data);
 	}
 	else
 	{
 		turnNum = (turnNum + 1) % 3;
-		data[0] = 0x00;
-		data[1] = CHOOSE_TURN;
+		data[0] = CHOOSE_TURN;
 		broadCastData(turnNum, data);  // notify to next player
 	}
 }
