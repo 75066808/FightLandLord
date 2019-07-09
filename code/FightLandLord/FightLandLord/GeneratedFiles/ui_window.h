@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'window.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.0
+** Created by: Qt User Interface Compiler version 5.13.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,11 +10,8 @@
 #define UI_WINDOW_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QGraphicsView>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
@@ -37,26 +34,26 @@ public:
     void setupUi(QMainWindow *FightLandLordClass)
     {
         if (FightLandLordClass->objectName().isEmpty())
-            FightLandLordClass->setObjectName(QStringLiteral("FightLandLordClass"));
+            FightLandLordClass->setObjectName(QString::fromUtf8("FightLandLordClass"));
         FightLandLordClass->resize(1870, 980);
         centralWidget = new QWidget(FightLandLordClass);
-        centralWidget->setObjectName(QStringLiteral("centralWidget"));
+        centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         graphicsView = new QGraphicsView(centralWidget);
-        graphicsView->setObjectName(QStringLiteral("graphicsView"));
+        graphicsView->setObjectName(QString::fromUtf8("graphicsView"));
         graphicsView->setGeometry(QRect(10, 130, 1261, 791));
         btnShowCard = new QPushButton(centralWidget);
-        btnShowCard->setObjectName(QStringLiteral("btnShowCard"));
+        btnShowCard->setObjectName(QString::fromUtf8("btnShowCard"));
         btnShowCard->setGeometry(QRect(500, 50, 131, 41));
         FightLandLordClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(FightLandLordClass);
-        menuBar->setObjectName(QStringLiteral("menuBar"));
+        menuBar->setObjectName(QString::fromUtf8("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 1870, 23));
         FightLandLordClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(FightLandLordClass);
-        mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
+        mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
         FightLandLordClass->addToolBar(Qt::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(FightLandLordClass);
-        statusBar->setObjectName(QStringLiteral("statusBar"));
+        statusBar->setObjectName(QString::fromUtf8("statusBar"));
         FightLandLordClass->setStatusBar(statusBar);
 
         retranslateUi(FightLandLordClass);
@@ -66,8 +63,8 @@ public:
 
     void retranslateUi(QMainWindow *FightLandLordClass)
     {
-        FightLandLordClass->setWindowTitle(QApplication::translate("FightLandLordClass", "FightLandLord", Q_NULLPTR));
-        btnShowCard->setText(QApplication::translate("FightLandLordClass", "Show Card", Q_NULLPTR));
+        FightLandLordClass->setWindowTitle(QCoreApplication::translate("FightLandLordClass", "FightLandLord", nullptr));
+        btnShowCard->setText(QCoreApplication::translate("FightLandLordClass", "Show Card", nullptr));
     } // retranslateUi
 
 };
