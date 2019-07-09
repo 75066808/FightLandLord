@@ -16,7 +16,7 @@ void Window::showCardsInHand()
 
 	QPixmap *cardTempPixmap = new QPixmap();
 
-	QGraphicsScene *Scene = new QGraphicsScene(ui.graphicsView);
+	QGraphicsScene *Scene = new QGraphicsScene();
 
 	qreal init_x = 10;
 	qreal init_y = 10;
