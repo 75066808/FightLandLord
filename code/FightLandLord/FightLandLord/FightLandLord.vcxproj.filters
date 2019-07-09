@@ -1,65 +1,61 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
-      <Extensions>qrc;*</Extensions>
-      <ParseFiles>false</ParseFiles>
-    </Filter>
-    <Filter Include="Generated Files">
-      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
-      <Extensions>moc;h;cpp</Extensions>
-      <SourceControlFiles>False</SourceControlFiles>
-    </Filter>
-    <Filter Include="utility">
-      <UniqueIdentifier>{bbf158f5-3e72-4314-acaa-24cec2082908}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="utility\viewmodel">
-      <UniqueIdentifier>{e5748afd-90ad-4931-afee-3d8b7f9f4355}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="utility\model">
-      <UniqueIdentifier>{b44f6e23-d401-4b63-bc35-6285b39597c9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="utility\common">
-      <UniqueIdentifier>{5c5015c3-442d-4cd6-8023-26e8139f7d39}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="windowview">
-      <UniqueIdentifier>{b9ba2aa6-e27a-4838-b27c-81b01b05d110}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="windowview\window">
-      <UniqueIdentifier>{76a4ece8-aacf-406c-a5f2-5bb8262de1a6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="windowview\view">
-      <UniqueIdentifier>{00d15a1a-0b0e-4e5f-be1b-89d6eac31b27}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="app">
-      <UniqueIdentifier>{dfb27f0d-6e2f-4032-a95b-9e3c94e8bea3}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="app.cpp">
       <Filter>app</Filter>
     </ClCompile>
-    <ClCompile Include="window.cpp">
-      <Filter>windowview\window</Filter>
+    <ClCompile Include="main.cpp">
+      <Filter>app</Filter>
     </ClCompile>
     <ClCompile Include="common.cpp">
       <Filter>utility\common</Filter>
     </ClCompile>
+    <ClCompile Include="window.cpp">
+      <Filter>windowview\window</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="app.h">
+      <Filter>app</Filter>
+    </QtMoc>
     <QtMoc Include="window.h">
       <Filter>windowview\window</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="window.ui">
-      <Filter>windowview\window</Filter>
-    </QtUic>
+    <Filter Include="app">
+      <UniqueIdentifier>{e65f51ab-53eb-482a-938e-2d13b60b9f16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utility">
+      <UniqueIdentifier>{2ed0ffd7-2da3-443a-8ad6-cb90b432fb65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utility\common">
+      <UniqueIdentifier>{1e3b8c17-5179-4e31-8720-b9c414357559}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utility\model">
+      <UniqueIdentifier>{40a15e7b-fd04-4088-b3a6-bfb99e04879e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utility\modelview">
+      <UniqueIdentifier>{ccb05eaa-125c-426f-92bc-83ad55d6d01e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="windowview">
+      <UniqueIdentifier>{acebf3ee-abb7-4f44-9258-c07b6d86726e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="windowview\window">
+      <UniqueIdentifier>{f7d7de1e-042e-42df-8409-3b8fd17f66e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="windowview\view">
+      <UniqueIdentifier>{9b0b7399-f2d9-4b9c-a783-02f5799645f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">
       <Filter>utility\common</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="window.ui">
+      <Filter>windowview\window</Filter>
+    </QtUic>
   </ItemGroup>
 </Project>
