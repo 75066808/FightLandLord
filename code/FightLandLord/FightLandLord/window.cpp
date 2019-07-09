@@ -6,11 +6,6 @@ Window::Window(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	// this->Scene = new QGraphicsScene(ui->graphicsView);
-
-	// this->cardTempPixmapItem = new QGraphicsPixmapItem();
-
-	// this->cardTempPixmap = new QPixmap();
 
 	connect(ui.btnShowCard, SIGNAL(clicked()), this, SLOT(showCardsInHand()));
 
@@ -18,45 +13,46 @@ Window::Window(QWidget *parent)
 
 void Window::showCardsInHand()
 {
-	// QPainter cardPainter;
-	//QImage *cardTempImg = new QImage();
+
 	QPixmap *cardTempPixmap = new QPixmap();
-	//QGraphicsPixmapItem* cardTempPixmapItem = new QGraphicsPixmapItem();
-	//QRect sceneRect;
-	//QSize rectSize;
-	//QPoint rectTopLeftPoint;
+
 	QGraphicsScene *Scene = new QGraphicsScene(ui.graphicsView);
+
+	qreal init_x = 10;
+	qreal init_y = 10;
 	
-	//rectSize.setHeight(200);
-	//rectSize.setWidth(200);
-	//rectTopLeftPoint.setX(20);
-	//rectTopLeftPoint.setY(20);
-	//sceneRect.setSize(rectSize);
-	//sceneRect.setTopLeft(rectTopLeftPoint);
+	int cardNum = 15;
 
 
 
 
-	//cardTempImg->load("joker", "jpg");
-	//*cardTempPixmap = QPixmap::fromImage(*cardTempImg);
+	Scene->setSceneRect(300, -100, 1, 1);
 
-	cardTempPixmap->load("joker", "jpg");
-	//cardTempPixmapItem->setPixmap(*cardTempPixmap);
-	//cardTempPixmapItem->setPos(20, 20);
 
-	Scene->setSceneRect(-300, 100, 1, 1);
-	//Scene->addItem(cardTempPixmapItem);
-	Scene->addPixmap(*cardTempPixmap);
-	//Scene->addPixmap(QPixmap::fromImage(*cardTempImg));
+	for (size_t i = 0; i < cardNum; i++)
+	{
+		addCardInScene(init_x + i*20, init_y, cardTempPixmap, Scene);
+	}
 
-	//Scene->addText("Hello World!");
-	//ui->graphicsView->setSceneRect(sceneRect);
+
+
+
 	ui.graphicsView->setScene(Scene);
+	
+	ui.graphicsView->show();
 
-	//ui.graphicsView->show();
 
-	//delete cardTempPixmap;
-	//delete cardTempPixmapItem;
-	//delete Scene;
+
 
 }
+
+
+
+void Window::addCardInScene(qreal x, qreal y, QPixmap* cardTempPixmap, QGraphicsScene* Scene)
+{
+	cardTempPixmap->load("poker_resource/joker1", "jpg");
+	Scene->addPixmap(*cardTempPixmap)->setPos(x, y);
+
+}
+
+

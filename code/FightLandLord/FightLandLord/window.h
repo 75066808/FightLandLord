@@ -29,6 +29,7 @@ private:
 	// QPixmap* cardTempPixmap ;
 	// QGraphicsPixmapItem* cardTempPixmapItem;
 	// QGraphicsScene* Scene;
+	void addCardInScene(qreal x, qreal y, QPixmap *cardTempPixmap, QGraphicsScene* scene);
 public slots:
 	void showCardsInHand();
 };
