@@ -44,11 +44,12 @@ void Window::showCardsInHand()
 	//cardTempPixmapItem->setPixmap(*cardTempPixmap);
 	//cardTempPixmapItem->setPos(20, 20);
 
-	Scene->setSceneRect(-300, 100, 1, 1);
+	Scene->setSceneRect(300, -100, 1, 1);
 	//Scene->addItem(cardTempPixmapItem);
-	Scene->addPixmap(*cardTempPixmap);
+	Scene->addPixmap(*cardTempPixmap)->setPos(10,10);
 	//Scene->addPixmap(QPixmap::fromImage(*cardTempImg));
-
+	cardTempPixmap->load("spadeK", "jpg");
+	Scene->addPixmap(*cardTempPixmap)->setPos(30,10);
 	//Scene->addText("Hello World!");
 	//ui->graphicsView->setSceneRect(sceneRect);
 	ui->graphicsView->setScene(Scene);
