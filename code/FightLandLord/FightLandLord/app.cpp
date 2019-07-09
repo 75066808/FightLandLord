@@ -98,7 +98,7 @@ void App::windowToAppSlot(Singal &signal)
 				state = PLAY_TURN_STATE;
 				break;
 			case PLAY_TURN_NO_SKIP:
-				state = PLAY_PRE_NO_SKIP_STATE;
+				state = PLAY_TURN_NO_SKIP_STATE;
 				break;
 			case CHOOSE_TURN:
 				state = CHOOSE_TURN_STATE;
