@@ -26,6 +26,10 @@ void Window::showCardsInHand()
 	//QSize rectSize;
 	//QPoint rectTopLeftPoint;
 	QGraphicsScene *Scene = new QGraphicsScene(ui.graphicsView);
+	qreal init_x = 10;
+	qreal init_y = 10;
+	
+	int cardNum = 15;
 
 	//rectSize.setHeight(200);
 	//rectSize.setWidth(200);
@@ -45,8 +49,15 @@ void Window::showCardsInHand()
 	//cardTempPixmapItem->setPos(20, 20);
 
 	Scene->setSceneRect(300, -100, 1, 1);
-	addCardInScene(10, 10, cardTempPixmap, Scene);
-	addCardInScene(30, 10, cardTempPixmap, Scene);
+
+
+	for (size_t i = 0; i < cardNum; i++)
+	{
+		addCardInScene(init_x + i*20, init_y, cardTempPixmap, Scene);
+	}
+
+	//addCardInScene(10, 10, cardTempPixmap, Scene);
+	//addCardInScene(30, 10, cardTempPixmap, Scene);
 
 	//Scene->addItem(cardTempPixmapItem);
 
