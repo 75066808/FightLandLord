@@ -10,6 +10,30 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="app\app.cpp" />
+    <ClCompile Include="app\main.cpp" />
+    <ClCompile Include="utility\common\common.cpp" />
+    <ClCompile Include="utility\model\algorithm\algorithm.cpp" />
+    <ClCompile Include="utility\model\model.cpp" />
+    <ClCompile Include="utility\socket\socket.cpp" />
+    <ClCompile Include="utility\viewmodel\viewmodel.cpp" />
+    <ClCompile Include="window\window\window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="app\app.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="utility\common\common.h" />
+    <QtMoc Include="window\window\window.h" />
+    <QtMoc Include="utility\socket\socket.h" />
+    <QtMoc Include="utility\viewmodel\viewmodel.h" />
+    <QtMoc Include="utility\model\algorithm\algorithm.h" />
+    <QtMoc Include="utility\model\model.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="window\window\window.ui" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B12702AD-ABFB-343A-A199-8E24837244A3}</ProjectGuid>
     <Keyword>Qt4VSv1.0</Keyword>
@@ -60,7 +84,7 @@
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
       <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -112,24 +136,6 @@
       <OutputFile>.\GeneratedFiles\qrc_%(Filename).cpp</OutputFile>
     </QtRcc>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="app.cpp" />
-    <ClCompile Include="common.cpp" />
-    <ClCompile Include="model.cpp" />
-    <ClCompile Include="viewmodel.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="window.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtUic Include="window.ui" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="viewmodel.h" />
-    <QtMoc Include="model.h" />
-    <QtMoc Include="app.h" />
-    <ClInclude Include="common.h" />
-    <QtMoc Include="window.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />

@@ -24,11 +24,11 @@ private:
 	GameRoom room;
 
 private slots:
-	void acceptConnection(void);
-	void dealDisconnection(void);
-	void readClientData(void);
+	void connectionSlot(void);
+	void disconnectionSlot(void);
+	void clientToServerSlot(void);
 
 private:
-	void dealClientData(qint32 sender, QByteArray &data);
+	void processClientData(qint32 sender, QByteArray &data);
 
 };

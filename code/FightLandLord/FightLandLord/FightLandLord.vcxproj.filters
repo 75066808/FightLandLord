@@ -1,40 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="app.cpp">
-      <Filter>app</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>app</Filter>
-    </ClCompile>
-    <ClCompile Include="common.cpp">
-      <Filter>utility\common</Filter>
-    </ClCompile>
-    <ClCompile Include="window.cpp">
-      <Filter>windowview\window</Filter>
-    </ClCompile>
-    <ClCompile Include="model.cpp">
-      <Filter>utility\model</Filter>
-    </ClCompile>
-    <ClCompile Include="viewmodel.cpp">
-      <Filter>utility\modelview</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="app.h">
-      <Filter>app</Filter>
-    </QtMoc>
-    <QtMoc Include="window.h">
-      <Filter>windowview\window</Filter>
-    </QtMoc>
-    <QtMoc Include="model.h">
-      <Filter>utility\model</Filter>
-    </QtMoc>
-    <QtMoc Include="viewmodel.h">
-      <Filter>utility\modelview</Filter>
-    </QtMoc>
-  </ItemGroup>
-  <ItemGroup>
     <Filter Include="app">
       <UniqueIdentifier>{e65f51ab-53eb-482a-938e-2d13b60b9f16}</UniqueIdentifier>
     </Filter>
@@ -47,32 +13,82 @@
     <Filter Include="utility\model">
       <UniqueIdentifier>{40a15e7b-fd04-4088-b3a6-bfb99e04879e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="utility\modelview">
+    <Filter Include="utility\model\algorithm">
+      <UniqueIdentifier>{ea50de61-eb10-4e9c-9488-1f84bfca2737}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utility\socket">
+      <UniqueIdentifier>{2dbef7d2-496f-4cef-a394-510a548d7137}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utility\viewmodel">
       <UniqueIdentifier>{ccb05eaa-125c-426f-92bc-83ad55d6d01e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="windowview">
+    <Filter Include="window">
       <UniqueIdentifier>{acebf3ee-abb7-4f44-9258-c07b6d86726e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="windowview\window">
+    <Filter Include="window\window">
       <UniqueIdentifier>{f7d7de1e-042e-42df-8409-3b8fd17f66e1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="windowview\view">
+    <Filter Include="window\view">
       <UniqueIdentifier>{9b0b7399-f2d9-4b9c-a783-02f5799645f8}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="common.h">
-      <Filter>utility\common</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <QtUic Include="window.ui">
-      <Filter>windowview\window</Filter>
-    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="window.h">
       <Filter>windowview\window</Filter>
     </QtMoc>
+    <QtMoc Include="app\app.h">
+      <Filter>app</Filter>
+    </QtMoc>
+    <QtMoc Include="utility\model\model.h">
+      <Filter>utility\model</Filter>
+    </QtMoc>
+    <QtMoc Include="utility\model\algorithm\algorithm.h">
+      <Filter>utility\model\algorithm</Filter>
+    </QtMoc>
+    <QtMoc Include="utility\viewmodel\viewmodel.h">
+      <Filter>utility\viewmodel</Filter>
+    </QtMoc>
+    <QtMoc Include="utility\socket\socket.h">
+      <Filter>utility\socket</Filter>
+    </QtMoc>
+    <QtMoc Include="window\window\window.h">
+      <Filter>window\window</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="app\app.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="app\main.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="utility\common\common.cpp">
+      <Filter>utility\common</Filter>
+    </ClCompile>
+    <ClCompile Include="utility\model\model.cpp">
+      <Filter>utility\model</Filter>
+    </ClCompile>
+    <ClCompile Include="utility\model\algorithm\algorithm.cpp">
+      <Filter>utility\model\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="utility\viewmodel\viewmodel.cpp">
+      <Filter>utility\viewmodel</Filter>
+    </ClCompile>
+    <ClCompile Include="utility\socket\socket.cpp">
+      <Filter>utility\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="window\window\window.cpp">
+      <Filter>window\window</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="utility\common\common.h">
+      <Filter>utility\common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="window\window\window.ui">
+      <Filter>window\window</Filter>
+    </QtUic>
   </ItemGroup>
 </Project>
