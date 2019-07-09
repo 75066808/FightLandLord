@@ -40,18 +40,26 @@ void Window::showCardsInHand()
 	//cardTempImg->load("joker", "jpg");
 	//*cardTempPixmap = QPixmap::fromImage(*cardTempImg);
 
-	cardTempPixmap->load("joker", "jpg");
+	//cardTempPixmap->load("joker", "jpg");
 	//cardTempPixmapItem->setPixmap(*cardTempPixmap);
 	//cardTempPixmapItem->setPos(20, 20);
 
 	Scene->setSceneRect(300, -100, 1, 1);
+	addCardInScene(10, 10, cardTempPixmap, Scene);
+	addCardInScene(30, 10, cardTempPixmap, Scene);
+
 	//Scene->addItem(cardTempPixmapItem);
-	Scene->addPixmap(*cardTempPixmap)->setPos(10,10);
+
+	//Scene->addPixmap(*cardTempPixmap)->setPos(10,10);
+
 	//Scene->addPixmap(QPixmap::fromImage(*cardTempImg));
-	cardTempPixmap->load("spadeK", "jpg");
-	Scene->addPixmap(*cardTempPixmap)->setPos(30,10);
+
+	//cardTempPixmap->load("spadeK", "jpg");
+	//Scene->addPixmap(*cardTempPixmap)->setPos(30,10);
+
 	//Scene->addText("Hello World!");
 	//ui->graphicsView->setSceneRect(sceneRect);
+
 	ui.graphicsView->setScene(Scene);
 	
 	ui.graphicsView->show();
@@ -59,6 +67,14 @@ void Window::showCardsInHand()
 	//delete cardTempPixmap;
 	//delete cardTempPixmapItem;
 	//delete Scene;
+
+}
+
+
+void Window::addCardInScene(qreal x, qreal y, QPixmap* cardTempPixmap, QGraphicsScene* Scene)
+{
+	cardTempPixmap->load("joker", "jpg");
+	Scene->addPixmap(*cardTempPixmap)->setPos(x, y);
 
 }
 
