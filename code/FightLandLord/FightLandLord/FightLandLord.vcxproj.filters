@@ -13,6 +13,12 @@
     <ClCompile Include="window.cpp">
       <Filter>windowview\window</Filter>
     </ClCompile>
+    <ClCompile Include="model.cpp">
+      <Filter>utility\model</Filter>
+    </ClCompile>
+    <ClCompile Include="viewmodel.cpp">
+      <Filter>utility\modelview</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="app.h">
@@ -20,6 +26,12 @@
     </QtMoc>
     <QtMoc Include="window.h">
       <Filter>windowview\window</Filter>
+    </QtMoc>
+    <QtMoc Include="model.h">
+      <Filter>utility\model</Filter>
+    </QtMoc>
+    <QtMoc Include="viewmodel.h">
+      <Filter>utility\modelview</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
