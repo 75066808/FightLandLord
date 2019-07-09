@@ -3,6 +3,7 @@
 #include <QtWidgets/QApplication>
 
 #include "window.h"
+#include "viewmodel.h"
 #include "common.h"
 
 #define IP_NUM "127.0.0.1"
@@ -37,6 +38,7 @@ private:
 	QTcpSocket *tcpSocket;
 	QApplication app;
 	Window window;
+	Player player;
 	qint8 state;
 
 signals:

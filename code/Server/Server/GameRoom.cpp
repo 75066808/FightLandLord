@@ -13,12 +13,19 @@ GameRoom::GameRoom()
 	skipLandLordNum = 0;
 	dealCardOverNum = 0;
 	dealLandLordOverNum = 0;
+
+	playTimer = new QTimer(this);
+	chooseTimer = new QTimer(this);
+
+	connect(playTimer, SIGNAL(timeout()), this, SLOT(playTimeOut()));
+	connect(chooseTimer, SIGNAL(timeout()), this, SLOT(chooseTimeOut()));
 }
 
 
 GameRoom::~GameRoom()
 {
-
+	delete playTimer;
+	delete chooseTimer;
 }
 
 
@@ -40,12 +47,17 @@ bool GameRoom::connectSocket(QTcpSocket *tcpSocket)
 			if (tcpConnect[i] == 0)
 			{
 				tcpClient[i] = tcpSocket;
+				tcpConnect[i] = 1;
 				break;
 			}
 		}
 		
 		QByteArray data;
 		data[0] = CONNECT_SUCCESS;
+		card.setToAll();
+		distribute(card, person1, person2, person3, landlord);
+
+		data.append(person1.tranToSig());
 		broadCastData(playerNum, data); // notify success
 
 		playerNum++;  // increase play number
@@ -129,13 +141,16 @@ void GameRoom::playNextTurn(void)
 		data[0] = PLAY_TURN; // next play also can skip 
 		broadCastData(turnNum, data);
 	}
+	
+	if (playTimer->isActive())
+		playTimer->stop();
+	playTimer->start(TIMEOUT);
 }
 
 
 void GameRoom::skipLandLord(qint8 index)
 {
 	QByteArray data;
-
 	data[0] = SKIP_LANDLORD;
 	broadCastData(turnNum, data);
 	skipLandLordNum++;
@@ -165,13 +180,20 @@ void GameRoom::chooseNextTurn(void)
 		skipLandLordNum = 0;
 		data[0] = DEAL_LANDLORD;
 		broadCastData(turnNum, data);
+		if (chooseTimer->isActive())
+			chooseTimer->stop();
+		chooseTimer->start(TIMEOUT);
 	}
 	else
 	{
 		turnNum = (turnNum + 1) % 3;
 		data[0] = CHOOSE_TURN;
 		broadCastData(turnNum, data);  // notify to next player
+		if (chooseTimer->isActive())
+			chooseTimer->stop();
+		chooseTimer->start(TIMEOUT);
 	}
+
 }
 
 void GameRoom::dealCardFinish(void)
@@ -217,13 +239,27 @@ void GameRoom::broadCastData(qint8 sender, QByteArray data)
 	}
 }
 
-void GameRoom::timerEvent(QTimerEvent *event)
+void GameRoom::playTimeOut(void)
 {
-	if (event->timerId() == timerID) 
+	QByteArray data;
+
+	turnNum = (turnNum + 1) % 3;
+
+	if (skipPlayNum == 2) // if skips twice
 	{
-		QByteArray data;
-		data[0] = 0x00;
-		data[1] = TIME_OUT;
-		tcpClient[turnNum]->write(data); // notify player time out
+		skipPlayNum = 0;
+		data[0] = COM_PLAY_NO_SKIP; // next player can't skip
+		broadCastData(turnNum, data);
 	}
+	else
+	{
+		data[0] = COM_PLAY; // next play also can skip 
+		broadCastData(turnNum, data);
+	}
+}
+
+
+void GameRoom::chooseTimeOut(void)
+{
+
 }

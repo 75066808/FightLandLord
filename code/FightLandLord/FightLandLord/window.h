@@ -15,6 +15,7 @@
 #include <QGraphicsItem>
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
+#include "common.h"
 
 class Window : public QMainWindow
 {
@@ -22,15 +23,20 @@ class Window : public QMainWindow
 
 public:
 	Window(QWidget *parent = Q_NULLPTR);
+	void setCurrentCardsInHand(const qint8* cards);
 
 private:
 	Ui::FightLandLordClass ui;
-	std::vector<QImage> cards; 
+	const qint8 *currentCardsInHand;
 	// QPixmap* cardTempPixmap ;
 	// QGraphicsPixmapItem* cardTempPixmapItem;
 	// QGraphicsScene* Scene;
+	void addCardInScene(qreal x, qreal y, QPixmap *cardTempPixmap, QGraphicsScene* scene);
 public slots:
-	void showCardsInHand();
+	void buttonClick(void);
+	void appToWindowSlot(Singal& signal);
+signals:
+	void windowToAppSignal(Singal &signal);
 };
 
 #endif

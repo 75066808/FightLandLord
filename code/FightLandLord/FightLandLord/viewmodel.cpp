@@ -17,7 +17,8 @@ void Player::appToViewModelSlot(Singal& signal) {
 		signal.signalType = MODIFY_FEEDBACK;
 		RuleCardSet zero;
 		(*onHand) = zero + RuleCardSet(signal.cardTransfer);
-		emit viewModelToAppSignal( signal);
+
+		emit viewModelToAppSignal(signal);
 	}
 
 }

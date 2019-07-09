@@ -6,57 +6,199 @@ Window::Window(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	// this->Scene = new QGraphicsScene(ui->graphicsView);
 
-	// this->cardTempPixmapItem = new QGraphicsPixmapItem();
-
-	// this->cardTempPixmap = new QPixmap();
-
-	connect(ui.btnShowCard, SIGNAL(clicked()), this, SLOT(showCardsInHand()));
+	connect(ui.btnShowCard, SIGNAL(clicked()), this, SLOT(buttonClick()));
 
 }
 
-void Window::showCardsInHand()
+void Window::setCurrentCardsInHand(const qint8* cards)
 {
-	// QPainter cardPainter;
-	//QImage *cardTempImg = new QImage();
+	currentCardsInHand = cards;
+}
+
+
+void Window::appToWindowSlot(Singal& signal)
+{
 	QPixmap *cardTempPixmap = new QPixmap();
-	//QGraphicsPixmapItem* cardTempPixmapItem = new QGraphicsPixmapItem();
-	//QRect sceneRect;
-	//QSize rectSize;
-	//QPoint rectTopLeftPoint;
-	QGraphicsScene *Scene = new QGraphicsScene(ui.graphicsView);
-	
-	//rectSize.setHeight(200);
-	//rectSize.setWidth(200);
-	//rectTopLeftPoint.setX(20);
-	//rectTopLeftPoint.setY(20);
-	//sceneRect.setSize(rectSize);
-	//sceneRect.setTopLeft(rectTopLeftPoint);
+
+	QGraphicsScene *Scene = new QGraphicsScene();
+
+	qreal init_x = 10;
+	qreal init_y = 10;
+
+	//int cardNum = 15;
+
+	size_t cardCnt = 0;
+
+	Scene->setSceneRect(300, -100, 1, 1);
+
+
+	if (signal.signalType == MODIFY)
+	{
+		for (size_t i = 3; i < 18; i++)
+		{
+			if (currentCardsInHand[i] == 0)
+				continue;
+			else
+			{
+				switch (i)
+				{
+				case 3:
+					cardCnt += currentCardsInHand[i];
+					for (size_t j = 0; j < currentCardsInHand[i]; j++)
+					{
+						cardTempPixmap->load("poker_resource/club3", "jpg");
+						addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
+					}
+					break;
+				case 4:
+					cardCnt += currentCardsInHand[i];
+					for (size_t j = 0; j < currentCardsInHand[i]; j++)
+					{
+						cardTempPixmap->load("poker_resource/club4", "jpg");
+						addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
+					}
+					break;
+				case 5:
+					cardCnt += currentCardsInHand[i];
+					for (size_t j = 0; j < currentCardsInHand[i]; j++)
+					{
+						cardTempPixmap->load("poker_resource/club5", "jpg");
+						addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
+					}
+					break;
+				case 6:
+					cardCnt += currentCardsInHand[i];
+					for (size_t j = 0; j < currentCardsInHand[i]; j++)
+					{
+						cardTempPixmap->load("poker_resource/club6", "jpg");
+						addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
+					}
+					break;
+				case 7:
+					cardCnt += currentCardsInHand[i];
+					for (size_t j = 0; j < currentCardsInHand[i]; j++)
+					{
+						cardTempPixmap->load("poker_resource/club7", "jpg");
+						addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
+					}
+					break;
+				case 8:
+					cardCnt += currentCardsInHand[i];
+					for (size_t j = 0; j < currentCardsInHand[i]; j++)
+					{
+						cardTempPixmap->load("poker_resource/club8", "jpg");
+						addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
+					}
+					break;
+				case 9:
+					cardCnt += currentCardsInHand[i];
+					for (size_t j = 0; j < currentCardsInHand[i]; j++)
+					{
+						cardTempPixmap->load("poker_resource/club9", "jpg");
+						addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
+					}
+					break;
+				case 10:
+					cardCnt += currentCardsInHand[i];
+					for (size_t j = 0; j < currentCardsInHand[i]; j++)
+					{
+						cardTempPixmap->load("poker_resource/club10", "jpg");
+						addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
+					}
+					break;
+				case 11:
+					cardCnt += currentCardsInHand[i];
+					for (size_t j = 0; j < currentCardsInHand[i]; j++)
+					{
+						cardTempPixmap->load("poker_resource/clubJ", "jpg");
+						addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
+					}
+					break;
+				case 12:
+					cardCnt += currentCardsInHand[i];
+					for (size_t j = 0; j < currentCardsInHand[i]; j++)
+					{
+						cardTempPixmap->load("poker_resource/clubQ", "jpg");
+						addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
+					}
+					break;
+				case 13:
+					cardCnt += currentCardsInHand[i];
+					for (size_t j = 0; j < currentCardsInHand[i]; j++)
+					{
+						cardTempPixmap->load("poker_resource/clubK", "jpg");
+						addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
+					}
+					break;
+				case 14:
+					cardCnt += currentCardsInHand[i];
+					for (size_t j = 0; j < currentCardsInHand[i]; j++)
+					{
+						cardTempPixmap->load("poker_resource/clubA", "jpg");
+						addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
+					}
+					break;
+				case 15:
+					cardCnt += currentCardsInHand[i];
+					for (size_t j = 0; j < currentCardsInHand[i]; j++)
+					{
+						cardTempPixmap->load("poker_resource/club2", "jpg");
+						addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
+					}
+					break;
+				case 16:
+					cardCnt += currentCardsInHand[i];
+					for (size_t j = 0; j < currentCardsInHand[i]; j++)
+					{
+						cardTempPixmap->load("poker_resource/joker1", "jpg");
+						addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
+					}
+					break;
+				case 17:
+					cardCnt += currentCardsInHand[i];
+					for (size_t j = 0; j < currentCardsInHand[i]; j++)
+					{
+						cardTempPixmap->load("poker_resource/joker2", "jpg");
+						addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
+					}
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		signal.signalType = MODIFY_FEEDBACK;
+		emit windowToAppSignal(signal);
+	}
 
 
 
 
-	//cardTempImg->load("joker", "jpg");
-	//*cardTempPixmap = QPixmap::fromImage(*cardTempImg);
+	//addCardInScene(init_x + i*20, init_y, cardTempPixmap, Scene);
 
-	cardTempPixmap->load("joker", "jpg");
-	//cardTempPixmapItem->setPixmap(*cardTempPixmap);
-	//cardTempPixmapItem->setPos(20, 20);
 
-	Scene->setSceneRect(-300, 100, 1, 1);
-	//Scene->addItem(cardTempPixmapItem);
-	Scene->addPixmap(*cardTempPixmap);
-	//Scene->addPixmap(QPixmap::fromImage(*cardTempImg));
 
-	//Scene->addText("Hello World!");
-	//ui->graphicsView->setSceneRect(sceneRect);
+
 	ui.graphicsView->setScene(Scene);
 
-	//ui.graphicsView->show();
+	ui.graphicsView->show();
+	
+}
 
-	//delete cardTempPixmap;
-	//delete cardTempPixmapItem;
-	//delete Scene;
+void Window::addCardInScene(qreal x, qreal y, QPixmap* cardTempPixmap, QGraphicsScene* Scene)
+{
+	//cardTempPixmap->load("poker_resource/joker1", "jpg");
+	Scene->addPixmap(*cardTempPixmap)->setPos(x, y);
 
+}
+
+void Window::buttonClick(void)
+{
+	Singal *signal = new Singal;
+
+	signal->signalType = ORIGIN;
+	signal->signalCotent = CONNECT;
+
+	emit windowToAppSignal(*signal);
 }
