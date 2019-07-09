@@ -44,9 +44,9 @@
 
 struct CARD {
 	qint8 i;
-	CARD(qint8 in = 3) { 
-		if(in >= (qint8)3 && in <= (qint8)17)
-			i = in; 
+	CARD(qint8 in = 3) {
+		if (in >= (qint8)3 && in <= (qint8)17)
+			i = in;
 		else {
 			qDebug("out of range");
 			i = 0;
@@ -55,14 +55,15 @@ struct CARD {
 	CARD(const CARD& in) {
 		i = in.i;
 	}
-	friend bool operator<(const CARD& l,const CARD& r);
+	friend bool operator<(const CARD& l, const CARD& r);
 	friend bool operator>(const CARD& l, const CARD& r);
 	friend bool operator!=(const CARD& l, const CARD& r);
 	friend bool operator==(const CARD& l, const CARD& r);
 	CARD& operator=(const CARD& r);
 };
 
-class CARDSET{
+
+class CARDSET {
 public:
 	CARDSET();
 	CARDSET(QByteArray dataIn);
@@ -73,12 +74,21 @@ public:
 	void setToAll();   //set to default 54 cards
 	bool add(CARD in);
 	bool remove(CARD out);
+	CARD setPop() {
+		c_num--;
+		CARD tmp = cards.top();
+		cards.pop();
+		return tmp;
+	}
+	bool setIsEmpty() {
+		return !c_num;
+	}
 	friend void distribute(CARDSET& origin, CARDSET& one, CARDSET& two, CARDSET& three, CARDSET& landlord);
 	//for test
 	void print() {
 		for (int i = 0; i < c_num; i++) {
 			int temp = cards.top().i;
-			std::cout<<temp<<std::endl;
+			std::cout << temp << std::endl;
 			cards.pop();
 		}
 	}
