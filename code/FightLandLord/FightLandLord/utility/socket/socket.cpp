@@ -2,7 +2,7 @@
 
 Socket::Socket(): tcpSocket(std::make_shared<QTcpSocket>())
 {
-	connect(&*tcpSocket, SIGNAL(readyRead()), this, SLOT(serverToSocketSlot()));
+	connect(&*tcpSocket, SIGNAL(readyRead()), this, SLOT(socketNotificationSlot()));
 }
 
 Socket::~Socket()
@@ -12,7 +12,7 @@ Socket::~Socket()
 
 
 
-void Socket::modelToSocketSlot(std::shared_ptr<Signal> signal)
+void Socket::socketCommandSlot(std::shared_ptr<Signal> signal)
 {
 	QByteArray data;
 
@@ -39,7 +39,7 @@ void Socket::modelToSocketSlot(std::shared_ptr<Signal> signal)
 	}
 }
 
-void Socket::serverToSocketSlot(void)
+void Socket::socketNotificationSlot(void)
 {
 	qDebug() << "Server to Socket" << endl;
 	QByteArray data = tcpSocket->readAll(); // read from server
@@ -54,5 +54,5 @@ void Socket::serverToSocketSlot(void)
 		temp[i - 2] = data[i];
 
 	signal->cardTransfer = temp;
-	emit socketToModel(signal);
+	emit socketNotificationSignal(signal);
 }

@@ -18,10 +18,10 @@ private:
 	std::shared_ptr<QTcpSocket> tcpSocket;
 
 signals:
-	void socketToModel(std::shared_ptr<Signal> signal);
+	void socketNotificationSignal(std::shared_ptr<Signal> signal);
 
 private slots:
-	void modelToSocketSlot(std::shared_ptr<Signal> signal);
-	void serverToSocketSlot(void);
+	void socketCommandSlot(std::shared_ptr<Signal> signal);
+	void socketNotificationSlot(void);
 
 };

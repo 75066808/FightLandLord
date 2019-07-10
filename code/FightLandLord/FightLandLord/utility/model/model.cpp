@@ -11,16 +11,16 @@ Player::~Player()
 {
 }
 
-void Player::viewModelToModelSlot(std::shared_ptr<Signal> signal) {
+void Player::modelCommandSlot(std::shared_ptr<Signal> signal) {
 	qDebug() << "View Model to Model" << endl;
 	if (*status == -2) {
-		emit modelToSocketSignal(signal);
+		emit modelCommandSignal(signal);
 		//emit modelToViewModelSignal(signal);
 	}
 
 }
 
-void Player::socketToModelSlot(std::shared_ptr<Signal> signal) {
+void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 	if (*status == -2) {
 		qDebug() << "Socket to Model" << endl;
 		if (signal->signalType == CONNECT_SUCCESS) {
@@ -28,7 +28,7 @@ void Player::socketToModelSlot(std::shared_ptr<Signal> signal) {
 			RuleCardSet zero;
 			RuleCardSet tmp = (*onHand) = zero + RuleCardSet(signal->cardTransfer);
 			const qint8* temp = onHand->getArr();
-			emit modelToViewModelSignal(signal);
+			emit modelNotificationSignal(signal);
 		}
 	}
 }
@@ -43,16 +43,18 @@ Table::~Table()
 {
 }
 
-void Table::viewModelToModelSlot(std::shared_ptr<Signal> signal) {
+void Table::modelCommandSlot(std::shared_ptr<Signal> signal) {
+	qDebug() << "View Model to Model" << endl;
 	if (0) {
-		emit modelToSocketSignal(signal);
-		emit modelToViewModelSignal(signal);
+		emit modelCommandSignal(signal);
+		//emit modelToViewModelSignal(signal);
 	}
 
 }
 
-void Table::socketToModelSlot(std::shared_ptr<Signal> signal) {
+void Table::modelNotificationSlot(std::shared_ptr<Signal> signal) {
+	qDebug() << "Socket to Model" << endl;
 	if (0) {
-		emit modelToViewModelSignal(signal);
+		emit modelNotificationSignal(signal);
 	}
 }
