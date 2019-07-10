@@ -30,140 +30,7 @@ void Window::windowNotificationSlot(std::shared_ptr<Signal> signal)
 
 	Scene->setSceneRect(300, -100, 1, 1);
 
-	for (size_t i = 3; i < 18; i++)
-	{
-		if (currentCardsInHand[i] == 0)
-			continue;
-		else
-		{
-			switch (i)
-			{
-			case 3:
-				cardCnt += currentCardsInHand[i];
-				for (size_t j = 0; j < currentCardsInHand[i]; j++)
-				{
-					cardTempPixmap->load("poker_resource/club3", "jpg");
-					addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
-				}
-				break;
-			case 4:
-				cardCnt += currentCardsInHand[i];
-				for (size_t j = 0; j < currentCardsInHand[i]; j++)
-				{
-					cardTempPixmap->load("poker_resource/club4", "jpg");
-					addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
-				}
-				break;
-			case 5:
-				cardCnt += currentCardsInHand[i];
-				for (size_t j = 0; j < currentCardsInHand[i]; j++)
-				{
-					cardTempPixmap->load("poker_resource/club5", "jpg");
-					addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
-				}
-				break;
-			case 6:
-				cardCnt += currentCardsInHand[i];
-				for (size_t j = 0; j < currentCardsInHand[i]; j++)
-				{
-					cardTempPixmap->load("poker_resource/club6", "jpg");
-					addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
-				}
-				break;
-			case 7:
-				cardCnt += currentCardsInHand[i];
-				for (size_t j = 0; j < currentCardsInHand[i]; j++)
-				{
-					cardTempPixmap->load("poker_resource/club7", "jpg");
-					addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
-				}
-				break;
-			case 8:
-				cardCnt += currentCardsInHand[i];
-				for (size_t j = 0; j < currentCardsInHand[i]; j++)
-				{
-					cardTempPixmap->load("poker_resource/club8", "jpg");
-					addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
-				}
-				break;
-			case 9:
-				cardCnt += currentCardsInHand[i];
-				for (size_t j = 0; j < currentCardsInHand[i]; j++)
-				{
-					cardTempPixmap->load("poker_resource/club9", "jpg");
-					addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
-				}
-				break;
-			case 10:
-				cardCnt += currentCardsInHand[i];
-				for (size_t j = 0; j < currentCardsInHand[i]; j++)
-				{
-					cardTempPixmap->load("poker_resource/club10", "jpg");
-					addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
-				}
-				break;
-			case 11:
-				cardCnt += currentCardsInHand[i];
-				for (size_t j = 0; j < currentCardsInHand[i]; j++)
-				{
-					cardTempPixmap->load("poker_resource/clubJ", "jpg");
-					addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
-				}
-				break;
-			case 12:
-				cardCnt += currentCardsInHand[i];
-				for (size_t j = 0; j < currentCardsInHand[i]; j++)
-				{
-					cardTempPixmap->load("poker_resource/clubQ", "jpg");
-					addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
-				}
-				break;
-			case 13:
-				cardCnt += currentCardsInHand[i];
-				for (size_t j = 0; j < currentCardsInHand[i]; j++)
-				{
-					cardTempPixmap->load("poker_resource/clubK", "jpg");
-					addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
-				}
-				break;
-			case 14:
-				cardCnt += currentCardsInHand[i];
-				for (size_t j = 0; j < currentCardsInHand[i]; j++)
-				{
-					cardTempPixmap->load("poker_resource/clubA", "jpg");
-					addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
-				}
-				break;
-			case 15:
-				cardCnt += currentCardsInHand[i];
-				for (size_t j = 0; j < currentCardsInHand[i]; j++)
-				{
-					cardTempPixmap->load("poker_resource/club2", "jpg");
-					addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
-				}
-				break;
-			case 16:
-				cardCnt += currentCardsInHand[i];
-				for (size_t j = 0; j < currentCardsInHand[i]; j++)
-				{
-					cardTempPixmap->load("poker_resource/joker1", "jpg");
-					addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
-				}
-				break;
-			case 17:
-				cardCnt += currentCardsInHand[i];
-				for (size_t j = 0; j < currentCardsInHand[i]; j++)
-				{
-					cardTempPixmap->load("poker_resource/joker2", "jpg");
-					addCardInScene(init_x + (cardCnt - 1) * 20, init_y, cardTempPixmap, Scene);
-				}
-				break;
-			default:
-				break;
-			}
-		}		
-	}
-
+	addHandInScene(cardTempPixmap, Scene);
 
 	//addCardInScene(init_x + i*20, init_y, cardTempPixmap, Scene);
 
@@ -188,4 +55,153 @@ void Window::buttonClick(void)
 
 	signal->signalType = CONNECT;
 	emit windowCommandSignal(signal);
+}
+
+void Window::addHandInScene(QPixmap *cardTempPixmap, QGraphicsScene *Scene)
+{
+	qreal init_x = 10;
+	qreal init_y = 10;
+
+	size_t cardCnt = 0;
+
+	for (size_t i = 3; i < 18; i++)
+	{
+		if (currentCardsInHand[i] == 0)
+			continue;
+		else
+		{
+			switch (i)
+			{
+			case 3:
+
+				for (size_t j = 0; j < currentCardsInHand[i]; j++)
+				{
+					cardTempPixmap->load("poker_resource/club3", "jpg");
+					addCardInScene(init_x + (cardCnt - 1 + j) * 20, init_y, cardTempPixmap, Scene);
+				}
+				cardCnt += currentCardsInHand[i];
+				break;
+			case 4:
+
+				for (size_t j = 0; j < currentCardsInHand[i]; j++)
+				{
+					cardTempPixmap->load("poker_resource/club4", "jpg");
+					addCardInScene(init_x + (cardCnt - 1 + j) * 20, init_y, cardTempPixmap, Scene);
+				}
+				cardCnt += currentCardsInHand[i];
+				break;
+			case 5:
+
+				for (size_t j = 0; j < currentCardsInHand[i]; j++)
+				{
+					cardTempPixmap->load("poker_resource/club5", "jpg");
+					addCardInScene(init_x + (cardCnt - 1 + j) * 20, init_y, cardTempPixmap, Scene);
+				}
+				cardCnt += currentCardsInHand[i];
+				break;
+			case 6:
+				for (size_t j = 0; j < currentCardsInHand[i]; j++)
+				{
+					cardTempPixmap->load("poker_resource/club6", "jpg");
+					addCardInScene(init_x + (cardCnt - 1 + j) * 20, init_y, cardTempPixmap, Scene);
+				}
+				cardCnt += currentCardsInHand[i];
+				break;
+			case 7:
+
+				for (size_t j = 0; j < currentCardsInHand[i]; j++)
+				{
+					cardTempPixmap->load("poker_resource/club7", "jpg");
+					addCardInScene(init_x + (cardCnt - 1 + j) * 20, init_y, cardTempPixmap, Scene);
+				}
+				cardCnt += currentCardsInHand[i];
+				break;
+			case 8:
+
+				for (size_t j = 0; j < currentCardsInHand[i]; j++)
+				{
+					cardTempPixmap->load("poker_resource/club8", "jpg");
+					addCardInScene(init_x + (cardCnt - 1 + j) * 20, init_y, cardTempPixmap, Scene);
+				}
+				cardCnt += currentCardsInHand[i];
+				break;
+			case 9:
+
+				for (size_t j = 0; j < currentCardsInHand[i]; j++)
+				{
+					cardTempPixmap->load("poker_resource/club9", "jpg");
+					addCardInScene(init_x + (cardCnt - 1 + j) * 20, init_y, cardTempPixmap, Scene);
+				}
+				cardCnt += currentCardsInHand[i];
+				break;
+			case 10:
+				for (size_t j = 0; j < currentCardsInHand[i]; j++)
+				{
+					cardTempPixmap->load("poker_resource/club10", "jpg");
+					addCardInScene(init_x + (cardCnt - 1 + j) * 20, init_y, cardTempPixmap, Scene);
+				}
+				cardCnt += currentCardsInHand[i];
+				break;
+			case 11:
+
+				for (size_t j = 0; j < currentCardsInHand[i]; j++)
+				{
+					cardTempPixmap->load("poker_resource/clubJ", "jpg");
+					addCardInScene(init_x + (cardCnt - 1 + j) * 20, init_y, cardTempPixmap, Scene);
+				}
+				cardCnt += currentCardsInHand[i];
+				break;
+			case 12:
+				for (size_t j = 0; j < currentCardsInHand[i]; j++)
+				{
+					cardTempPixmap->load("poker_resource/clubQ", "jpg");
+					addCardInScene(init_x + (cardCnt - 1 + j) * 20, init_y, cardTempPixmap, Scene);
+				}
+				cardCnt += currentCardsInHand[i];
+				break;
+			case 13:
+				for (size_t j = 0; j < currentCardsInHand[i]; j++)
+				{
+					cardTempPixmap->load("poker_resource/clubK", "jpg");
+					addCardInScene(init_x + (cardCnt - 1 + j) * 20, init_y, cardTempPixmap, Scene);
+				}
+				cardCnt += currentCardsInHand[i];
+				break;
+			case 14:
+				for (size_t j = 0; j < currentCardsInHand[i]; j++)
+				{
+					cardTempPixmap->load("poker_resource/clubA", "jpg");
+					addCardInScene(init_x + (cardCnt - 1 + j) * 20, init_y, cardTempPixmap, Scene);
+				}
+				cardCnt += currentCardsInHand[i];
+				break;
+			case 15:
+				for (size_t j = 0; j < currentCardsInHand[i]; j++)
+				{
+					cardTempPixmap->load("poker_resource/club2", "jpg");
+					addCardInScene(init_x + (cardCnt - 1 + j) * 20, init_y, cardTempPixmap, Scene);
+				}
+				cardCnt += currentCardsInHand[i];
+				break;
+			case 16:
+				for (size_t j = 0; j < currentCardsInHand[i]; j++)
+				{
+					cardTempPixmap->load("poker_resource/joker1", "jpg");
+					addCardInScene(init_x + (cardCnt - 1 + j) * 20, init_y, cardTempPixmap, Scene);
+				}
+				cardCnt += currentCardsInHand[i];
+				break;
+			case 17:
+				for (size_t j = 0; j < currentCardsInHand[i]; j++)
+				{
+					cardTempPixmap->load("poker_resource/joker2", "jpg");
+					addCardInScene(init_x + (cardCnt - 1 + j) * 20, init_y, cardTempPixmap, Scene);
+				}
+				cardCnt += currentCardsInHand[i];
+				break;
+			default:
+				break;
+			}
+		}
+	}
 }

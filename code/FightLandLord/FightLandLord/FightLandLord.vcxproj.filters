@@ -33,9 +33,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="window.h">
-      <Filter>windowview\window</Filter>
-    </QtMoc>
     <QtMoc Include="app\app.h">
       <Filter>app</Filter>
     </QtMoc>

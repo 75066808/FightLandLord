@@ -15,6 +15,8 @@
 #include <QGraphicsItem>
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
+#include <QGraphicsSceneMouseEvent>
+#include <QTransform>
 #include "../utility/common/common.h"
 
 class Window : public QMainWindow
@@ -32,7 +34,7 @@ private:
 	// QGraphicsPixmapItem* cardTempPixmapItem;
 	// QGraphicsScene* Scene;
 	void addCardInScene(qreal x, qreal y, QPixmap *cardTempPixmap, QGraphicsScene* scene);
-
+	void addHandInScene(QPixmap *cardTempPixmap, QGraphicsScene *Scene);
 signals:
 	void windowCommandSignal(std::shared_ptr<Signal> signal);
 
