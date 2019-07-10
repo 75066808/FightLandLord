@@ -45,10 +45,7 @@ private:
 	qint8 turnIndex;             // turn index
 
 	CARDSET person[3];
-	CARDSET person2;
-	CARDSET person3;
 	CARDSET landlord;
-
 	CARDSET card;
 
 	QTimer *playTimer;

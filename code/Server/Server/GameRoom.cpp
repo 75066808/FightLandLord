@@ -179,7 +179,7 @@ void GameRoom::skipLandLord(qint8 index)
 void GameRoom::chooseLandLord(qint8 index)
 {
 	QByteArray data;	
-	data[0] = CHOOSE_LANDLORD;
+	data[0] = DEAL_LANDLORD;
 	broadCastData(index, data);
 	skipLandLordNum = 0;
 }
