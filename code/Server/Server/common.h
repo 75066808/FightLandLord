@@ -11,15 +11,6 @@
 #define LOWERHOUSE         0x01
 
 // signal type
-#define ORIGIN             0x00
-#define MODIFY             0x01
-#define CHECK              0x02
-#define MODIFY_FEEDBACK    0x03      
-#define CHECK_FEEDBACK     0x04
-#define BROADCAST          0x05
-#define ALL_FINISH         0x06
-
-// signal content
 #define CONNECT            0x00
 #define DISCONNECT         0x01
 #define CONNECT_SUCCESS    0x02
@@ -44,9 +35,9 @@
 
 struct CARD {
 	qint8 i;
-	CARD(qint8 in = 3) { 
-		if(in >= (qint8)3 && in <= (qint8)17)
-			i = in; 
+	CARD(qint8 in = 3) {
+		if (in >= (qint8)3 && in <= (qint8)17)
+			i = in;
 		else {
 			qDebug("out of range");
 			i = 0;
@@ -55,14 +46,15 @@ struct CARD {
 	CARD(const CARD& in) {
 		i = in.i;
 	}
-	friend bool operator<(const CARD& l,const CARD& r);
+	friend bool operator<(const CARD& l, const CARD& r);
 	friend bool operator>(const CARD& l, const CARD& r);
 	friend bool operator!=(const CARD& l, const CARD& r);
 	friend bool operator==(const CARD& l, const CARD& r);
 	CARD& operator=(const CARD& r);
 };
 
-class CARDSET{
+
+class CARDSET {
 public:
 	CARDSET();
 	CARDSET(QByteArray dataIn);
@@ -73,12 +65,21 @@ public:
 	void setToAll();   //set to default 54 cards
 	bool add(CARD in);
 	bool remove(CARD out);
+	CARD setPop() {
+		c_num--;
+		CARD tmp = cards.top();
+		cards.pop();
+		return tmp;
+	}
+	bool setIsEmpty() {
+		return !c_num;
+	}
 	friend void distribute(CARDSET& origin, CARDSET& one, CARDSET& two, CARDSET& three, CARDSET& landlord);
 	//for test
 	void print() {
 		for (int i = 0; i < c_num; i++) {
 			int temp = cards.top().i;
-			std::cout<<temp<<std::endl;
+			std::cout << temp << std::endl;
 			cards.pop();
 		}
 	}
@@ -87,12 +88,11 @@ private:
 	int c_num;
 };
 
-struct Singal {
-	qint8 legal;        
+struct Signal {
+	qint8 valid;
 	qint8 signalType;
-	qint8 signalCotent;
-	qint8 playerType;    
+	qint8 playerType;
 	CARDSET cardTransfer;
 };
 
-Q_DECLARE_METATYPE(Singal)
+Q_DECLARE_METATYPE(Signal)

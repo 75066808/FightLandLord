@@ -1,7 +1,7 @@
 #include "common.h"
 #include <random>
 
-CARDSET::CARDSET():c_num(0)
+CARDSET::CARDSET() :c_num(0)
 {
 }
 
@@ -36,11 +36,14 @@ CARDSET::~CARDSET()
 QByteArray CARDSET::tranToSig()
 {
 	QByteArray sig;
+
 	sig.resize(c_num);
 	for (int i = 0; i < c_num; i++) {
 		sig[i] = cards.top().i;
 		cards.pop();
 	}
+
+	c_num = 0;
 	return sig;
 }
 
@@ -119,7 +122,17 @@ bool operator==(const CARD& l, const CARD& r)
 void distribute(CARDSET& origin, CARDSET& one, CARDSET& two, CARDSET& three, CARDSET& landlord)
 {
 	static std::default_random_engine randEng(clock());
-	if (origin.c_num != 54||one.c_num != 0 || two.c_num != 0 || three.c_num != 0 || landlord.c_num != 0) {
+
+	while (!one.setIsEmpty())
+		one.setPop();
+	while (!two.setIsEmpty())
+		two.setPop();
+	while (!three.setIsEmpty())
+		three.setPop();
+	while (!landlord.setIsEmpty())
+		landlord.setPop();
+
+	if (origin.c_num != 54 || one.c_num != 0 || two.c_num != 0 || three.c_num != 0 || landlord.c_num != 0) {
 		qDebug("illegal distribute");
 	}
 	else {
@@ -130,8 +143,8 @@ void distribute(CARDSET& origin, CARDSET& one, CARDSET& two, CARDSET& three, CAR
 		CARDSET* dest;
 		for (int i = 54; i >= 1; i--) {
 			int rnd = randEng() % vnum + 1;
-			for (int j = 0; j <= 3;j++) {
-				if (vSet[j] == 1){
+			for (int j = 0; j <= 3; j++) {
+				if (vSet[j] == 1) {
 					rnd--;
 					if (rnd == 0) {
 						choose = j;

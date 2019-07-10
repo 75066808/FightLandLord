@@ -15,7 +15,7 @@
 #include <QGraphicsItem>
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
-#include "common.h"
+#include "../utility/common/common.h"
 
 class Window : public QMainWindow
 {
@@ -32,11 +32,13 @@ private:
 	// QGraphicsPixmapItem* cardTempPixmapItem;
 	// QGraphicsScene* Scene;
 	void addCardInScene(qreal x, qreal y, QPixmap *cardTempPixmap, QGraphicsScene* scene);
+
 public slots:
 	void buttonClick(void);
-	void appToWindowSlot(Singal& signal);
+	void viewModelToWindowSlot(std::shared_ptr<Signal> signal);
+
 signals:
-	void windowToAppSignal(Singal &signal);
+	void windowToViewModelSignal(std::shared_ptr<Signal> signal);
 };
 
 #endif

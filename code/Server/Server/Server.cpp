@@ -3,31 +3,31 @@
 Server::Server(QWidget *parent) : QMainWindow(parent), tcpServer(this)
 {
 	ui.setupUi(this);
-	connect(&tcpServer, SIGNAL(newConnection()), this, SLOT(acceptConnection()));
+	connect(&tcpServer, SIGNAL(newConnection()), this, SLOT(connectionSlot()));
 	tcpServer.listen(QHostAddress::Any, PORT_NUM);
 }
 
 
-void Server::acceptConnection(void)
+void Server::connectionSlot(void)
 {
 	QTcpSocket *socket = tcpServer.nextPendingConnection();
 	if (room.connectSocket(socket))
 	{
-		connect(socket, SIGNAL(readyRead()), this, SLOT(readClientData()));
-		connect(socket, SIGNAL(disconnect()), this, SLOT(dealDisconnection()));
+		connect(socket, SIGNAL(readyRead()), this, SLOT(clientToServerSlot()));
+		connect(socket, SIGNAL(disconnected()), this, SLOT(disconnectionSlot()));
 	}
 }
 
-void Server::dealDisconnection(void)
+void Server::disconnectionSlot(void)
 {
 	for (qint32 index = 0;index < 3;index++)
 	{
-		if (room.getSocket(index)->state() == QAbstractSocket::UnconnectedState && room.checkConnect(index))
+		if (room.checkConnect(index) && room.getSocket(index)->state() == QAbstractSocket::UnconnectedState )
 			room.disconnectSocket(index);
 	}
 }
 
-void Server::readClientData(void)
+void Server::clientToServerSlot(void)
 {
 	for (qint32 index = 0;index < 3;index++)
 	{
@@ -39,28 +39,21 @@ void Server::readClientData(void)
 		if (data.isEmpty())
 			continue;
 
-		dealClientData(index, data);  // deal the special notify
+		processClientData(index, data);  // deal the special notify
 	}
 }
 
 
-
-
-void Server::dealClientData(qint32 sender, QByteArray &data)
+void Server::processClientData(qint32 sender, QByteArray &data)
 {
 	QByteArray transData;
 
 	qint8 signalType = data[0];
-	qint8 signalContent = data[1];
 
 	switch (signalType)
 	{
-
-	case BROADCAST:
-		switch (signalContent)
-		{
 		case READY: // player ready
-			room.readyStart(sender);
+			room.ready(sender);
 			break;
 
 		case PLAY_CARD: // player plays card
@@ -81,38 +74,6 @@ void Server::dealClientData(qint32 sender, QByteArray &data)
 
 		default:
 			return;
-		}
-		break;
-
-	case ALL_FINISH:
-		switch (signalContent)
-		{
-		case READY: // player ready
-			room.readyFinish();
-			break;
-
-		case PLAY_CARD: // player plays card
-		case SKIP_CARD: // play skips card
-			room.playNextTurn();
-			break;
-
-		case CHOOSE_LANDLORD: // player chooses landlord
-		case SKIP_LANDLORD: // player skips landlord
-			room.chooseNextTurn();
-			break;
-
-		case DEAL_CARD: // player deals card
-			room.dealCardFinish();
-			break;
-		case DEAL_LANDLORD: // player deals landlord card
-			room.dealLandLordFinish();
-			break;
-
-		default:
-			return;
-		}
-		break;
-	
 	}
 
 }

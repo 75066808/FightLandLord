@@ -11,15 +11,6 @@
 #define LOWERHOUSE         0x01
 
 // signal type
-#define ORIGIN             0x00
-#define MODIFY             0x01
-#define CHECK              0x02
-#define MODIFY_FEEDBACK    0x03      
-#define CHECK_FEEDBACK     0x04
-#define BROADCAST          0x05
-#define ALL_FINISH         0x06
-
-// signal content
 #define CONNECT            0x00
 #define DISCONNECT         0x01
 #define CONNECT_SUCCESS    0x02
@@ -97,12 +88,11 @@ private:
 	int c_num;
 };
 
-struct Singal {
-	qint8 legal;        
+struct Signal {
+	qint8 valid;        
 	qint8 signalType;
-	qint8 signalCotent;
 	qint8 playerType;    
 	CARDSET cardTransfer;
 };
 
-Q_DECLARE_METATYPE(Singal)
+Q_DECLARE_METATYPE(Signal)

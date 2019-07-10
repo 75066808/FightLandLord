@@ -1,4 +1,4 @@
-#include "model.h"
+#include "../utility/model/model.h"
 
 const RuleCardSet operator+(const RuleCardSet& left, const RuleCardSet& right)
 {

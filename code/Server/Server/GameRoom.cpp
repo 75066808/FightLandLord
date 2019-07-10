@@ -6,7 +6,6 @@ GameRoom::GameRoom()
 	tcpConnect[1] = 0;
 	tcpConnect[2] = 0;
 
-	turnNum = 0;
 	readyNum = 0;
 	playerNum = 0;
 	skipPlayNum = 0;
@@ -14,9 +13,11 @@ GameRoom::GameRoom()
 	dealCardOverNum = 0;
 	dealLandLordOverNum = 0;
 
+	turnIndex = 0;
 	playTimer = new QTimer(this);
 	chooseTimer = new QTimer(this);
 
+	
 	connect(playTimer, SIGNAL(timeout()), this, SLOT(playTimeOut()));
 	connect(chooseTimer, SIGNAL(timeout()), this, SLOT(chooseTimeOut()));
 }
@@ -55,9 +56,9 @@ bool GameRoom::connectSocket(QTcpSocket *tcpSocket)
 		QByteArray data;
 		data[0] = CONNECT_SUCCESS;
 		card.setToAll();
-		distribute(card, person1, person2, person3, landlord);
+		distribute(card, person[0], person[1], person[2], landlord);
 
-		data.append(person1.tranToSig());
+		data.append(person[0].tranToSig());
 		broadCastData(playerNum, data); // notify success
 
 		playerNum++;  // increase play number
@@ -71,7 +72,7 @@ void GameRoom::disconnectSocket(qint8 index)
 	QByteArray data;
 	
 	tcpClient[index]->disconnectFromHost();
-	playerNum--; // decrease the player
+	playerNum--;           // decrease the player
 	tcpConnect[index] = 0; // set the connect signal
 	data[0] = PLAYER_QUIT;
 	broadCastData(index, data); 
@@ -88,137 +89,104 @@ QTcpSocket *GameRoom::getSocket(qint8 index)
 }
 
 
-void GameRoom::readyStart(qint8 index)
+void GameRoom::ready(qint8 index)
 {
 	QByteArray data;
 	data[0] = READY;
 	broadCastData(index, data);
 	readyNum++;
-}
 
-void GameRoom::readyFinish(void)
-{
-	QByteArray data;
+	QThread::msleep(100);
 	if (readyNum == 3) // all players ready
 	{
 		readyNum = 0;
 		data[0] = DEAL_CARD;
-		broadCastData(-1, data);
+		broadCastData(turnIndex, data);
 	}
 }
+
 
 
 
 void GameRoom::skipCard(qint8 index)
 {
+	qint8 next;
 	QByteArray data;
 	data[0] = SKIP_CARD;
 	broadCastData(index, data);
 
 	skipPlayNum++;
-}
-
-void GameRoom::playCard(qint8 index)
-{
-	QByteArray data;
-	data[0] =  PLAY_CARD;
-	broadCastData(index, data);
-}
-
-void GameRoom::playNextTurn(void)
-{
-	QByteArray data;
-	turnNum = (turnNum + 1) % 3;
-
+	
+	QThread::msleep(100);
+	next = (index + 1) % 3;
 	if (skipPlayNum == 2) // if skips twice
 	{
 		skipPlayNum = 0;
 		data[0] = PLAY_TURN_NO_SKIP; // next player can't skip
-		broadCastData(turnNum, data);
+		broadCastData(next, data);
 	}
 	else
 	{
 		data[0] = PLAY_TURN; // next play also can skip 
-		broadCastData(turnNum, data);
+		broadCastData(next, data);
 	}
-	
-	if (playTimer->isActive())
-		playTimer->stop();
-	playTimer->start(TIMEOUT);
+
 }
+
+void GameRoom::playCard(qint8 index)
+{
+	qint8 next;
+	QByteArray data;
+	data[0] =  PLAY_CARD;
+	broadCastData(index, data);
+
+	skipPlayNum = 0;
+	
+	QThread::msleep(100);
+	next = (index + 1) % 3;
+	data[0] = PLAY_TURN; // next play also can skip 
+	broadCastData(next, data);
+}
+
 
 
 void GameRoom::skipLandLord(qint8 index)
 {
+	qint8 next;
 	QByteArray data;
 	data[0] = SKIP_LANDLORD;
-	broadCastData(turnNum, data);
+	broadCastData(index, data);
+
 	skipLandLordNum++;
+
+	QThread::msleep(100);
+	if (skipLandLordNum == 3) // all skips
+	{
+		skipLandLordNum = 0;
+		data[0] = DEAL_CARD;
+		broadCastData(turnIndex, data); // shuffle the cards 
+
+	}
+	else
+	{
+		next = (index + 1) % 3;
+		data[0] = CHOOSE_TURN;
+		broadCastData(next, data);  // notify to next player
+	}
+
 }
 
 void GameRoom::chooseLandLord(qint8 index)
 {
 	QByteArray data;	
-	data[0] = CHOOSE_LANDLORD;
-	broadCastData(turnNum, data); 
-	skipLandLordNum = -1;
+	data[0] = DEAL_LANDLORD;
+	broadCastData(index, data);
+	skipLandLordNum = 0;
 }
 
-void GameRoom::chooseNextTurn(void)
-{
-	QByteArray data;
 
-	if (skipLandLordNum == 3) // all skips
-	{
-		skipLandLordNum = 0;
-		data[0] = DEAL_CARD;
-		broadCastData(-1, data); // shuffle the cards 
 
-	}
-	else if (skipLandLordNum == -1) // player choose to be the landlord
-	{
-		skipLandLordNum = 0;
-		data[0] = DEAL_LANDLORD;
-		broadCastData(turnNum, data);
-		if (chooseTimer->isActive())
-			chooseTimer->stop();
-		chooseTimer->start(TIMEOUT);
-	}
-	else
-	{
-		turnNum = (turnNum + 1) % 3;
-		data[0] = CHOOSE_TURN;
-		broadCastData(turnNum, data);  // notify to next player
-		if (chooseTimer->isActive())
-			chooseTimer->stop();
-		chooseTimer->start(TIMEOUT);
-	}
 
-}
-
-void GameRoom::dealCardFinish(void)
-{
-	QByteArray data;
-	dealCardOverNum++;
-	if (dealCardOverNum == 3) // finish dealing the card to all player
-	{
-		dealCardOverNum = 0;
-		data[0] = CHOOSE_TURN;
-		broadCastData(turnNum, data);  // notify player to choose landlord
-	}
-}
-
-void GameRoom::dealLandLordFinish(void)
-{
-	QByteArray data;
-	dealLandLordOverNum++;
-	if (dealLandLordOverNum == 1)
-	{
-		dealCardOverNum = 0;
-		data[0] = PLAY_TURN_NO_SKIP;
-		broadCastData(turnNum, data); // notify player(landlord) to play card, can't skip 
-	}
-}
 
 void GameRoom::broadCastData(qint8 sender, QByteArray data)
 {
@@ -241,21 +209,7 @@ void GameRoom::broadCastData(qint8 sender, QByteArray data)
 
 void GameRoom::playTimeOut(void)
 {
-	QByteArray data;
-
-	turnNum = (turnNum + 1) % 3;
-
-	if (skipPlayNum == 2) // if skips twice
-	{
-		skipPlayNum = 0;
-		data[0] = COM_PLAY_NO_SKIP; // next player can't skip
-		broadCastData(turnNum, data);
-	}
-	else
-	{
-		data[0] = COM_PLAY; // next play also can skip 
-		broadCastData(turnNum, data);
-	}
+	
 }
 
 

@@ -1,5 +1,6 @@
 #pragma once
-#include "common.h"
+#pragma once
+#include "../utility/common/common.h"
 
 class RuleCardSet : public QObject {
 
@@ -13,8 +14,8 @@ public:
 			cardLog[i] = in.cardLog[i];
 		}
 	}
-	~RuleCardSet(){}
-	RuleCardSet(CARDSET init):type(0), cardLog{ 0 } {
+	~RuleCardSet() {}
+	RuleCardSet(CARDSET init) :type(0), cardLog{ 0 } {
 		while (!init.setIsEmpty()) {
 			CARD tmp = init.setPop();
 			cardLog[tmp.i]++;
