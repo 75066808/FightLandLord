@@ -44,13 +44,14 @@ public:
         graphicsView = new QGraphicsView(centralWidget);
         graphicsView->setObjectName(QStringLiteral("graphicsView"));
         graphicsView->setGeometry(QRect(10, 130, 1261, 791));
+        graphicsView->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
         btnShowCard = new QPushButton(centralWidget);
         btnShowCard->setObjectName(QStringLiteral("btnShowCard"));
         btnShowCard->setGeometry(QRect(500, 50, 131, 41));
         FightLandLordClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(FightLandLordClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1870, 23));
+        menuBar->setGeometry(QRect(0, 0, 1870, 26));
         FightLandLordClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(FightLandLordClass);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));

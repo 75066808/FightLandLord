@@ -23,6 +23,9 @@
       <height>791</height>
      </rect>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
    </widget>
    <widget class="QPushButton" name="btnShowCard">
     <property name="geometry">
@@ -44,7 +47,7 @@
      <x>0</x>
      <y>0</y>
      <width>1870</width>
-     <height>23</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
@@ -59,8 +62,6 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources>
-  <include location="FightLandLord.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

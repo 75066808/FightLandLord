@@ -9,6 +9,7 @@
 #include <QPainter>
 #include <QRect>
 #include <QPoint>
+#include <QPointF>
 #include <QSize>
 #include <QGraphicsView>
 #include <QGraphicsScene>
@@ -18,6 +19,11 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QTransform>
 #include "../utility/common/common.h"
+
+class customScene : public QGraphicsScene
+{
+	void mousePressEvent(QGraphicsSceneMouseEvent* event);
+};
 
 class Window : public QMainWindow
 {
@@ -33,8 +39,8 @@ private:
 	// QPixmap* cardTempPixmap ;
 	// QGraphicsPixmapItem* cardTempPixmapItem;
 	// QGraphicsScene* Scene;
-	void addCardInScene(qreal x, qreal y, QPixmap *cardTempPixmap, QGraphicsScene* scene);
-	void addHandInScene(QPixmap *cardTempPixmap, QGraphicsScene *Scene);
+	void addCardInScene(qreal x, qreal y, QPixmap *cardTempPixmap, customScene* scene);
+	void addHandInScene(QPixmap *cardTempPixmap, customScene *Scene);
 signals:
 	void windowCommandSignal(std::shared_ptr<Signal> signal);
 

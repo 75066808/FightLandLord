@@ -19,7 +19,7 @@ void Window::windowNotificationSlot(std::shared_ptr<Signal> signal)
 	qDebug() << "View Model to Window";
 	QPixmap *cardTempPixmap = new QPixmap();
 
-	QGraphicsScene *Scene = new QGraphicsScene();
+	customScene *Scene = new customScene();
 
 	qreal init_x = 10;
 	qreal init_y = 10;
@@ -28,7 +28,7 @@ void Window::windowNotificationSlot(std::shared_ptr<Signal> signal)
 
 	size_t cardCnt = 0;
 
-	Scene->setSceneRect(300, -100, 1, 1);
+	Scene->setSceneRect(0, 0, 1, 1);
 
 	addHandInScene(cardTempPixmap, Scene);
 
@@ -41,7 +41,7 @@ void Window::windowNotificationSlot(std::shared_ptr<Signal> signal)
 	
 }
 
-void Window::addCardInScene(qreal x, qreal y, QPixmap* cardTempPixmap, QGraphicsScene* Scene)
+void Window::addCardInScene(qreal x, qreal y, QPixmap* cardTempPixmap, customScene* Scene)
 {
 	//cardTempPixmap->load("poker_resource/joker1", "jpg");
 	Scene->addPixmap(*cardTempPixmap)->setPos(x, y);
@@ -57,10 +57,10 @@ void Window::buttonClick(void)
 	emit windowCommandSignal(signal);
 }
 
-void Window::addHandInScene(QPixmap *cardTempPixmap, QGraphicsScene *Scene)
+void Window::addHandInScene(QPixmap *cardTempPixmap, customScene *Scene)
 {
-	qreal init_x = 10;
-	qreal init_y = 10;
+	qreal init_x = 400;
+	qreal init_y = 600;
 
 	size_t cardCnt = 0;
 
@@ -204,4 +204,23 @@ void Window::addHandInScene(QPixmap *cardTempPixmap, QGraphicsScene *Scene)
 			}
 		}
 	}
+}
+
+void customScene::mousePressEvent(QGraphicsSceneMouseEvent* event)
+{
+	QTransform transform;
+	QGraphicsItem* item;
+
+
+	QGraphicsScene::mousePressEvent(event);
+	//qreal orignal_x = this->itemAt(event->scenePos(), transform)->pos().rx();
+	//qreal orignal_y = this->itemAt(event->scenePos(), transform)->pos().ry();
+
+	//this->itemAt(event->scenePos(), transform)->setPos(orignal_x, orignal_y - 30);
+	item = this->itemAt(event->scenePos(), transform);
+	//item->setPos(event->scenePos().x(), event->scenePos().y() - 30);
+	qreal original_x = (qreal) item->pos().x()+1;
+	qreal original_y = (qreal) item->pos().y()+1;
+
+	item->setPos(original_x, original_y - 30);
 }
