@@ -1,5 +1,6 @@
 #pragma once
 #include "../model/model.h"
+#include "../utility/socket/socket.h"
 
 class modelView : public QObject {
 	Q_OBJECT
@@ -10,6 +11,7 @@ public:
 	void setUpper(const std::shared_ptr<Player>& model);
 	void setLower(const std::shared_ptr<Player>& model);
 	void setTable(const std::shared_ptr<Table>& model);
+	void setSocket(const std::shared_ptr<Socket>& model);
 
 	std::shared_ptr<RuleCardSet> getSelected() {
 		return selected;
@@ -31,14 +33,16 @@ public:
 	}
 
 signals:
-	void viewModelToModelSignal(std::shared_ptr<Signal> signal);
-	void viewModelToWindowSignal(std::shared_ptr<Signal> signal);
+	void viewModelCommandSignal(std::shared_ptr<Signal> signal);
+	void viewModelNotificationSignal(std::shared_ptr<Signal> signal);
 
 public slots:
-	void windowToViewModelSlot(std::shared_ptr<Signal> signal);
-	void modelToViewModelSlot(std::shared_ptr<Signal> signal);
+	void viewModelCommandSlot(std::shared_ptr<Signal> signal);
+	void viewModelNotificationSlot(std::shared_ptr<Signal> signal);
 
 private:
+	std::shared_ptr <Socket> socket;
+
 	std::shared_ptr<Player> self;
 	std::shared_ptr<Player> upperHouse;
 	std::shared_ptr<Player> lowerHouse;

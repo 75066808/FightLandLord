@@ -22,6 +22,5 @@ private:
 	QApplication app;
 	Window window;
 	modelView modelview;
-	Socket socket;
 };
 

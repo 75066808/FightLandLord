@@ -16,11 +16,12 @@ public:
 		*status = in;
 	}
 signals:
-	void modelToSocketSignal(std::shared_ptr<Signal> signal);
-	void modelToViewModelSignal(std::shared_ptr<Signal> signal);
+	void modelCommandSignal(std::shared_ptr<Signal> signal);
+	void modelNotificationSignal(std::shared_ptr<Signal> signal);
+
 public slots:
-	void viewModelToModelSlot(std::shared_ptr<Signal> signal);
-	void socketToModelSlot(std::shared_ptr<Signal> signal);
+	void modelCommandSlot(std::shared_ptr<Signal> signal);
+	void modelNotificationSlot(std::shared_ptr<Signal> signal);
 
 private:
 	std::shared_ptr<RuleCardSet> selected;
@@ -41,11 +42,12 @@ public:
 	}
 
 signals:
-	void modelToSocketSignal(std::shared_ptr<Signal> signal);
-	void modelToViewModelSignal(std::shared_ptr<Signal> signal);
+	void modelCommandSignal(std::shared_ptr<Signal> signal);
+	void modelNotificationSignal(std::shared_ptr<Signal> signal);
+
 public slots:
-	void viewModelToModelSlot(std::shared_ptr<Signal> signal);
-	void socketToModelSlot(std::shared_ptr<Signal> signal);
+	void modelCommandSlot(std::shared_ptr<Signal> signal);
+	void modelNotificationSlot(std::shared_ptr<Signal> signal);
 
 private:
 	std::shared_ptr<RuleCardSet> onTable;

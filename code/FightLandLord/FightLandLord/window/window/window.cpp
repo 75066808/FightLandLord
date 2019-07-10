@@ -14,7 +14,7 @@ void Window::setCurrentCardsInHand(const qint8* cards)
 }
 
 
-void Window::viewModelToWindowSlot(std::shared_ptr<Signal> signal)
+void Window::windowNotificationSlot(std::shared_ptr<Signal> signal)
 {
 	qDebug() << "View Model to Window";
 	QPixmap *cardTempPixmap = new QPixmap();
@@ -187,5 +187,5 @@ void Window::buttonClick(void)
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
 	signal->signalType = CONNECT;
-	emit windowToViewModelSignal(signal);
+	emit windowCommandSignal(signal);
 }

@@ -33,12 +33,13 @@ private:
 	// QGraphicsScene* Scene;
 	void addCardInScene(qreal x, qreal y, QPixmap *cardTempPixmap, QGraphicsScene* scene);
 
+signals:
+	void windowCommandSignal(std::shared_ptr<Signal> signal);
+
 public slots:
 	void buttonClick(void);
-	void viewModelToWindowSlot(std::shared_ptr<Signal> signal);
+	void windowNotificationSlot(std::shared_ptr<Signal> signal);
 
-signals:
-	void windowToViewModelSignal(std::shared_ptr<Signal> signal);
 };
 
 #endif
