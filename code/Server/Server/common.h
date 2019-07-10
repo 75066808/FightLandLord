@@ -30,8 +30,7 @@
 #define PLAYER_QUIT        0x10
 #define TIME_OUT		   0x11
 #define COM_PLAY           0x12
-#define COM_PLAY_NO_SKIP   0x13
-#define COM_CHOOSE         0x14
+#define COM_CHOOSE         0x13
 
 struct CARD {
 	qint8 i;

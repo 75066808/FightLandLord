@@ -26,7 +26,7 @@ private:
 private slots:
 	void connectionSlot(void);
 	void disconnectionSlot(void);
-	void clientToServerSlot(void);
+	void serverNotificationSlot(void);
 
 private:
 	void processClientData(qint32 sender, QByteArray &data);

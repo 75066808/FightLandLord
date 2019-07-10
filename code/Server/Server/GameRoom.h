@@ -15,11 +15,11 @@ public:
 	GameRoom();
 	~GameRoom();
 
-	bool connectSocket(QTcpSocket *tcpSocket);
+	bool connectSocket(std::shared_ptr<QTcpSocket> tcpSocket);
 	void disconnectSocket(qint8 index);
 
 	bool checkConnect(qint8 index);
-	QTcpSocket *getSocket(qint8 index);
+	std::shared_ptr<QTcpSocket> getSocket(qint8 index);
 
 	void ready(qint8 index);
 
@@ -29,27 +29,28 @@ public:
 	void skipLandLord(qint8 index);
 	void chooseLandLord(qint8 index);
 
+	void dealCard(void);
 	void broadCastData(qint8 sender, QByteArray data);
+	
 
 private:
-	QTcpSocket *tcpClient[3];  // clients
-	qint8 tcpConnect[3];       // connect signal
+	std::shared_ptr<QTcpSocket> tcpClient[3];  // client
 
-	qint8 readyNum;            // number of ready clients
-	qint8 playerNum;           // number of players
-	qint8 skipPlayNum;         // skip times in playing card
-	qint8 skipLandLordNum;     // skip times in choosing landlord
-	qint8 dealCardOverNum;     // number of players who finish dealing card
-	qint8 dealLandLordOverNum; // number of players who finish dealing landlord card
+	qint8 tcpConnect[3];  // connect signal
 
-	qint8 turnIndex;             // turn index
+	qint8 readyNum;        // number of ready clients
+	qint8 playerNum;       // number of players
+	qint8 skipPlayNum;     // skip times in playing card
+	qint8 skipLandLordNum; // skip times in choosing landlord
+
+	qint8 turnIndex;       // turn index
 
 	CARDSET person[3];
 	CARDSET landlord;
 	CARDSET card;
 
-	QTimer *playTimer;
-	QTimer *chooseTimer;
+	std::shared_ptr<QTimer> playTimer;
+	std::shared_ptr<QTimer> chooseTimer;
 
 private slots:
 	void playTimeOut(void);

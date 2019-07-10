@@ -11,23 +11,24 @@ Server::Server(QWidget *parent) : QMainWindow(parent), tcpServer(this)
 void Server::connectionSlot(void)
 {
 	QTcpSocket *socket = tcpServer.nextPendingConnection();
-	if (room.connectSocket(socket))
+
+	if (room.connectSocket(std::shared_ptr<QTcpSocket>(socket)))
 	{
-		connect(socket, SIGNAL(readyRead()), this, SLOT(clientToServerSlot()));
+		connect(socket, SIGNAL(readyRead()), this, SLOT(serverNotificationSlot()));
 		connect(socket, SIGNAL(disconnected()), this, SLOT(disconnectionSlot()));
 	}
 }
 
 void Server::disconnectionSlot(void)
 {
-	for (qint32 index = 0;index < 3;index++)
+	for (qint32 index = 0;index < 3;index++) // check unconnected
 	{
 		if (room.checkConnect(index) && room.getSocket(index)->state() == QAbstractSocket::UnconnectedState )
 			room.disconnectSocket(index);
 	}
 }
 
-void Server::clientToServerSlot(void)
+void Server::serverNotificationSlot(void)
 {
 	for (qint32 index = 0;index < 3;index++)
 	{
