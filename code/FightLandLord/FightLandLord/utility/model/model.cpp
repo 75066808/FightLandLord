@@ -87,6 +87,21 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 			}
 		}
 		(*m_Num) = j;*/
+		CARDSET zero;
+		(*selected) = zero;
+		(*onHand) = (*onHand) - RuleCardSet(signal->cardTransfer);
+		CARDSET origin;
+		for (int i = 0; i < (*m_Num); i++) {
+			origin.add(m_Card->cards[i]);
+		}
+		int index = 0;
+		CARDSET tmp = signal->cardTransfer - origin;
+		while (!tmp.setIsEmpty()) {
+			m_Card->cards[index] = tmp.setPop();
+			index++;
+		}
+		(*m_Num) = index;
+		emit modelNotificationSignal(signal);
 	}
 }
 
