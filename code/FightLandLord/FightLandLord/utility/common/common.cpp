@@ -74,7 +74,8 @@ bool CARDSET::remove(CARD out)
 	std::priority_queue<CARD> tmp;
 	CARD temp;
 	bool sig = 0;
-	for (int i = 0; i < c_num; i++) {
+	int o_num = c_num;
+	for (int i = 0; i < o_num; i++) {
 		if (out == cards.top()) {
 			cards.pop();
 			c_num--;

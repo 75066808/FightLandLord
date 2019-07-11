@@ -54,17 +54,24 @@ void Player::modelCommandSlot(std::shared_ptr<Signal> signal) {
 }
 
 void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
+	qDebug() << "Socket to Model" << endl;
 	if (*status == -2) {
-		qDebug() << "Socket to Model" << endl;
 		if (signal->signalType == CONNECT_SUCCESS) {
 			*status = 1;
-		    (*onHand) = (*onHand) + RuleCardSet(signal->cardTransfer);
+			QByteArray whole = signal->cardTransfer;
+			QByteArray here;
+			here.resize(34);
+			int start = 40;  //modify here
+			for (int i = 0; i < 34; i++) {
+				here[i] = whole[start + i];
+			}
+		    (*onHand) = (*onHand) + RuleCardSet(here);
 			CARDSET origin;
 			for (int i = 0; i < (*m_Num); i++) {
 				origin.add(m_Card->cards[i]);
 			}
 			int index = 0;
-			CARDSET tmp = signal->cardTransfer + origin;
+			CARDSET tmp = here + origin;
 			while (!tmp.setIsEmpty()) {
 				m_Card->cards[index] = tmp.setPop();
 				index++;
@@ -75,18 +82,6 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 	}
 	else if (0) //this is for handing cards
 	{
-		/*(*onHand) = (*onHand) - (*selected);
-		RuleCardSet zero;
-		(*selected) = zero;
-		int i = 0, j = 0;
-		for (; i < (*m_Num); i++){
-			if (m_Selected->bools[i] == 1) {
-				m_Card->cards[j] = m_Card->cards[i];
-				m_Selected->bools[j] = m_Selected->bools[i];
-				j++;
-			}
-		}
-		(*m_Num) = j;*/
 		CARDSET zero;
 		(*selected) = zero;
 		(*onHand) = (*onHand) - RuleCardSet(signal->cardTransfer);
@@ -131,6 +126,30 @@ void Table::modelCommandSlot(std::shared_ptr<Signal> signal) {
 void Table::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 	qDebug() << "Socket to Model" << endl;
 	if (0) {
-		emit modelNotificationSignal(signal);
+		if (*status == -2) {
+			if (signal->signalType == CONNECT_SUCCESS) {
+				*status = 1;
+				QByteArray whole = signal->cardTransfer;
+				QByteArray here;
+				here.resize(6);
+				int start = 0;  //modify here
+				for (int i = 0; i < 6; i++) {
+					here[i] = whole[start + i];
+				}
+				(*landLord) = (*landLord) + RuleCardSet(here);
+				CARDSET origin;
+				for (int i = 0; i < (*l_Num); i++) {
+					origin.add(l_Card->cards[i]);
+				}
+				int index = 0;
+				CARDSET tmp = here + origin;
+				while (!tmp.setIsEmpty()) {
+					l_Card->cards[index] = tmp.setPop();
+					index++;
+				}
+				(*l_Num) = index;
+				emit modelNotificationSignal(signal);
+			}
+		}
 	}
 }

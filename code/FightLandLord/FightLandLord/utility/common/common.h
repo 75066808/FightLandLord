@@ -100,7 +100,7 @@ struct Signal {
 	qint8 valid;        
 	qint8 signalType;
 	qint8 playerType;    
-	CARDSET cardTransfer;
+	QByteArray cardTransfer;
 };
 
 
