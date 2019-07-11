@@ -15,12 +15,22 @@
 #include <QGraphicsItem>
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
+#include <QGraphicsSceneMouseEvent>
+#include <QTransform>
+#include <QPushButton>
+#include <QtAlgorithms>
 #include "../utility/common/common.h"
+
+class customScene : public QGraphicsScene
+{
+	void mousePressEvent(QGraphicsSceneMouseEvent* event);
+};
 
 class Window : public QMainWindow
 {
 	Q_OBJECT
 
+	friend class customScene;
 public:
 	Window(QWidget *parent = Q_NULLPTR);
 
@@ -54,20 +64,31 @@ private:
 	std::shared_ptr<int> landLordNum;
 	std::shared_ptr<CARD20> landLordCard;
 
-	QGraphicsScene scene;
-	QPixmap pixmap[4][18];
-	QGraphicsPixmapItem item[4][18];
-	
+	customScene scene;
+	QGraphicsPixmapItem cardItem[4][18];
+	QGraphicsRectItem cardSlot;
+	QPushButton enterButton;
+	QPushButton readyButton;
 
-	void Window::addToScene(int color, int value, qreal rx, qreal ry, qreal rw, qreal rh);
-	void getRatio(int x, int y, qreal &rx, qreal &ry);
-	void moveItem(QGraphicsPixmapItem &item, qreal rx, qreal ry);
+	void initItem(QPixmap pixmap, QGraphicsPixmapItem &item, qreal rw, qreal rh);
+	void initButton(QPixmap pixmap, QPushButton &button, qreal rw, qreal rh);
+
+	void addParentItemToScene(QGraphicsRectItem &parent, qreal rx, qreal ry, qreal rw, qreal rh);
+	void addItemToScene(QGraphicsPixmapItem &item, qreal rx, qreal ry);
+	void addItemToParentItem(QGraphicsPixmapItem &item, QGraphicsRectItem &parent, qreal rx, qreal ry);
+
+	void addButtonToScene(QPushButton &button, qreal rx, qreal ry);
+
+
+	QString colorName[4];
+	QString valueName[18];
 
 signals:
 	void windowCommandSignal(std::shared_ptr<Signal> signal);
 
 public slots:
-	void buttonClick(void);
+	void connectButtonClick(void);
+	void readyButtonClick(void);
 	void windowNotificationSlot(std::shared_ptr<Signal> signal);
 
 };

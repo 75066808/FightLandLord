@@ -38,8 +38,6 @@ App::App(int argc, char *argv[]): app(argc, argv)
 	connect(&window, SIGNAL(windowCommandSignal(std::shared_ptr<Signal>)),
 		&modelview, SLOT(viewModelCommandSlot(std::shared_ptr<Signal>)));
 
-
-
 }
 
 App::~App()

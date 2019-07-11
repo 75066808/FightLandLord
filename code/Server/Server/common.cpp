@@ -56,7 +56,7 @@ void CARDSET::setToAll()
 		if (i >= 3 && i <= 15) time = 3;
 		else time = 0;
 		for (int j = 0; j <= time; j++) {
-			cards.push(CARD((qint8)i,(qint8)j));
+			cards.push(CARD((qint8)i, (qint8)j));
 		}
 	}
 
@@ -74,16 +74,12 @@ bool CARDSET::remove(CARD out)
 	std::priority_queue<CARD> tmp;
 	CARD temp;
 	bool sig = 0;
-	for (int i = 0; i < c_num; i++) {
-		if (!sig && out != cards.top()) {
-			temp = cards.top();
-			cards.pop();
-			tmp.push(temp);
-		}
-		else if (!sig && out == cards.top()) {
-			sig = 1;
+	int o_num = c_num;
+	for (int i = 0; i < o_num; i++) {
+		if (out == cards.top()) {
 			cards.pop();
 			c_num--;
+			sig = 1;
 		}
 		else {
 			temp = cards.top();
@@ -124,6 +120,16 @@ const CARDSET operator+(const CARDSET& l, const CARDSET& r)
 	CARDSET ltmp = l;
 	CARDSET rtmp = r;
 	while (!rtmp.setIsEmpty()) ltmp.add(rtmp.setPop());
+	return ltmp;
+}
+
+const CARDSET operator-(const CARDSET& l, const CARDSET& r)
+{
+	CARDSET ltmp = l;
+	CARDSET rtmp = r;
+	while (!rtmp.setIsEmpty()) {
+		ltmp.remove(rtmp.setPop());
+	}
 	return ltmp;
 }
 

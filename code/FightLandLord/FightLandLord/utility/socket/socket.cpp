@@ -28,13 +28,9 @@ void Socket::socketCommandSlot(std::shared_ptr<Signal> signal)
 		tcpSocket->disconnectFromHost(); // disconnect from host
 		break;
 	default:
-		if (signal->valid != 0) // valid signal
-		{
-			data[0] = signal->signalType;
-			data.append(signal->cardTransfer.tranToSig());
-			tcpSocket->write(data); // transfer to server
-			
-		}
+		data[0] = signal->signalType;
+		data.append(signal->cardTransfer);
+		tcpSocket->write(data); // transfer to server
 		break;
 	}
 }

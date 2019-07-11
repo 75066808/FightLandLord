@@ -60,7 +60,10 @@ void Player::modelCommandSlot(std::shared_ptr<Signal> signal) {
 void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 	qDebug() << "Socket to Model" << endl;
 	if (*status == -2 && (signal->signalType == CONNECT_SUCCESS||signal->signalType == CONNECT_FAILED)) {
-		emit modelCommandSignal(signal);
+		emit modelNotificationSignal(signal);
+	}
+	else if (*status == 2 && signal->signalType == READY) {
+		emit modelNotificationSignal(signal);
 	}
 	else if (*status == 2) {
 		if (signal->signalType == DEAL_CARD) {
