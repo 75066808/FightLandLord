@@ -19,6 +19,9 @@ public:
 	std::shared_ptr<BOOL20> get_Selected() {
 		return m_Selected;
 	}
+	void setOnTable(const std::shared_ptr<RuleCardSet>& on) {
+		onTable = on;
+	}
 signals:
 	void modelCommandSignal(std::shared_ptr<Signal> signal);
 	void modelNotificationSignal(std::shared_ptr<Signal> signal);
@@ -31,6 +34,7 @@ private:
 	std::shared_ptr<RuleCardSet> selected;
 	std::shared_ptr<RuleCardSet> onHand;
 	std::shared_ptr<int> status;
+	std::shared_ptr<RuleCardSet> onTable;
 
 	std::shared_ptr<int> m_Num;
 	std::shared_ptr<CARD20> m_Card;
@@ -55,6 +59,11 @@ public:
 	std::shared_ptr<CARD20> getL_Card() {
 		return l_Card;
 	}
+	std::shared_ptr<RuleCardSet> getOnTable() {
+		return onTable;
+	}
+
+
 
 signals:
 	void modelCommandSignal(std::shared_ptr<Signal> signal);
