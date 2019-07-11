@@ -61,7 +61,7 @@ private:
 	std::shared_ptr<int> landLordNum;
 	std::shared_ptr<CARD20> landLordCard;
 
-	QGraphicsScene scene;
+	customScene scene;
 	QPixmap pixmap[4][18];
 	QGraphicsPixmapItem item[4][18];
 	
