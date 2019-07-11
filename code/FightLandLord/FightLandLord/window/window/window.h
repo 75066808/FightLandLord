@@ -17,6 +17,8 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QTransform>
+#include <QPushButton>
+#include <QtAlgorithms>
 #include "../utility/common/common.h"
 
 class customScene : public QGraphicsScene
@@ -65,10 +67,17 @@ private:
 	customScene scene;
 	QGraphicsPixmapItem cardItem[4][18];
 	QGraphicsRectItem cardSlot;
+	QPushButton button;
+
 
 	void initItem(QPixmap pixmap, QGraphicsPixmapItem &item, qreal rw, qreal rh);
+	void initButton(QPixmap pixmap, QPushButton &button, qreal rw, qreal rh);
+
 	void addParentItemToScene(QGraphicsRectItem &parent, qreal rx, qreal ry, qreal rw, qreal rh);
+	void addItemToScene(QGraphicsPixmapItem &item, qreal rx, qreal ry);
 	void addItemToParentItem(QGraphicsPixmapItem &item, QGraphicsRectItem &parent, qreal rx, qreal ry);
+
+	void addButtonToScene(QPushButton &button, qreal rx, qreal ry);
 
 
 	QString colorName[4];

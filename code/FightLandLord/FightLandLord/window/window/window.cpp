@@ -5,7 +5,6 @@ Window::Window(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
-	connect(ui.pushButton, SIGNAL(clicked()), this, SLOT(buttonClick()));
 	
 	scene.setSceneRect(0, 0, 1, 1);
 
@@ -55,11 +54,17 @@ Window::Window(QWidget *parent)
 	initItem(pixmap, cardItem[0][17], 0.1, 0.15);
 
 	addParentItemToScene(cardSlot, 0.2, 0.6, 0.6, 0.2);
+	
+	pixmap.load("button_resource/connect", "jpg");
+	
+	initButton(pixmap, button, 0.2, 0.1);
+	addButtonToScene(button, 0.4, 0.4);
 
+	connect(&button, SIGNAL(clicked()), this, SLOT(buttonClick()));
+
+	ui.graphicsView->setScene(&scene);
+	ui.graphicsView->show();
 }
-
-
-
 
 
 
@@ -78,6 +83,7 @@ void Window::windowNotificationSlot(std::shared_ptr<Signal> signal)
 		x += 0.03;
 	}
 
+	addButtonToScene(button, 0.4, 0.4);
 	ui.graphicsView->setScene(&scene);
 	ui.graphicsView->show();
 }
@@ -102,11 +108,23 @@ void Window::initItem(QPixmap pixmap, QGraphicsPixmapItem &item, qreal rw, qreal
 	item.setPixmap(pixmap.scaled(rw*width(), rh*height()));
 }
 
+void Window::initButton(QPixmap pixmap, QPushButton &button, qreal rw, qreal rh)
+{
+	QIcon icon(pixmap.scaled(rw*width(), rh*height()));
+	button.setIcon(icon);
+	button.setGeometry(0, 0, rw*width(), rh*height());
+}
+
 void Window::addParentItemToScene(QGraphicsRectItem &parent, qreal rx, qreal ry, qreal rw, qreal rh)
 {
 	parent.setRect(QRectF(rx*width(), ry*height(), rw*width(), rh*height()));
-	//parent.setVisible(false);
 	scene.addItem(&parent);
+}
+
+void Window::addItemToScene(QGraphicsPixmapItem &item, qreal rx, qreal ry)
+{
+	item.setPos(rx*width(), ry*height());
+	scene.addItem(&item);
 }
 
 void Window::addItemToParentItem(QGraphicsPixmapItem &item, QGraphicsRectItem &parent, qreal rx, qreal ry)
@@ -115,6 +133,11 @@ void Window::addItemToParentItem(QGraphicsPixmapItem &item, QGraphicsRectItem &p
 	item.setParentItem(&parent);
 }
 
+void Window::addButtonToScene(QPushButton &button, qreal rx, qreal ry)
+{
+	button.setGeometry(rx*width(), ry*height(), button.width(),button.height());
+	scene.addWidget(&button);
+}
 
 void Window::buttonClick(void)
 {
@@ -139,9 +162,14 @@ void customScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	//item->setPos(event->scenePos().x(), event->scenePos().y() - 30);
 	//qreal original_x = (qreal) item->pos().x()+1;
 	//qreal original_y = (qreal) item->pos().y()+1;
-	int index = item->parentItem()->childItems().indexOf(item);
+
+	if (item && item->parentItem())
+	{
+		int index = item->parentItem()->childItems().indexOf(item);
+		qDebug() << "index of this item is " << index;
+	}
 
 	//event->
 	//item->setPos(original_x, original_y - 30);
-	qDebug() << "index of this item is " << index;
+	
 }

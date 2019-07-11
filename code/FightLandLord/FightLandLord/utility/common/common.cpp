@@ -129,6 +129,7 @@ const CARDSET operator-(const CARDSET& l, const CARDSET& r)
 	while (!rtmp.setIsEmpty()) {
 		ltmp.remove(rtmp.setPop());
 	}
+	return ltmp;
 }
 
 void distribute(CARDSET& origin, CARDSET& one, CARDSET& two, CARDSET& three, CARDSET& landlord)
