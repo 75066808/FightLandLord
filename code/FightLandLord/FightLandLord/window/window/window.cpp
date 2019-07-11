@@ -63,8 +63,7 @@ Window::Window(QWidget *parent)
 	initButton(pixmap, readyButton, 0.2, 0.1);
 	addButtonToScene(readyButton, 0.6, 0.4);
 	
-
-
+	
 	connect(&enterButton, SIGNAL(clicked()), this, SLOT(connectButtonClick()));
 	connect(&readyButton, SIGNAL(clicked()), this, SLOT(readyButtonClick()));
 
@@ -161,7 +160,7 @@ void Window::addButtonToScene(QPushButton &button, qreal rx, qreal ry)
 
 void Window::connectButtonClick(void)
 {
-	qDebug() << "Connect button Click" << endl;
+	qDebug() << "Connect button Click";
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
 	signal->signalType = CONNECT;
@@ -170,7 +169,7 @@ void Window::connectButtonClick(void)
 
 void Window::readyButtonClick(void)
 {
-	qDebug() << "Ready button Click" << endl;
+	qDebug() << "Ready button Click";
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
 	signal->signalType = READY;

@@ -201,14 +201,22 @@ void GameRoom::dealCard(void)
 	card.setToAll();
 	distribute(card, person[0], person[1], person[2], landlord);
 
+	QByteArray card[4];
+	
+	card[0] = person[0].tranToSig();
+	card[1] = person[1].tranToSig();
+	card[2] = person[2].tranToSig();
+	card[3] = landlord.tranToSig();
+
 	for (qint32 i = 0;i < 3;i++)
 	{
 		QByteArray data;
 		data[0] = turnIndex;
 		data[1] = DEAL_CARD;
-		data.append(person[(i + 2) % 3].tranToSig()); // upperhouse card
-		data.append(person[i].tranToSig()); // self card
-		data.append(person[(i + 1) % 3].tranToSig()); // lowerhouse card
+		data.append(card[3]);
+		data.append(card[(i + 2) % 3]); // upperhouse card
+		data.append(card[i]); // self card
+		data.append(card[(i + 1) % 3]); // lowerhouse card
 		tcpClient[i]->write(data);
 	}
 }
