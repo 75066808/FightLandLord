@@ -16,7 +16,11 @@ Player::~Player()
 
 void Player::modelCommandSlot(std::shared_ptr<Signal> signal) {
 	qDebug() << "View Model to Model" << endl;
-	if (*status == -2) {
+	if (*status == -2 && signal->signalType == CONNECT) {
+		emit modelCommandSignal(signal);
+	}
+	if (*status == -2 && signal->signalType == READY) {
+		*status = 2;
 		emit modelCommandSignal(signal);
 		//emit modelToViewModelSignal(signal);
 	}
@@ -55,9 +59,12 @@ void Player::modelCommandSlot(std::shared_ptr<Signal> signal) {
 
 void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 	qDebug() << "Socket to Model" << endl;
-	if (*status == -2) {
-		if (signal->signalType == CONNECT_SUCCESS) {
-			*status = 1;
+	if (*status == -2 && (signal->signalType == CONNECT_SUCCESS||signal->signalType == CONNECT_FAILED)) {
+		emit modelCommandSignal(signal);
+	}
+	else if (*status == 2) {
+		if (signal->signalType == DEAL_CARD) {
+			*status = 4;
 			QByteArray whole = signal->cardTransfer;
 			QByteArray here;
 			here.resize(34);
