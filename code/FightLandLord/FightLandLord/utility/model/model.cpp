@@ -28,9 +28,7 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 		qDebug() << "Socket to Model" << endl;
 		if (signal->signalType == CONNECT_SUCCESS) {
 			*status = 1;
-		    //(*onHand) = (*onHand) + RuleCardSet(signal->cardTransfer);
-			RuleCardSet zero;
-			RuleCardSet temp = zero + RuleCardSet(signal->cardTransfer);
+		    (*onHand) = (*onHand) + RuleCardSet(signal->cardTransfer);
 			CARDSET origin;
 			for (int i = 0; i < (*m_Num); i++) {
 				origin.add(m_Card->cards[i]);
