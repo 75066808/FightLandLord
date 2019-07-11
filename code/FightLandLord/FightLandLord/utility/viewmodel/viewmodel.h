@@ -13,24 +13,17 @@ public:
 	void setTable(const std::shared_ptr<Table>& model);
 	void setSocket(const std::shared_ptr<Socket>& model);
 
-	std::shared_ptr<RuleCardSet> getSelected() {
-		return selected;
-	}
-	std::shared_ptr<RuleCardSet> getSelfOnHand() {
-		return selfOnHand;
-	}
-	std::shared_ptr<RuleCardSet> getUpperOnHand() {
-		return upperOnHand;
-	}
-	std::shared_ptr<RuleCardSet> getLowerOnHand() {
-		return lowerOnHand;
-	}
-	std::shared_ptr<RuleCardSet> getOnTable() {
-		return onTable;
-	}
-	std::shared_ptr<RuleCardSet> getLandLord() {
-		return landLord;
-	}
+	std::shared_ptr<int> getOnHandNum();
+	std::shared_ptr<CARD20> getOnHandCard();
+	std::shared_ptr<BOOL20> getOnHandSelected();
+	std::shared_ptr<int> getLowerNum();
+	std::shared_ptr<CARD20> getLowerCard();
+	std::shared_ptr<int> getUpperNum();
+	std::shared_ptr<CARD20> getUpperCard();
+	std::shared_ptr<int> getOnTableNum();
+	std::shared_ptr<CARD20> getOnTableCard();
+	std::shared_ptr<int> getLandLordNum();
+	std::shared_ptr<CARD20> getLandLordCard();
 
 signals:
 	void viewModelCommandSignal(std::shared_ptr<Signal> signal);
@@ -48,10 +41,15 @@ private:
 	std::shared_ptr<Player> lowerHouse;
 	std::shared_ptr<Table> m_table;
 
-	std::shared_ptr<RuleCardSet> selected;
-	std::shared_ptr<RuleCardSet> selfOnHand;
-	std::shared_ptr<RuleCardSet> upperOnHand;
-	std::shared_ptr<RuleCardSet> lowerOnHand;
-	std::shared_ptr<RuleCardSet> onTable;
-	std::shared_ptr<RuleCardSet> landLord;
+	std::shared_ptr<int> onHandNum;
+	std::shared_ptr<CARD20> onHandCard;
+	std::shared_ptr<BOOL20> onHandSelected;
+	std::shared_ptr<int> lowerNum;
+	std::shared_ptr<CARD20> lowerCard;
+	std::shared_ptr<int> upperNum;
+	std::shared_ptr<CARD20> upperCard;
+	std::shared_ptr<int> onTableNum;
+	std::shared_ptr<CARD20> onTableCard;
+	std::shared_ptr<int> landLordNum;
+	std::shared_ptr<CARD20> landLordCard;
 };

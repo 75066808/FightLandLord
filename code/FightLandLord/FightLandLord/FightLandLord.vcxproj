@@ -24,7 +24,6 @@
     <QtMoc Include="app\app.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="utility\common\common.h" />
     <QtMoc Include="window\window\window.h" />
     <QtMoc Include="utility\socket\socket.h" />
     <QtMoc Include="utility\viewmodel\viewmodel.h" />
@@ -33,6 +32,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="window\window\window.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="utility\common\common.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B12702AD-ABFB-343A-A199-8E24837244A3}</ProjectGuid>

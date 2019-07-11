@@ -14,12 +14,10 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QGraphicsView>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QStatusBar>
-#include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -28,36 +26,33 @@ class Ui_FightLandLordClass
 {
 public:
     QWidget *centralWidget;
+    QGridLayout *gridLayout;
     QGraphicsView *graphicsView;
-    QPushButton *btnShowCard;
-    QMenuBar *menuBar;
-    QToolBar *mainToolBar;
-    QStatusBar *statusBar;
+    QPushButton *pushButton;
 
     void setupUi(QMainWindow *FightLandLordClass)
     {
         if (FightLandLordClass->objectName().isEmpty())
             FightLandLordClass->setObjectName(QStringLiteral("FightLandLordClass"));
-        FightLandLordClass->resize(1870, 980);
+        FightLandLordClass->resize(694, 578);
         centralWidget = new QWidget(FightLandLordClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
+        gridLayout = new QGridLayout(centralWidget);
+        gridLayout->setSpacing(6);
+        gridLayout->setContentsMargins(11, 11, 11, 11);
+        gridLayout->setObjectName(QStringLiteral("gridLayout"));
         graphicsView = new QGraphicsView(centralWidget);
         graphicsView->setObjectName(QStringLiteral("graphicsView"));
-        graphicsView->setGeometry(QRect(10, 130, 1261, 791));
-        btnShowCard = new QPushButton(centralWidget);
-        btnShowCard->setObjectName(QStringLiteral("btnShowCard"));
-        btnShowCard->setGeometry(QRect(500, 50, 131, 41));
+        graphicsView->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
+
+        gridLayout->addWidget(graphicsView, 1, 0, 1, 1);
+
+        pushButton = new QPushButton(centralWidget);
+        pushButton->setObjectName(QStringLiteral("pushButton"));
+
+        gridLayout->addWidget(pushButton, 0, 0, 1, 1);
+
         FightLandLordClass->setCentralWidget(centralWidget);
-        menuBar = new QMenuBar(FightLandLordClass);
-        menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1870, 23));
-        FightLandLordClass->setMenuBar(menuBar);
-        mainToolBar = new QToolBar(FightLandLordClass);
-        mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
-        FightLandLordClass->addToolBar(Qt::TopToolBarArea, mainToolBar);
-        statusBar = new QStatusBar(FightLandLordClass);
-        statusBar->setObjectName(QStringLiteral("statusBar"));
-        FightLandLordClass->setStatusBar(statusBar);
 
         retranslateUi(FightLandLordClass);
 
@@ -67,7 +62,7 @@ public:
     void retranslateUi(QMainWindow *FightLandLordClass)
     {
         FightLandLordClass->setWindowTitle(QApplication::translate("FightLandLordClass", "FightLandLord", Q_NULLPTR));
-        btnShowCard->setText(QApplication::translate("FightLandLordClass", "Show Card", Q_NULLPTR));
+        pushButton->setText(QApplication::translate("FightLandLordClass", "PushButton", Q_NULLPTR));
     } // retranslateUi
 
 };

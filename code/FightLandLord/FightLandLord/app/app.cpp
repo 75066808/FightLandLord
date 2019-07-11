@@ -20,8 +20,17 @@ App::App(int argc, char *argv[]): app(argc, argv)
 	player2->setStatus(-2);
 	player3->setStatus(-3);
 
-	const qint8* tmp = modelview.getSelfOnHand()->getArr();
-	window.setCurrentCardsInHand(tmp);
+	window.setOnHandNum(modelview.getOnHandNum());
+	window.setOnHandCard(modelview.getOnHandCard());
+	window.setOnHandSelected(modelview.getOnHandSelected());
+	window.setLowerNum(modelview.getLowerNum());
+	window.setLowerCard(modelview.getLowerCard());
+	window.setUpperNum(modelview.getUpperNum());
+	window.setUpperCard(modelview.getUpperCard());
+	window.setOnTableNum(modelview.getOnTableNum());
+	window.setOnTableCard(modelview.getOnTableCard());
+	window.setLandLordNum(modelview.getLandLordNum());
+	window.setLandLordCard(modelview.getLandLordCard());
 
 	connect(&modelview, SIGNAL(viewModelNotificationSignal(std::shared_ptr<Signal>)),
 		&window, SLOT(windowNotificationSlot(std::shared_ptr<Signal>)));

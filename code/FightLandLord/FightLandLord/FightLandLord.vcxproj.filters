@@ -33,9 +33,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="window.h">
-      <Filter>windowview\window</Filter>
-    </QtMoc>
     <QtMoc Include="app\app.h">
       <Filter>app</Filter>
     </QtMoc>
@@ -62,9 +59,6 @@
     <ClCompile Include="app\main.cpp">
       <Filter>app</Filter>
     </ClCompile>
-    <ClCompile Include="utility\common\common.cpp">
-      <Filter>utility\common</Filter>
-    </ClCompile>
     <ClCompile Include="utility\model\model.cpp">
       <Filter>utility\model</Filter>
     </ClCompile>
@@ -80,15 +74,18 @@
     <ClCompile Include="window\window\window.cpp">
       <Filter>window\window</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="utility\common\common.h">
+    <ClCompile Include="utility\common\common.cpp">
       <Filter>utility\common</Filter>
-    </ClInclude>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="window\window\window.ui">
       <Filter>window\window</Filter>
     </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="utility\common\common.h">
+      <Filter>utility\common</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

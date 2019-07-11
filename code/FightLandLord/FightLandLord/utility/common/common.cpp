@@ -7,17 +7,17 @@ CARDSET::CARDSET() :c_num(0)
 
 CARDSET::CARDSET(QByteArray dataIn)
 {
-	c_num = dataIn.size();
+	c_num = dataIn.size() / 2;
 	for (int i = 0; i < c_num; i++) {
-		cards.push(CARD(dataIn[i]));
+		cards.push(CARD(dataIn[2 * i], dataIn[2 * i + 1]));
 	}
 }
 
 CARDSET::CARDSET(qint8 arr[], int size)
 {
-	c_num = size;
-	for (int i = 0; i < c_num; i++) {
-		cards.push(CARD(arr[i]));
+	c_num = size / 2;
+	for (int i = 0; i < c_num; i += 2) {
+		cards.push(CARD(arr[i], arr[i + 1]));
 	}
 }
 
@@ -36,10 +36,10 @@ CARDSET::~CARDSET()
 QByteArray CARDSET::tranToSig()
 {
 	QByteArray sig;
-
-	sig.resize(c_num);
+	sig.resize(c_num * 2);
 	for (int i = 0; i < c_num; i++) {
-		sig[i] = cards.top().i;
+		sig[2 * i] = cards.top().i;
+		sig[2 * i + 1] = cards.top().color;
 		cards.pop();
 	}
 
@@ -53,10 +53,10 @@ void CARDSET::setToAll()
 	while (!cards.empty()) cards.pop();
 	for (int i = 3; i <= 17; i++) {
 		int time;
-		if (i >= 3 && i <= 15) time = 4;
-		else time = 1;
-		for (int j = 1; j <= time; j++) {
-			cards.push(CARD((qint8)i));
+		if (i >= 3 && i <= 15) time = 3;
+		else time = 0;
+		for (int j = 0; j <= time; j++) {
+			cards.push(CARD((qint8)i,(qint8)j));
 		}
 	}
 
@@ -111,12 +111,20 @@ bool operator>(const CARD& l, const CARD& r)
 
 bool operator!=(const CARD& l, const CARD& r)
 {
-	return l.i != r.i;
+	return l.i != r.i || l.color != r.color;
 }
 
 bool operator==(const CARD& l, const CARD& r)
 {
-	return l.i == r.i;
+	return l.i == r.i && l.color == r.color;
+}
+
+const CARDSET operator+(const CARDSET& l, const CARDSET& r)
+{
+	CARDSET ltmp = l;
+	CARDSET rtmp = r;
+	while (!rtmp.setIsEmpty()) ltmp.add(rtmp.setPop());
+	return ltmp;
 }
 
 void distribute(CARDSET& origin, CARDSET& one, CARDSET& two, CARDSET& three, CARDSET& landlord)
@@ -180,6 +188,7 @@ CARD& CARD::operator=(const CARD& r)
 {
 	if (this == &r) return *this;
 	i = r.i;
+	color = r.color;
 	return *this;
 }
 

@@ -30,20 +30,26 @@
 #define PLAYER_QUIT        0x10
 #define TIME_OUT		   0x11
 #define COM_PLAY           0x12
-#define COM_CHOOSE         0x13
+#define COM_PLAY_NO_SKIP   0x13
+#define COM_CHOOSE         0x14
 
 struct CARD {
-	qint8 i;
-	CARD(qint8 in = 3) {
-		if (in >= (qint8)3 && in <= (qint8)17)
+	qint8 i;      //3->17 is legal;
+	qint8 color;  //0,1,2,3 is legal;
+	CARD(qint8 in = 3, qint8 incolor = 0) {
+		if (in >= (qint8)3 && in <= (qint8)17 || incolor <= (qint8)3 && incolor >= (qint8)0){
 			i = in;
+			color = incolor;
+		}
 		else {
 			qDebug("out of range");
 			i = 0;
+			color = 4;
 		}
 	}
 	CARD(const CARD& in) {
 		i = in.i;
+		color = in.color;
 	}
 	friend bool operator<(const CARD& l, const CARD& r);
 	friend bool operator>(const CARD& l, const CARD& r);
@@ -73,12 +79,15 @@ public:
 	bool setIsEmpty() {
 		return !c_num;
 	}
+	friend const CARDSET operator+(const CARDSET& l, const CARDSET& r);
+	friend const CARDSET operator-(const CARDSET& l, const CARDSET& r);
 	friend void distribute(CARDSET& origin, CARDSET& one, CARDSET& two, CARDSET& three, CARDSET& landlord);
 	//for test
 	void print() {
 		for (int i = 0; i < c_num; i++) {
-			int temp = cards.top().i;
-			std::cout << temp << std::endl;
+			int tempi = cards.top().i;
+			int tempc = cards.top().color;
+			std::cout << tempi << "  " << tempc << std::endl;
 			cards.pop();
 		}
 	}
@@ -94,4 +103,22 @@ struct Signal {
 	CARDSET cardTransfer;
 };
 
+
+class CARD20 {
+public:
+	CARD20() {
+		for (int i = 0; i < 20; i++) cards[i] = 0;
+	}
+	CARD cards[20];
+};
+
+class BOOL20 {
+public:
+	BOOL20() {
+		for (int i = 0; i < 20; i++) bools[i] = 0;
+	}
+	CARD bools[20];
+};
+
 Q_DECLARE_METATYPE(Signal)
+
