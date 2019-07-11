@@ -31,7 +31,7 @@ void Socket::socketCommandSlot(std::shared_ptr<Signal> signal)
 		if (signal->valid != 0) // valid signal
 		{
 			data[0] = signal->signalType;
-			data.append(signal->cardTransfer.tranToSig());
+			data.append(signal->cardTransfer);
 			tcpSocket->write(data); // transfer to server
 			
 		}

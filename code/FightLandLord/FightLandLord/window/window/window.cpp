@@ -56,11 +56,17 @@ Window::Window(QWidget *parent)
 	addParentItemToScene(cardSlot, 0.2, 0.6, 0.6, 0.2);
 	
 	pixmap.load("button_resource/connect", "jpg");
-	
-	initButton(pixmap, button, 0.2, 0.1);
-	addButtonToScene(button, 0.4, 0.4);
+	initButton(pixmap, enterButton, 0.2, 0.1);
+	addButtonToScene(enterButton, 0.2, 0.4);
 
-	connect(&button, SIGNAL(clicked()), this, SLOT(buttonClick()));
+	pixmap.load("button_resource/ready", "jpg");
+	initButton(pixmap, readyButton, 0.2, 0.1);
+	addButtonToScene(readyButton, 0.6, 0.4);
+	
+
+
+	connect(&enterButton, SIGNAL(clicked()), this, SLOT(connectButtonClick()));
+	connect(&readyButton, SIGNAL(clicked()), this, SLOT(readyButtonClick()));
 
 	ui.graphicsView->setScene(&scene);
 	ui.graphicsView->show();
@@ -75,17 +81,30 @@ void Window::windowNotificationSlot(std::shared_ptr<Signal> signal)
 	qreal x = 0.2;
 	qreal y = 0.1;
 
-	for (qint32 i = 0; i < *onHandNum;i++)
+	switch (signal->signalType)
 	{
-		qint32 color = onHandCard->cards[i].color;
-		qint32 value = onHandCard->cards[i].i;
-		addItemToParentItem(cardItem[color][value], cardSlot, x, y);
-		x += 0.03;
-	}
+	case CONNECT_SUCCESS:
+		qDebug() << "Connect success";
+		break;
+	case READY:
+		qDebug() << "Ready";
+		break;
+	case DEAL_CARD:
+		for (qint32 i = 0; i < *onHandNum;i++)
+		{
+			qint32 color = onHandCard->cards[i].color;
+			qint32 value = onHandCard->cards[i].i;
+			addItemToParentItem(cardItem[color][value], cardSlot, x, y);
+			x += 0.03;
+		}
 
-	addButtonToScene(button, 0.4, 0.4);
-	ui.graphicsView->setScene(&scene);
-	ui.graphicsView->show();
+		ui.graphicsView->setScene(&scene);
+		ui.graphicsView->show();
+		break;
+	default:
+		return;
+	}
+	
 }
 
 void Window::resizeEvent(QResizeEvent* size)
@@ -139,17 +158,29 @@ void Window::addButtonToScene(QPushButton &button, qreal rx, qreal ry)
 	scene.addWidget(&button);
 }
 
-void Window::buttonClick(void)
+
+void Window::connectButtonClick(void)
 {
-	qDebug() << "Button Click" << endl;
+	qDebug() << "Connect button Click" << endl;
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
 	signal->signalType = CONNECT;
 	emit windowCommandSignal(signal);
 }
 
+void Window::readyButtonClick(void)
+{
+	qDebug() << "Ready button Click" << endl;
+	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
+
+	signal->signalType = READY;
+	emit windowCommandSignal(signal);
+}
+
+
 void customScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+	/*
 	QTransform transform;
 	QGraphicsItem *item;
 
@@ -170,6 +201,6 @@ void customScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	}
 
 	//event->
-	//item->setPos(original_x, original_y - 30);
+	//item->setPos(original_x, original_y - 30); */
 	
 }

@@ -37,7 +37,7 @@ struct CARD {
 	qint8 i;      //3->17 is legal;
 	qint8 color;  //0,1,2,3 is legal;
 	CARD(qint8 in = 3, qint8 incolor = 0) {
-		if (in >= (qint8)3 && in <= (qint8)17 || incolor <= (qint8)3 && incolor >= (qint8)0){
+		if (in >= (qint8)3 && in <= (qint8)17 || incolor <= (qint8)3 && incolor >= (qint8)0) {
 			i = in;
 			color = incolor;
 		}
@@ -97,10 +97,10 @@ private:
 };
 
 struct Signal {
-	qint8 valid;        
+	qint8 valid;
 	qint8 signalType;
-	qint8 playerType;    
-	CARDSET cardTransfer;
+	qint8 playerType;
+	QByteArray cardTransfer;
 };
 
 

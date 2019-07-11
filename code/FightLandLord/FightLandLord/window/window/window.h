@@ -67,8 +67,8 @@ private:
 	customScene scene;
 	QGraphicsPixmapItem cardItem[4][18];
 	QGraphicsRectItem cardSlot;
-	QPushButton button;
-
+	QPushButton enterButton;
+	QPushButton readyButton;
 
 	void initItem(QPixmap pixmap, QGraphicsPixmapItem &item, qreal rw, qreal rh);
 	void initButton(QPixmap pixmap, QPushButton &button, qreal rw, qreal rh);
@@ -87,7 +87,8 @@ signals:
 	void windowCommandSignal(std::shared_ptr<Signal> signal);
 
 public slots:
-	void buttonClick(void);
+	void connectButtonClick(void);
+	void readyButtonClick(void);
 	void windowNotificationSlot(std::shared_ptr<Signal> signal);
 
 };
