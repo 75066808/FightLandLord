@@ -62,13 +62,16 @@ private:
 	std::shared_ptr<CARD20> landLordCard;
 
 	customScene scene;
-	QPixmap pixmap[4][18];
-	QGraphicsPixmapItem item[4][18];
+	QGraphicsPixmapItem cardItem[4][18];
 	
 
-	void Window::addToScene(int color, int value, qreal rx, qreal ry, qreal rw, qreal rh);
+	void initItem(QPixmap pixmap, QGraphicsPixmapItem &item, qreal rw, qreal rh);
+	void addItemToScene(QGraphicsPixmapItem &item, qreal rx, qreal ry);
+
 	void getRatio(int x, int y, qreal &rx, qreal &ry);
-	void moveItem(QGraphicsPixmapItem &item, qreal rx, qreal ry);
+
+	QString colorName[4];
+	QString valueName[18];
 
 signals:
 	void windowCommandSignal(std::shared_ptr<Signal> signal);
