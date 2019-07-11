@@ -56,6 +56,11 @@ public:
 	cardsType getType() {
 		return type;
 	}
+
+	RuleCardSet findBigger(RuleCardSet& origin);  //add here
+	qint8 getSubType() { return subType; }        //add here
+	int getCompSig() { return compareSignal; }    //add here
+
 	friend const RuleCardSet operator+(const RuleCardSet& left, const RuleCardSet& right);
 	friend const RuleCardSet operator-(const RuleCardSet& left, const RuleCardSet& right);
 	friend int operator<(RuleCardSet& left, RuleCardSet& right);
