@@ -15,7 +15,14 @@
 #include <QGraphicsItem>
 #include <QPixmap>
 #include <QGraphicsPixmapItem>
+#include <QGraphicsSceneMouseEvent>
+#include <QTransform>
 #include "../utility/common/common.h"
+
+class customScene : public QGraphicsScene
+{
+	void mousePressEvent(QGraphicsSceneMouseEvent* event);
+};
 
 class Window : public QMainWindow
 {

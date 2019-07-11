@@ -153,3 +153,22 @@ void Window::buttonClick(void)
 	signal->signalType = CONNECT;
 	emit windowCommandSignal(signal);
 }
+
+void customScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+	QTransform transform;
+	QGraphicsItem *item;
+
+	QGraphicsScene::mousePressEvent(event);
+	//qreal orignal_x = this->itemAt(event->scenePos(), transform)->pos().rx();
+	//qreal orignal_y = this->itemAt(event->scenePos(), transform)->pos().ry();
+	//this->itemAt(event->scenePos(), transform)->setPos(orignal_x, orignal_y - 30);
+	item = this->itemAt(event->scenePos(), transform);
+	int indexOfCard = this->items().indexOf(item);
+	//item->setPos(event->scenePos().x(), event->scenePos().y() - 30);
+	//qreal original_x = (qreal) item->pos().x()+1;
+	//qreal original_y = (qreal) item->pos().y()+1;
+
+	//item->setPos(original_x, original_y - 30);
+	qDebug() << "index of this item is " << indexOfCard;
+}
