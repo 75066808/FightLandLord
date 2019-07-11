@@ -75,15 +75,10 @@ bool CARDSET::remove(CARD out)
 	CARD temp;
 	bool sig = 0;
 	for (int i = 0; i < c_num; i++) {
-		if (!sig && out != cards.top()) {
-			temp = cards.top();
-			cards.pop();
-			tmp.push(temp);
-		}
-		else if (!sig && out == cards.top()) {
-			sig = 1;
+		if (out == cards.top()) {
 			cards.pop();
 			c_num--;
+			sig = 1;
 		}
 		else {
 			temp = cards.top();
@@ -125,6 +120,15 @@ const CARDSET operator+(const CARDSET& l, const CARDSET& r)
 	CARDSET rtmp = r;
 	while (!rtmp.setIsEmpty()) ltmp.add(rtmp.setPop());
 	return ltmp;
+}
+
+const CARDSET operator-(const CARDSET& l, const CARDSET& r)
+{
+	CARDSET ltmp = l;
+	CARDSET rtmp = r;
+	while (!rtmp.setIsEmpty()) {
+		ltmp.remove(rtmp.setPop());
+	}
 }
 
 void distribute(CARDSET& origin, CARDSET& one, CARDSET& two, CARDSET& three, CARDSET& landlord)
