@@ -136,7 +136,7 @@ void Table::modelCommandSlot(std::shared_ptr<Signal> signal) {
 void Table::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 	qDebug() << "Socket to Model" << endl;
 	if (0) {
-		if (*status == -2) {
+		if (*status == 0) {
 			if (signal->signalType == CONNECT_SUCCESS) {
 				*status = 1;
 				QByteArray whole = signal->cardTransfer;
