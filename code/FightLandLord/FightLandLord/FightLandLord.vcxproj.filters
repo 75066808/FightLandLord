@@ -31,6 +31,11 @@
     <Filter Include="window\view">
       <UniqueIdentifier>{9b0b7399-f2d9-4b9c-a783-02f5799645f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="app\app.h">
@@ -87,5 +92,10 @@
     <ClInclude Include="utility\common\common.h">
       <Filter>utility\common</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="Resource.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
   </ItemGroup>
 </Project>
