@@ -54,6 +54,8 @@ Window::Window(QWidget *parent)
 	pixmap.load("poker_resource/joker2", "jpg");
 	initItem(pixmap, cardItem[0][17], 0.1, 0.15);
 
+	addParentItemToScene(cardSlot, 0.2, 0.6, 0.6, 0.2);
+
 }
 
 
@@ -66,13 +68,13 @@ void Window::windowNotificationSlot(std::shared_ptr<Signal> signal)
 	qDebug() << "View Model to Window";
 
 	qreal x = 0.2;
-	qreal y = 0.7;
+	qreal y = 0.1;
 
 	for (qint32 i = 0; i < *onHandNum;i++)
 	{
 		qint32 color = onHandCard->cards[i].color;
 		qint32 value = onHandCard->cards[i].i;
-		addItemToScene(cardItem[color][value], x, y);
+		addItemToParentItem(cardItem[color][value], cardSlot, x, y);
 		x += 0.03;
 	}
 
@@ -100,18 +102,19 @@ void Window::initItem(QPixmap pixmap, QGraphicsPixmapItem &item, qreal rw, qreal
 	item.setPixmap(pixmap.scaled(rw*width(), rh*height()));
 }
 
-void Window::addItemToScene(QGraphicsPixmapItem &item, qreal rx, qreal ry)
+void Window::addParentItemToScene(QGraphicsRectItem &parent, qreal rx, qreal ry, qreal rw, qreal rh)
 {
-	item.setPos(rx*width(), ry*height());
-	scene.addItem(&item);
+	parent.setRect(QRectF(rx*width(), ry*height(), rw*width(), rh*height()));
+	//parent.setVisible(false);
+	scene.addItem(&parent);
 }
 
-
-void Window::getRatio(int x, int y, qreal &rx, qreal &ry)
+void Window::addItemToParentItem(QGraphicsPixmapItem &item, QGraphicsRectItem &parent, qreal rx, qreal ry)
 {
-	rx = (qreal)x / width();
-	ry = (qreal)y / height();
+	item.setPos(parent.rect().left() + rx*parent.rect().width(), parent.rect().top() + ry*parent.rect().height());
+	item.setParentItem(&parent);
 }
+
 
 void Window::buttonClick(void)
 {
@@ -132,11 +135,13 @@ void customScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	//qreal orignal_y = this->itemAt(event->scenePos(), transform)->pos().ry();
 	//this->itemAt(event->scenePos(), transform)->setPos(orignal_x, orignal_y - 30);
 	item = this->itemAt(event->scenePos(), transform);
-	int indexOfCard = this->items(Qt::AscendingOrder).indexOf(item);
+	//int indexOfCard = item->childItems().indexOf(//tems(Qt::AscendingOrder).indexOf(item);
 	//item->setPos(event->scenePos().x(), event->scenePos().y() - 30);
 	//qreal original_x = (qreal) item->pos().x()+1;
 	//qreal original_y = (qreal) item->pos().y()+1;
+	int index = item->parentItem()->childItems().indexOf(item);
 
+	//event->
 	//item->setPos(original_x, original_y - 30);
-	qDebug() << "index of this item is " << indexOfCard;
+	qDebug() << "index of this item is " << index;
 }

@@ -28,6 +28,7 @@ class Window : public QMainWindow
 {
 	Q_OBJECT
 
+	friend class customScene;
 public:
 	Window(QWidget *parent = Q_NULLPTR);
 
@@ -63,12 +64,12 @@ private:
 
 	customScene scene;
 	QGraphicsPixmapItem cardItem[4][18];
-	
+	QGraphicsRectItem cardSlot;
 
 	void initItem(QPixmap pixmap, QGraphicsPixmapItem &item, qreal rw, qreal rh);
-	void addItemToScene(QGraphicsPixmapItem &item, qreal rx, qreal ry);
+	void addParentItemToScene(QGraphicsRectItem &parent, qreal rx, qreal ry, qreal rw, qreal rh);
+	void addItemToParentItem(QGraphicsPixmapItem &item, QGraphicsRectItem &parent, qreal rx, qreal ry);
 
-	void getRatio(int x, int y, qreal &rx, qreal &ry);
 
 	QString colorName[4];
 	QString valueName[18];
