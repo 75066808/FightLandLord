@@ -75,6 +75,7 @@ void modelView::setLower(const std::shared_ptr<Player>& model)
 void modelView::setTable(const std::shared_ptr<Table>& model)
 {
 	m_table = model;
+	self->setOnTable(model->getOnTable());
 	connect(this, SIGNAL(viewModelCommandSignal(std::shared_ptr<Signal>)), &(*model), SLOT(modelCommandSlot(std::shared_ptr<Signal>)));
 	connect(&(*model), SIGNAL(modelNotificationSignal(std::shared_ptr<Signal>)), this, SLOT(viewModelNotificationSlot(std::shared_ptr<Signal>)));
 }
