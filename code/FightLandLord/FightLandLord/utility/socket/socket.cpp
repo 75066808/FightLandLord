@@ -26,6 +26,7 @@ void Socket::socketCommandSlot(std::shared_ptr<Signal> signal)
 		break;
 	case DISCONNECT:
 		tcpSocket->disconnectFromHost(); // disconnect from host
+		emit socketNotificationSignal(signal);
 		break;
 	default:
 		data[0] = signal->signalType;

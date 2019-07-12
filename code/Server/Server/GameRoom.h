@@ -44,9 +44,7 @@ private:
 
 	qint8 turnIndex;       // turn index
 
-	CARDSET person[3];
-	CARDSET landlord;
-	CARDSET card;
+	QByteArray person[4];
 
 	std::shared_ptr<QTimer> playTimer;
 	std::shared_ptr<QTimer> chooseTimer;
