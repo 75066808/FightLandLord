@@ -62,6 +62,9 @@
 #define SELF_NOT_CHOOSE_TURN  0x18
 #define UPPER_NOT_CHOOSE_TURN 0x19
 #define LOWER_NOT_CHOOSE_TURN 0x1a
+#define SELF_NOSKIP_TURN      0x1b
+#define UPPER_NOSKIP_TURN     0x1c
+#define LOWER_NOSKIP_TURN     0x1d
 
 
 #define TABLE_NO_READY        0x00

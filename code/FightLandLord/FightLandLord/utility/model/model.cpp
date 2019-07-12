@@ -21,7 +21,10 @@ void Player::modelCommandSlot(std::shared_ptr<Signal> signal) {
 	if (*status == SELF_DIS_CONNECT && signal->signalType == CONNECT) {
 		emit modelCommandSignal(signal);
 	}
-	if (*status == SELF_CONNECT && signal->signalType == READY) {
+	else if (*status == SELF_CONNECT && signal->signalType == READY) {
+		emit modelCommandSignal(signal);
+	}
+	else if(*status == SELF_CONNECT && signal->signalType == DISCONNECT){
 		emit modelCommandSignal(signal);
 	}
 	else if (0)  //this is for selected
@@ -61,6 +64,10 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 	qDebug() << "Socket to Model" << endl;
 	if (*status == SELF_DIS_CONNECT && signal->signalType == CONNECT_SUCCESS && signal->playerType[SELF] == 1) {
 		*status = SELF_CONNECT;
+		emit modelNotificationSignal(signal);
+	}
+	else if(*status == SELF_CONNECT && signal->signalType == DISCONNECT){
+		*status = SELF_DIS_CONNECT;
 		emit modelNotificationSignal(signal);
 	}
 	else if (*status == UPPER_DIS_CONNECT && signal->signalType == CONNECT_SUCCESS && signal->playerType[UPPERHOUSE] == 1) {
