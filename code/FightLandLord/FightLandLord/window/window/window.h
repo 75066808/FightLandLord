@@ -12,6 +12,11 @@
 
 #include "../utility/common/common.h"
 
+#define PLAYER_NUM        3
+#define COLOR_NUM         4
+#define POKER_NUM         18
+
+#define BTN_NUM           9
 #define ENTER_BTN         0
 #define QUIT_BTN          1
 #define READY_BTN         2
@@ -19,47 +24,58 @@
 #define SKIP_LL_BTN       4
 #define PLAY_CARD_BTN     5
 #define SKIP_CARD_BTN     6
-  
-#define READY_ITEM        0
-#define SKIP_LL_ITEM      1
-#define SKIP_CARD_ITEM    2
+#define LOSE_BTN          7
+#define WIN_BTN           8
 
-#define BTN_WIDTH         0.2
+#define STATE_NUM         3
+#define READY_STATE       0
+#define SKIP_LL_STATE     1
+#define SKIP_CARD_STATE   2
+
+#define HEAD_NUM          2
+#define FARMER_HEAD       0
+#define LANDLORD_HEAD     1
+
+#define BTN_WIDTH         0.16
 #define BTN_HEIGHT        0.08
+#define STATE_WIDTH       0.16
+#define STATE_HEIGHT      0.08
+#define CARD_WIDTH        0.10
+#define CARD_HEIGHT       0.15
+#define HEAD_WIDTH        0.1
+#define HEAD_HEIGHT       0.1
 
-#define STATE_WIDTH       0.2
-#define STATE_HEIGHT      0.1
-
-#define CARD_WIDTH        0.15
-#define CARD_HEIGHT       0.2
-
-#define BTN_TOP           0.5
-#define BTN_INT           0.05
-
-#define SLOT_LEFT         0.1
-#define SLOT_TOP          0.6
-#define SLOT_WIDTH        0.8
-#define SLOT_HEIGHT       0.35
+#define SLOT_LEFT         0.2
+#define SLOT_TOP          0.75
+#define SLOT_WIDTH        0.6
+#define SLOT_HEIGHT       0.25
 
 #define ON_HAND_TOP       0.3
 #define ON_HAND_INT       0.05 
+#define ON_HAND_RISE      0.2
 
-#define SELF_PLAY_TOP     0.4
+#define BTN_TOP           0.64
+#define BTN_INT           0.05
+
+#define SELF_STATE_TOP    0.64
+#define SELF_PLAY_TOP     0.45
 #define SELF_PLAY_INT     0.03
 
-#define UPPER_PLAY_LEFT   0.2
-#define UPPER_PLAY_TOP    0.3
-#define UPPER_PLAY_INT    0.03
-
-#define LOWER_PLAY_RIGHT  0.8
-#define LOWER_PLAY_TOP    0.3
-#define LOWER_PLAY_INT    0.03
-
 #define UPPER_STATE_LEFT  0.2
-#define UPPER_STATE_TOP   0.3
+#define UPPER_STATE_TOP   0.25
+#define UPPER_HEAD_LEFT   0.02
+#define UPPER_HEAD_TOP    0.25
+#define UPPER_PLAY_LEFT   0.15
+#define UPPER_PLAY_TOP    0.225
+#define UPPER_PLAY_INT    0.02
 
 #define LOWER_STATE_RIGHT 0.8
-#define LOWER_STATE_TOP   0.3
+#define LOWER_STATE_TOP   0.25
+#define LOWER_HEAD_RIGHT  0.98
+#define LOWER_HEAD_TOP    0.25
+#define LOWER_PLAY_RIGHT  0.8
+#define LOWER_PLAY_TOP    0.225
+#define LOWER_PLAY_INT    0.02
 
 class customScene : public QGraphicsScene
 {
@@ -104,9 +120,11 @@ private:
 	std::shared_ptr<CARD20> landLordCard;
 
 	customScene scene;
-	QGraphicsPixmapItem cardItem[4][18];
-	QGraphicsPixmapItem stateItem[3][3];
-	QPushButton button[7];
+	QGraphicsPixmapItem cardItem[COLOR_NUM][POKER_NUM];
+	QGraphicsPixmapItem stateItem[STATE_NUM][PLAYER_NUM];
+	QGraphicsPixmapItem headItem[HEAD_NUM][PLAYER_NUM];
+	QPushButton button[BTN_NUM];
+
 	QGraphicsRectItem cardSlot;
 
 	void initAll(void);
@@ -136,8 +154,15 @@ signals:
 	void windowCommandSignal(std::shared_ptr<Signal> signal);
 
 public slots:
-	void connectButtonClick(void);
-	void readyButtonClick(void);
+	void connectBtnClick(void);
+	void disconnectBtnClick(void);
+	void readyBtnClick(void);
+	void chooseLandLordBtnClick(void);
+	void skipLandLordBtnClick(void);
+	void playCardBtnClick(void);
+	void skipCardBtnClick(void);
+	void 
+
 	void windowNotificationSlot(std::shared_ptr<Signal> signal);
 
 };

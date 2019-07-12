@@ -105,17 +105,23 @@ void Window::initAll(void)
 	initItem(cardItem[0][17], path, CARD_WIDTH, CARD_HEIGHT);
 
 
-	initItem(stateItem[READY_ITEM][0], "Resources/state/readyState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[READY_ITEM][1], "Resources/state/readyState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[READY_ITEM][2], "Resources/state/readyState.jpg", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[READY_STATE][0], "Resources/state/readyState.jpg", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[READY_STATE][1], "Resources/state/readyState.jpg", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[READY_STATE][2], "Resources/state/readyState.jpg", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[SKIP_LL_STATE][0], "Resources/state/skipLLState.jpg", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[SKIP_LL_STATE][1], "Resources/state/skipLLState.jpg", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[SKIP_LL_STATE][2], "Resources/state/skipLLState.jpg", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[SKIP_CARD_STATE][0], "Resources/state/skipCardState.jpg", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[SKIP_CARD_STATE][1], "Resources/state/skipCardState.jpg", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[SKIP_CARD_STATE][2], "Resources/state/skipCardState.jpg", STATE_WIDTH, STATE_HEIGHT);
 
-	initItem(stateItem[SKIP_LL_ITEM][0], "Resources/state/skipLLState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[SKIP_LL_ITEM][1], "Resources/state/skipLLState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[SKIP_LL_ITEM][2], "Resources/state/skipLLState.jpg", STATE_WIDTH, STATE_HEIGHT);
+	initItem(headItem[FARMER_HEAD][0], "Resources/head/farmer.jpg", HEAD_WIDTH, HEAD_HEIGHT);
+	initItem(headItem[FARMER_HEAD][1], "Resources/head/farmer.jpg", HEAD_WIDTH, HEAD_HEIGHT);
+	initItem(headItem[FARMER_HEAD][2], "Resources/head/farmer.jpg", HEAD_WIDTH, HEAD_HEIGHT);
 
-	initItem(stateItem[SKIP_CARD_ITEM][0], "Resources/state/skipCardState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[SKIP_CARD_ITEM][1], "Resources/state/skipCardState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[SKIP_CARD_ITEM][2], "Resources/state/skipCardState.jpg", STATE_WIDTH, STATE_HEIGHT);
+	initItem(headItem[LANDLORD_HEAD][0], "Resources/head/landlord.jpg", HEAD_WIDTH, HEAD_HEIGHT);
+	initItem(headItem[LANDLORD_HEAD][0], "Resources/head/landlord.jpg", HEAD_WIDTH, HEAD_HEIGHT);
+	initItem(headItem[LANDLORD_HEAD][0], "Resources/head/landlord.jpg", HEAD_WIDTH, HEAD_HEIGHT);
 
 
 	initButton(button[ENTER_BTN], "border-image: url(:/Button/Resources/button/connect.jpg);", BTN_WIDTH, BTN_HEIGHT);
@@ -125,13 +131,18 @@ void Window::initAll(void)
 	initButton(button[SKIP_LL_BTN], "border-image: url(:/Button/Resources/button/skipLL.jpg);", BTN_WIDTH, BTN_HEIGHT);
 	initButton(button[PLAY_CARD_BTN], "border-image: url(:/Button/Resources/button/playCard.jpg);", BTN_WIDTH, BTN_HEIGHT);
 	initButton(button[SKIP_CARD_BTN], "border-image: url(:/Button/Resources/button/skipCard.jpg);", BTN_WIDTH, BTN_HEIGHT);
+	initButton(button[LOSE_BTN], "border-image: url(:/Button/Resources/button/lose.jpg);", BTN_WIDTH, BTN_HEIGHT);
+	initButton(button[WIN_BTN], "border-image: url(:/Button/Resources/button/win.jpg);", BTN_WIDTH, BTN_HEIGHT);
 
 
 }
 
 void Window::drawState(void)
 {
-	//switch()
+	// switch()
+
+	// SELE_STATE
+
 }
 
 void Window::drawSelfCard(void)
@@ -150,15 +161,41 @@ void Window::drawSelfCard(void)
 
 void Window::drawSelfPlayCard(void)
 {
+	qreal top = SELF_PLAY_TOP;
+	qreal left = 0.5 - ((*onHandNum - 1) * SELF_PLAY_INT + CARD_WIDTH) / 2;
 
+	for (qint32 i = 0; i < *onHandNum;i++)
+	{
+		qint32 color = onHandCard->cards[i].color;
+		qint32 value = onHandCard->cards[i].i;
+		addItemToParentItem(cardItem[color][value], cardSlot, left, top);
+		left += SELF_PLAY_INT;
+	}
 }
+
 void Window::drawUpperPlayCard(void)
 {
+	qreal top = UPPER_PLAY_TOP;
+	qreal left = UPPER_PLAY_LEFT;
 
+	/*
+	for (qint32 i = 0; i < ;i++)
+	{
+		left += UPPER_PLAY_INT;
+	}*/
 }
+
 void Window::drawLowerPlayCard(void)
 {
+	qreal top = LOWER_PLAY_TOP;
+	qreal right = LOWER_PLAY_RIGHT;
 
+
+	/*
+	for (qint32 i = 0; i < ;i++)
+	{
+		right += LOWER_PLAY_INT;
+	}*/
 }
 void Window::drawBackGround(void)
 {
