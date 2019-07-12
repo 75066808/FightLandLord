@@ -14,7 +14,7 @@ Window::Window(QWidget *parent)
 	connect(&button[READY_BTN], SIGNAL(clicked()), this, SLOT(readyBtnClick()));
 	connect(&button[QUIT_BTN], SIGNAL(clicked()), this, SLOT(disconnectBtnClick()));
 	connect(&button[CHOOSE_LL_BTN], SIGNAL(clicked()), this, SLOT(chooseLandLordBtnClick()));
-	
+	connect(&button[SKIP_LL_BTN], SIGNAL(clicked()), this, SLOT(skipLandLordBtnClick()));
 }
 
 void Window::initWindow(void)
@@ -141,59 +141,54 @@ void Window::initAll(void)
 
 void Window::drawState(void)
 {
-	//  0.5 - (btn_width / 2 + (n - 1) / 2 * (btn_int + btn_width))
+	addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
 
-	if (*selfStatus != SELF_DIS_CONNECT && *selfStatus != SELF_CONNECT && *selfStatus != SELF_READY)
+	if (*selfStatus != SELF_DIS_CONNECT)
 	{
-		drawSelfCard();
-		addItemToScene(numItem[*upperNum][0], UPPER_NUM_LEFT, UPPER_NUM_TOP);
-		addItemToScene(numItem[*lowerNum][1], LOWER_NUM_RIGHT - NUM_HEIGHT , LOWER_NUM_TOP);
-		drawLandLordCard(true);
+		if(*upperStatus != UPPER_DIS_CONNECT)
+			addItemToScene(headItem[FARMER_HEAD][0], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
+		if(*lowerStatus != LOWER_DIS_CONNECT)
+			addItemToScene(headItem[FARMER_HEAD][2], LOWER_HEAD_RIGHT - HEAD_WIDTH, LOWER_HEAD_TOP);
+		if (*selfStatus != SELF_CONNECT && *selfStatus != SELF_READY)
+		{
+			drawSelfCard();
+			addItemToScene(numItem[*upperNum][0], UPPER_NUM_LEFT, UPPER_NUM_TOP);
+			addItemToScene(numItem[*lowerNum][1], LOWER_NUM_RIGHT - NUM_WIDTH, LOWER_NUM_TOP);
+			drawLandLordCard(true);
+		}
 	}
 
 	switch (*selfStatus)
 	{
 	case SELF_DIS_CONNECT:
-		addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
 		setButtonNum(1);
 		drawButton(button[ENTER_BTN]);
 		break;
 	case SELF_CONNECT:
-		addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
 		setButtonNum(2);
 		drawButton(button[READY_BTN]);
 		drawButton(button[QUIT_BTN]);
 		break;
 	case SELF_READY:
-		addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
 		addItemToScene(stateItem[READY_STATE][1], 0.5 - (BTN_WIDTH / 2), BTN_TOP);
 		break;
 	case SELF_CHOOSE_TURN:
-		addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
 		setButtonNum(2);
 		drawButton(button[CHOOSE_LL_BTN]);
 		drawButton(button[SKIP_LL_BTN]);
 		break;
-	case SELF_NOT_CHOOSE_TURN:
-		addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
-		drawSelfCard();
-		break;
 	case SELF_NOSKIP_TURN:
-		addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
 		setButtonNum(1);
 		drawButton(button[PLAY_CARD_BTN]);
 		break;
 	case SELF_TURN:
-		addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
 		setButtonNum(2);
 		drawButton(button[PLAY_CARD_BTN]);
 		drawButton(button[SKIP_CARD_BTN]);
 	case SELF_PLAY:
-		addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
 		drawSelfPlayCard();
 		break;
 	case SELF_SKIP:
-		addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
 		addItemToScene(stateItem[SKIP_CARD_STATE][1], 0.5 - (BTN_WIDTH / 2), BTN_TOP);
 		break;	
 	default:
@@ -203,37 +198,16 @@ void Window::drawState(void)
 
 	switch(*upperStatus)
 	{
-	case UPPER_DIS_CONNECT:
-		break;
-	case UPPER_CONNECT:
-		if (*selfStatus != SELF_DIS_CONNECT)
-			addItemToScene(headItem[FARMER_HEAD][0], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
-		break;
+
 	case UPPER_READY:
 		if (*selfStatus != SELF_DIS_CONNECT)
-		{
-			addItemToScene(headItem[FARMER_HEAD][0], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
 			addItemToScene(stateItem[READY_STATE][0], UPPER_STATE_LEFT, UPPER_STATE_TOP);
-		}
-		break;
-	case UPPER_CHOOSE_TURN:
-		addItemToScene(headItem[FARMER_HEAD][0], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
-		break;
-	case UPPER_NOT_CHOOSE_TURN:
-		addItemToScene(headItem[FARMER_HEAD][0], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
-		break;
-	case UPPER_TURN:
-		addItemToScene(headItem[FARMER_HEAD][0], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
-		break;
-	case UPPER_NOSKIP_TURN:
-		addItemToScene(headItem[FARMER_HEAD][0], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
 		break;
 	case UPPER_PLAY:
 		addItemToScene(headItem[FARMER_HEAD][0], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
 		drawUpperPlayCard();
 		break;
 	case UPPER_SKIP:
-		addItemToScene(headItem[FARMER_HEAD][0], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
 		addItemToScene(stateItem[SKIP_CARD_STATE][0], UPPER_STATE_LEFT, UPPER_STATE_TOP);
 		break;
 	default:
@@ -243,38 +217,17 @@ void Window::drawState(void)
 
 	switch (*lowerStatus)
 	{
-	case LOWER_DIS_CONNECT:
-		break;
-	case LOWER_CONNECT:
-		if (*selfStatus != SELF_DIS_CONNECT)
-			addItemToScene(headItem[FARMER_HEAD][2], LOWER_HEAD_RIGHT - HEAD_WIDTH, LOWER_HEAD_TOP);
-		break;
 	case LOWER_READY:
 		if (*selfStatus != SELF_DIS_CONNECT)
-		{
-			addItemToScene(headItem[FARMER_HEAD][2], LOWER_HEAD_RIGHT - HEAD_WIDTH, LOWER_HEAD_TOP);
 			addItemToScene(stateItem[READY_STATE][2], LOWER_STATE_RIGHT - STATE_WIDTH, LOWER_STATE_TOP);
-		}
-		break;
-	case LOWER_CHOOSE_TURN:
-		addItemToScene(headItem[FARMER_HEAD][2], LOWER_HEAD_RIGHT - HEAD_WIDTH, LOWER_HEAD_TOP);
-		break;
-	case LOWER_NOT_CHOOSE_TURN:
-		addItemToScene(headItem[FARMER_HEAD][2], LOWER_HEAD_RIGHT - HEAD_WIDTH, LOWER_HEAD_TOP);
-		break;
-	case LOWER_TURN:
-		addItemToScene(headItem[FARMER_HEAD][2], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
-		break;
-	case LOWER_NOSKIP_TURN:
-		addItemToScene(headItem[FARMER_HEAD][2], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
 		break;
 	case LOWER_PLAY:
-		addItemToScene(headItem[FARMER_HEAD][2], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
 		drawLowerPlayCard();
 		break;
 	case LOWER_SKIP:
-		addItemToScene(headItem[FARMER_HEAD][2], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
 		addItemToScene(stateItem[SKIP_CARD_STATE][2], LOWER_STATE_RIGHT - STATE_WIDTH, LOWER_STATE_TOP);
+		break;
+	default:
 		break;
 	}
 
@@ -442,8 +395,6 @@ void Window::connectBtnClick(void)
 
 	signal->signalType = CONNECT;
 	emit windowCommandSignal(signal);
-
-	button[0].setFocus();
 }
 
 void Window::disconnectBtnClick(void)
