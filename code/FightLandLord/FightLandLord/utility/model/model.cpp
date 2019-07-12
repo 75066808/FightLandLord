@@ -59,27 +59,35 @@ void Player::modelCommandSlot(std::shared_ptr<Signal> signal) {
 
 void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 	qDebug() << "Socket to Model" << endl;
-	if (*status == SELF_DIS_CONNECT && signal->signalType == CONNECT_SUCCESS && signal->playerType == SELF) {
+	if (*status == SELF_DIS_CONNECT && signal->signalType == CONNECT_SUCCESS && signal->playerType[SELF] == 1) {
 		*status = SELF_CONNECT;
 		emit modelNotificationSignal(signal);
 	}
-	else if (*status == UPPER_DIS_CONNECT && signal->signalType == CONNECT_SUCCESS && signal->playerType == UPPERHOUSE) {
+	else if (*status == UPPER_DIS_CONNECT && signal->signalType == CONNECT_SUCCESS && signal->playerType[UPPERHOUSE] == 1) {
 		*status = UPPER_CONNECT;
 		emit modelNotificationSignal(signal);
 	}
-	else if (*status == LOWER_DIS_CONNECT && signal->signalType == CONNECT_SUCCESS && signal->playerType == LOWERHOUSE) {
+	else if (*status == UPPER_CONNECT && signal->signalType == CONNECT_SUCCESS && signal->playerType[UPPERHOUSE] == 0) {
+		*status = UPPER_DIS_CONNECT;
+		emit modelNotificationSignal(signal);
+	}
+	else if (*status == LOWER_DIS_CONNECT && signal->signalType == CONNECT_SUCCESS && signal->playerType[LOWERHOUSE] == 1) {
 		*status = LOWER_CONNECT;
 		emit modelNotificationSignal(signal);
 	}
-	else if (*status == SELF_CONNECT && signal->signalType == READY && signal->playerType == SELF) {
+	else if (*status == LOWER_CONNECT && signal->signalType == CONNECT_SUCCESS && signal->playerType[LOWERHOUSE] == 0) {
+		*status = LOWER_DIS_CONNECT;
+		emit modelNotificationSignal(signal);
+	}
+	else if (*status == SELF_CONNECT && signal->signalType == READY && signal->playerType[SELF] == 1) {
 		*status = SELF_READY;
 		emit modelNotificationSignal(signal);
 	}
-	else if (*status == UPPER_CONNECT && signal->signalType == READY && signal->playerType == UPPERHOUSE) {
+	else if (*status == UPPER_CONNECT && signal->signalType == READY && signal->playerType[UPPERHOUSE] == 1) {
 		*status = UPPER_READY;
 		emit modelNotificationSignal(signal);
 	}
-	else if (*status == LOWER_CONNECT && signal->signalType == READY && signal->playerType == LOWERHOUSE) {
+	else if (*status == LOWER_CONNECT && signal->signalType == READY && signal->playerType[LOWERHOUSE] == 1) {
 		*status = LOWER_READY;
 		emit modelNotificationSignal(signal);
 	}
@@ -104,10 +112,10 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 		}
 		(*m_Num) = index;
 
-		if (signal->playerType == SELF) *status = SELF_CHOOSE_TURN;
+		if (signal->playerType[SELF] == 1) *status = SELF_CHOOSE_TURN;
 		else *status = SELF_NOT_CHOOSE_TURN;
 
-		signal->playerType = SELF;
+		signal->playerType[SELF] = 1;
 		emit modelNotificationSignal(signal);
 	}
 	else if (signal->signalType == DEAL_CARD && *status == UPPER_READY) {
@@ -131,10 +139,10 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 		}
 		(*m_Num) = index;
 
-		if (signal->playerType == UPPERHOUSE)  *status = UPPER_CHOOSE_TURN;
+		if (signal->playerType[UPPERHOUSE] == 1)  *status = UPPER_CHOOSE_TURN;
 		else *status = UPPER_NOT_CHOOSE_TURN;
 
-		signal->playerType = UPPERHOUSE;
+		signal->playerType[SELF] = 0;
 		emit modelNotificationSignal(signal);
 	}
 	else if (signal->signalType == DEAL_CARD && *status == LOWER_READY) {
@@ -158,10 +166,10 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 		}
 		(*m_Num) = index;
 
-		if (signal->playerType == LOWERHOUSE )* status = LOWER_CHOOSE_TURN;
+		if (signal->playerType[LOWERHOUSE] == 1 )* status = LOWER_CHOOSE_TURN;
 		else *status = LOWER_NOT_CHOOSE_TURN;
 
-		signal->playerType = LOWERHOUSE;
+		signal->playerType[SELF] = 0;
 		emit modelNotificationSignal(signal);
 	}
 	else if (0) //this is for handing cards

@@ -6,9 +6,9 @@
 #include <QMetaType>
 
 // player type
-#define UPPERHOUSE         -1
-#define SELF               0x00
-#define LOWERHOUSE         0x01
+#define UPPERHOUSE         0x00
+#define SELF               0x01
+#define LOWERHOUSE         0x02
 
 // signal type
 #define CONNECT            0x00
@@ -137,7 +137,7 @@ private:
 struct Signal {
 	qint8 valid;        
 	qint8 signalType;
-	qint8 playerType;    
+	qint8 playerType[3];    
 	QByteArray cardTransfer;
 };
 
