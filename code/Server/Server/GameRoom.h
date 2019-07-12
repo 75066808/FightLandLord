@@ -36,10 +36,9 @@ public:
 private:
 	std::shared_ptr<QTcpSocket> tcpClient[3];  // client
 
-	qint8 tcpConnect[3];  // connect signal
-
-	qint8 readyNum;        // number of ready clients
-	qint8 playerNum;       // number of players
+	qint8 playerConnect[3];  // player connect
+	qint8 playerReady[3];    // player ready  
+  
 	qint8 skipPlayNum;     // skip times in playing card
 	qint8 skipLandLordNum; // skip times in choosing landlord
 
