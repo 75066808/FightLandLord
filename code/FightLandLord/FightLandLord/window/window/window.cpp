@@ -14,7 +14,7 @@ Window::Window(QWidget *parent)
 	connect(&button[READY_BTN], SIGNAL(clicked()), this, SLOT(readyBtnClick()));
 	connect(&button[QUIT_BTN], SIGNAL(clicked()), this, SLOT(disconnectBtnClick()));
 	connect(&button[CHOOSE_LL_BTN], SIGNAL(clicked()), this, SLOT(chooseLandLordBtnClick()));
-	
+	connect(&button[SKIP_LL_BTN], SIGNAL(clicked()), this, SLOT(skipLandLordBtnClick()));
 }
 
 void Window::initWindow(void)
@@ -91,7 +91,10 @@ void Window::initAll(void)
 	initItem(cardItem[0][16], path, CARD_WIDTH, CARD_HEIGHT);
 	path = "Resources/poker/joker2.jpg";
 	initItem(cardItem[0][17], path, CARD_WIDTH, CARD_HEIGHT);
-
+	path = "Resources/poker/card_back.png";
+	initItem(cardBackItem[0], path, CARD_WIDTH, CARD_HEIGHT);
+	initItem(cardBackItem[1], path, CARD_WIDTH, CARD_HEIGHT);
+	initItem(cardBackItem[2], path, CARD_WIDTH, CARD_HEIGHT);
 
 	initItem(stateItem[READY_STATE][0], "Resources/state/readyState.jpg", STATE_WIDTH, STATE_HEIGHT);
 	initItem(stateItem[READY_STATE][1], "Resources/state/readyState.jpg", STATE_WIDTH, STATE_HEIGHT);
@@ -108,8 +111,8 @@ void Window::initAll(void)
 	initItem(headItem[FARMER_HEAD][2], "Resources/head/farmer.jpg", HEAD_WIDTH, HEAD_HEIGHT);
 
 	initItem(headItem[LANDLORD_HEAD][0], "Resources/head/landlord.jpg", HEAD_WIDTH, HEAD_HEIGHT);
-	initItem(headItem[LANDLORD_HEAD][0], "Resources/head/landlord.jpg", HEAD_WIDTH, HEAD_HEIGHT);
-	initItem(headItem[LANDLORD_HEAD][0], "Resources/head/landlord.jpg", HEAD_WIDTH, HEAD_HEIGHT);
+	initItem(headItem[LANDLORD_HEAD][1], "Resources/head/landlord.jpg", HEAD_WIDTH, HEAD_HEIGHT);
+	initItem(headItem[LANDLORD_HEAD][2], "Resources/head/landlord.jpg", HEAD_WIDTH, HEAD_HEIGHT);
 
 
 	initButton(button[ENTER_BTN], "border-image: url(:/Button/Resources/button/connect.jpg);", BTN_WIDTH, BTN_HEIGHT);
@@ -122,62 +125,88 @@ void Window::initAll(void)
 	initButton(button[LOSE_BTN], "border-image: url(:/Button/Resources/button/lose.jpg);", BTN_WIDTH, BTN_HEIGHT);
 	initButton(button[WIN_BTN], "border-image: url(:/Button/Resources/button/win.jpg);", BTN_WIDTH, BTN_HEIGHT);
 
-
+	for (qint8 i = 0;i < NUM_NUM;i++)
+	{
+		QString path = "Resources/number/";
+		path.append(QString::number(i));
+		path.append(".png");
+		initItem(numItem[i][0], path, NUM_WIDTH, NUM_HEIGHT);
+		initItem(numItem[i][1], path, NUM_WIDTH, NUM_HEIGHT);
+		initItem(numItem[i][2], path, NUM_WIDTH, NUM_HEIGHT);
+	}
+	
 }
 
 void Window::drawState(void)
 {
-	//  0.5 - (btn_width / 2 + (n - 1) / 2 * (btn_int + btn_width))
+	addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
+
+	if (*selfStatus != SELF_DIS_CONNECT)
+	{
+		if(*upperStatus != UPPER_DIS_CONNECT)
+			addItemToScene(headItem[FARMER_HEAD][0], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
+		if(*lowerStatus != LOWER_DIS_CONNECT)
+			addItemToScene(headItem[FARMER_HEAD][2], LOWER_HEAD_RIGHT - HEAD_WIDTH, LOWER_HEAD_TOP);
+		if (*selfStatus != SELF_CONNECT && *selfStatus != SELF_READY)
+		{
+			drawSelfCard();
+			addItemToScene(numItem[*upperNum][0], UPPER_NUM_LEFT, UPPER_NUM_TOP);
+			addItemToScene(numItem[*lowerNum][1], LOWER_NUM_RIGHT - NUM_WIDTH, LOWER_NUM_TOP);
+			drawLandLordCard(true);
+		}
+	}
 
 	switch (*selfStatus)
 	{
 	case SELF_DIS_CONNECT:
-		addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
-		addButtonToScene(button[ENTER_BTN], 0.5 - (BTN_WIDTH / 2), BTN_TOP);
+		setButtonNum(1);
+		drawButton(button[ENTER_BTN]);
 		break;
 	case SELF_CONNECT:
-		addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
-		addButtonToScene(button[READY_BTN], 0.5 - (BTN_WIDTH / 2 + (BTN_INT + BTN_WIDTH) / 2), BTN_TOP);
-		addButtonToScene(button[QUIT_BTN], BTN_WIDTH + BTN_INT + 0.5 - (BTN_WIDTH / 2 + (BTN_INT + BTN_WIDTH) / 2), BTN_TOP);
+		setButtonNum(2);
+		drawButton(button[READY_BTN]);
+		drawButton(button[QUIT_BTN]);
 		break;
 	case SELF_READY:
-		addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
 		addItemToScene(stateItem[READY_STATE][1], 0.5 - (BTN_WIDTH / 2), BTN_TOP);
 		break;
 	case SELF_CHOOSE_TURN:
-		addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
-		addButtonToScene(button[CHOOSE_LL_BTN], 0.5 - (BTN_WIDTH / 2 + (BTN_INT + BTN_WIDTH) / 2), BTN_TOP);
-		addButtonToScene(button[SKIP_LL_BTN], BTN_WIDTH + BTN_INT + 0.5 - (BTN_WIDTH / 2 + (BTN_INT + BTN_WIDTH) / 2), BTN_TOP);
-		drawSelfCard();
+		setButtonNum(2);
+		drawButton(button[CHOOSE_LL_BTN]);
+		drawButton(button[SKIP_LL_BTN]);
 		break;
-	case SELF_NOT_CHOOSE_TURN:
-		addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
-		drawSelfCard();
+	case SELF_NOSKIP_TURN:
+		setButtonNum(1);
+		drawButton(button[PLAY_CARD_BTN]);
 		break;
+	case SELF_TURN:
+		setButtonNum(2);
+		drawButton(button[PLAY_CARD_BTN]);
+		drawButton(button[SKIP_CARD_BTN]);
+	case SELF_PLAY:
+		drawSelfPlayCard();
+		break;
+	case SELF_SKIP:
+		addItemToScene(stateItem[SKIP_CARD_STATE][1], 0.5 - (BTN_WIDTH / 2), BTN_TOP);
+		break;	
 	default:
 		break;
 	}
 
+
 	switch(*upperStatus)
 	{
-	case UPPER_DIS_CONNECT:
-		break;
-	case UPPER_CONNECT:
-		if (*selfStatus != SELF_DIS_CONNECT)
-			addItemToScene(headItem[FARMER_HEAD][0], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
-		break;
+
 	case UPPER_READY:
 		if (*selfStatus != SELF_DIS_CONNECT)
-		{
-			addItemToScene(headItem[FARMER_HEAD][0], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
 			addItemToScene(stateItem[READY_STATE][0], UPPER_STATE_LEFT, UPPER_STATE_TOP);
-		}
 		break;
-	case UPPER_CHOOSE_TURN:
+	case UPPER_PLAY:
 		addItemToScene(headItem[FARMER_HEAD][0], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
+		drawUpperPlayCard();
 		break;
-	case UPPER_NOT_CHOOSE_TURN:
-		addItemToScene(headItem[FARMER_HEAD][0], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
+	case UPPER_SKIP:
+		addItemToScene(stateItem[SKIP_CARD_STATE][0], UPPER_STATE_LEFT, UPPER_STATE_TOP);
 		break;
 	default:
 		break;
@@ -186,24 +215,17 @@ void Window::drawState(void)
 
 	switch (*lowerStatus)
 	{
-	case LOWER_DIS_CONNECT:
-		break;
-	case LOWER_CONNECT:
-		if (*selfStatus != SELF_DIS_CONNECT)
-			addItemToScene(headItem[FARMER_HEAD][2], LOWER_HEAD_RIGHT - HEAD_WIDTH, LOWER_HEAD_TOP);
-		break;
 	case LOWER_READY:
 		if (*selfStatus != SELF_DIS_CONNECT)
-		{
-			addItemToScene(headItem[FARMER_HEAD][2], LOWER_HEAD_RIGHT - HEAD_WIDTH, LOWER_HEAD_TOP);
 			addItemToScene(stateItem[READY_STATE][2], LOWER_STATE_RIGHT - STATE_WIDTH, LOWER_STATE_TOP);
-		}
 		break;
-	case LOWER_CHOOSE_TURN:
-		addItemToScene(headItem[FARMER_HEAD][2], LOWER_HEAD_RIGHT - HEAD_WIDTH, LOWER_HEAD_TOP);
+	case LOWER_PLAY:
+		drawLowerPlayCard();
 		break;
-	case LOWER_NOT_CHOOSE_TURN:
-		addItemToScene(headItem[FARMER_HEAD][2], LOWER_HEAD_RIGHT - HEAD_WIDTH, LOWER_HEAD_TOP);
+	case LOWER_SKIP:
+		addItemToScene(stateItem[SKIP_CARD_STATE][2], LOWER_STATE_RIGHT - STATE_WIDTH, LOWER_STATE_TOP);
+		break;
+	default:
 		break;
 	}
 
@@ -218,7 +240,10 @@ void Window::drawSelfCard(void)
 	{
 		qint32 color = onHandCard->cards[i].color;
 		qint32 value = onHandCard->cards[i].i;
-		addItemToParentItem(cardItem[color][value], cardSlot, left, top);
+		if (onHandSelected->bools[i] != 1)
+			addItemToParentItem(cardItem[color][value], cardSlot, left, top);
+		else
+			addItemToParentItem(cardItem[color][value], cardSlot, left, top + ON_HAND_RISE);
 		left += ON_HAND_INT;
 	}
 }
@@ -226,12 +251,12 @@ void Window::drawSelfCard(void)
 void Window::drawSelfPlayCard(void)
 {
 	qreal top = SELF_PLAY_TOP;
-	qreal left = 0.5 - ((*onHandNum - 1) * SELF_PLAY_INT + CARD_WIDTH) / 2;
+	qreal left = 0.5 - ((*selfHandOutNum - 1) * SELF_PLAY_INT + CARD_WIDTH) / 2;
 
-	for (qint32 i = 0; i < *onHandNum;i++)
+	for (qint32 i = 0; i < *selfHandOutNum;i++)
 	{
-		qint32 color = onHandCard->cards[i].color;
-		qint32 value = onHandCard->cards[i].i;
+		qint32 color = selfHandOut->cards[i].color;
+		qint32 value = selfHandOut->cards[i].i;
 		addItemToParentItem(cardItem[color][value], cardSlot, left, top);
 		left += SELF_PLAY_INT;
 	}
@@ -242,37 +267,84 @@ void Window::drawUpperPlayCard(void)
 	qreal top = UPPER_PLAY_TOP;
 	qreal left = UPPER_PLAY_LEFT;
 
-	/*
-	for (qint32 i = 0; i < ;i++)
+	for (qint32 i = 0; i < *upperHandOutNum;i++)
 	{
+		qint32 color = upperHandOut->cards[i].color;
+		qint32 value = upperHandOut->cards[i].i;
+		addItemToParentItem(cardItem[color][value], cardSlot, left, top);
 		left += UPPER_PLAY_INT;
-	}*/
+	}
+
 }
 
 void Window::drawLowerPlayCard(void)
 {
 	qreal top = LOWER_PLAY_TOP;
-	qreal right = LOWER_PLAY_RIGHT;
+	qreal right = LOWER_PLAY_RIGHT - CARD_WIDTH;
 
-
-	/*
-	for (qint32 i = 0; i < ;i++)
+	for (qint32 i = 0; i < *upperHandOutNum;i++)
 	{
-		right += LOWER_PLAY_INT;
-	}*/
+		qint32 color = upperHandOut->cards[i].color;
+		qint32 value = upperHandOut->cards[i].i;
+		addItemToParentItem(cardItem[color][value], cardSlot, right, top);
+		right -= LOWER_PLAY_INT;
+	}
 }
+
 void Window::drawBackGround(void)
 {
 
 }
 
+void Window::setButtonNum(qint8 num)
+{
+	drawBtnNum = num;
+}
+
+void Window::drawButton(QPushButton &button)
+{
+	static qreal top;
+	static qreal left; 
+	static bool over = true;
+
+	if (over)
+	{
+		top = BTN_TOP;
+		left = 0.5 - (BTN_WIDTH / 2 + (qreal)(drawBtnNum - 1) / 2 * (BTN_INT + BTN_WIDTH));
+		over = false;
+	}
+	else
+	{
+		left += BTN_INT + BTN_WIDTH;
+	}
+
+	addButtonToScene(button, left, top);
+	drawBtnNum--;
+
+	if (drawBtnNum == 0)
+		over = true;
+}
+
+void Window::drawLandLordCard(bool show)
+{
+	qreal top = LL_TOP;
+	qreal left = 0.5 - (2 * LL_INT + CARD_WIDTH) / 2;
+
+	for (qint32 i = 0; i < 3;i++)
+	{
+		addItemToScene(cardBackItem[i], left, top);
+		left += SELF_PLAY_INT;
+	}
+}
+
 
 void Window::clearScreen(void)
 {
-	foreach(QGraphicsItem *item, scene.items())
-	{
-		scene.removeItem(item);
-	}
+	auto itemList = scene.items();
+
+	for (qint32 i = 0;i < itemList.size();i++)
+		scene.removeItem(itemList[i]);
+
 }
 
 
@@ -321,8 +393,6 @@ void Window::connectBtnClick(void)
 
 	signal->signalType = CONNECT;
 	emit windowCommandSignal(signal);
-
-	button[0].setFocus();
 }
 
 void Window::disconnectBtnClick(void)
@@ -342,12 +412,20 @@ void Window::readyBtnClick(void)
 
 void Window::chooseLandLordBtnClick(void)
 {
+	qDebug() << "Choose LandLord button Click";
+	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
+	signal->signalType = CHOOSE_LANDLORD;
+	emit windowCommandSignal(signal);
 }
 
 void Window::skipLandLordBtnClick(void)
 {
+	qDebug() << "Skip LandLord button Click";
+	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
+	signal->signalType = SKIP_LANDLORD;
+	emit windowCommandSignal(signal);
 }
 
 void Window::playCardBtnClick(void)

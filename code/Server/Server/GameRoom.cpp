@@ -2,13 +2,9 @@
 
 GameRoom::GameRoom()
 {
-	playerConnect[0] = 0;
-	playerConnect[1] = 0;
-	playerConnect[2] = 0;
-
-	playerReady[0] = 0;
-	playerReady[1] = 0;
-	playerReady[2] = 0;
+	playerState[0] = 0;
+	playerState[1] = 0;
+	playerState[2] = 0;
 
 	skipPlayNum = 0;
 	skipLandLordNum = 0;
@@ -16,7 +12,6 @@ GameRoom::GameRoom()
 	turnIndex = 0;
 	playTimer = std::make_shared<QTimer>();
 	chooseTimer = std::make_shared<QTimer>();
-
 	
 	connect(&*playTimer, SIGNAL(timeout()), this, SLOT(playTimeOut()));
 	connect(&*chooseTimer, SIGNAL(timeout()), this, SLOT(chooseTimeOut()));
@@ -35,21 +30,15 @@ bool GameRoom::connectSocket(std::shared_ptr<QTcpSocket> tcpSocket)
 
 	for (qint32 i = 0;i < 3;i++)
 	{
-		if (playerConnect[i] == 0) // find empty connect slot
+		if (playerState[i] == 0) // find empty connect slot
 		{
 			tcpClient[i] = tcpSocket;
-			playerConnect[i] = 1;
+			playerState[i] = 1;
 			data[0] = CONNECT_SUCCESS;
 			broadCastData(i, data); // notify success
 			return true;
 		}
 	}
-	
-
-	data[0] = 0x00;  // full room
-	data[1] = CONNECT_FAILED;
-	tcpSocket->write(data);           // notify failure
-	tcpSocket->disconnectFromHost();  // disconnect
 
 	return false;
 }
@@ -60,16 +49,19 @@ void GameRoom::disconnectSocket(qint8 index)
 	QByteArray data;
 	
 	tcpClient[index]->disconnectFromHost();
-	playerConnect[index] = 0; // clear connect signal
-	playerReady[index] = 0;   // clear ready signal
+	playerState[index] = 0; // clear state
 
-	data[0] = PLAYER_QUIT;
+	skipPlayNum = 0;
+	skipLandLordNum = 0;
+	turnIndex = 0;
+
+	data[0] = CONNECT_SUCCESS;
 	broadCastData(index, data); 
 }
 
 bool GameRoom::checkConnect(qint8 index)
 {
-	return playerConnect[index];
+	return playerState[index] != 0;
 }
 
 std::shared_ptr<QTcpSocket> GameRoom::getSocket(qint8 index)
@@ -81,20 +73,24 @@ std::shared_ptr<QTcpSocket> GameRoom::getSocket(qint8 index)
 void GameRoom::ready(qint8 index)
 {
 	QByteArray data;
-	data[0] = READY;
-	broadCastData(index, data);
 
-	playerReady[index] = 1;
-
-	if (playerReady[0] && playerReady[1] && playerReady[2] ) // all players ready
+	if (playerState[index] == 1) // unready state
 	{
-		QThread::msleep(100);
-		playerReady[0] = 0;
-		playerReady[1] = 0;
-		playerReady[2] = 0;
-		dealCard();
-		chooseTimer->start(TIMEOUT);
+		data[0] = READY;
+		playerState[index] = 2;
+		broadCastData(index, data);
+
+		if (playerState[0] == 2&& playerState[1] == 2&& playerState[2] == 2) // all players ready
+		{
+			QThread::msleep(100);
+			playerState[0] = 1;   // set all players to unready state
+			playerState[1] = 1;
+			playerState[2] = 1;
+			dealCard();
+			chooseTimer->start(TIMEOUT);
+		}
 	}
+	
 }
 
 
@@ -123,11 +119,10 @@ void GameRoom::skipCard(qint8 index)
 		broadCastData(turnIndex, data);
 	}
 
-
 	playTimer->start(TIMEOUT);
 }
 
-void GameRoom::playCard(qint8 index)
+void GameRoom::playCard(qint8 index, QByteArray card)
 {
 	QByteArray data;
 
@@ -135,6 +130,7 @@ void GameRoom::playCard(qint8 index)
 		playTimer->stop();
 
 	data[0] =  PLAY_CARD;
+	data.append(card);
 	broadCastData(index, data);
 	skipPlayNum = 0;
 	
@@ -187,7 +183,7 @@ void GameRoom::chooseLandLord(qint8 index)
 
 	turnIndex = index;
 	data[0] = DEAL_LANDLORD;
-	data.append(landlord.tranToSig()); // land lord
+	data.append(person[3]); // land lord
 
 	broadCastData(turnIndex, data);
 	skipLandLordNum = 0;
@@ -197,25 +193,29 @@ void GameRoom::chooseLandLord(qint8 index)
 
 void GameRoom::dealCard(void)
 {
-	card.setToAll();
-	distribute(card, person[0], person[1], person[2], landlord);
+	CARDSET card;
+	CARDSET temp[4];
 
-	QByteArray card[4];
+	card.setToAll();
+	distribute(card, temp[0], temp[1], temp[2], temp[3]);
 	
-	card[0] = person[0].tranToSig();
-	card[1] = person[1].tranToSig();
-	card[2] = person[2].tranToSig();
-	card[3] = landlord.tranToSig();
+	for (qint32 i = 0; i < 4;i++)
+		person[i] = temp[i].tranToSig();
 
 	for (qint32 i = 0;i < 3;i++)
 	{
 		QByteArray data;
-		data[0] = turnIndex;
-		data[1] = DEAL_CARD;
-		data.append(card[3]);
-		data.append(card[(i + 2) % 3]); // upperhouse card
-		data.append(card[i]); // self card
-		data.append(card[(i + 1) % 3]); // lowerhouse card
+		
+		data[0] = 0;
+		data[1] = 0;
+		data[2] = 0;
+		data[(turnIndex - i + 4) % 3] = 1;
+
+		data.append(DEAL_CARD);
+		data.append(person[3]);
+		data.append(person[(i + 2) % 3]); // upperhouse card
+		data.append(person[i]); // self card
+		data.append(person[(i + 1) % 3]); // lowerhouse card
 		tcpClient[i]->write(data);
 	}
 }
@@ -225,14 +225,23 @@ void GameRoom::broadCastData(qint8 sender, QByteArray data)
 	for (qint8 i = 0;i < 3;i++)
 	{
 		QByteArray broadcast;
-		if (playerConnect[i] == 0)
+		if (playerState[i] == 0)
 			continue;
+	
+		if (data.at(0) == CONNECT_SUCCESS || data.at(0) == READY)
+		{
+			broadcast[0] = playerState[(i + 2) % 3];
+			broadcast[1] = playerState[i];
+			broadcast[2] = playerState[(i + 1) % 3];
+		}
+		else
+		{
+			broadcast[0] = 0;
+			broadcast[1] = 0;
+			broadcast[2] = 0;
+			broadcast[(sender - i + 4) % 3] = 1;
+		}
 		
-		if (sender != -1) // sender is client
-			broadcast[0] = (qint8)((sender - i + 4) % 3 - 1);
-		else              // sender is service
-			broadcast[0] = 0x00;
-
 		broadcast.append(data);
 		tcpClient[i]->write(broadcast);
 		tcpClient[i]->flush();
