@@ -74,8 +74,8 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 		(*m_Num) = 0;
 		(*s_Num) = 0;
 		m_Card->clear();
-		m_selected->clear();
-		o_card->clear();
+		m_Selected->clear();
+		o_Card->clear();
 		emit modelNotificationSignal(signal);
 	}
 	else if (*status == UPPER_DIS_CONNECT && signal->signalType == CONNECT_SUCCESS && signal->playerType[UPPERHOUSE] == 1) {
@@ -193,7 +193,7 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 				index++;
 			}
 			(*m_Num) = index;
-			*status = SELF_NOTSKIP_TURN;
+			*status = SELF_NOSKIP_TURN;
 			emit modelNotificationSignal(signal);
 		}
 		else{
@@ -222,7 +222,7 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 				index++;
 			}
 			(*m_Num) = index;
-			*status = UPPER_NOTSKIP_TURN;
+			*status = UPPER_NOSKIP_TURN;
 			emit modelNotificationSignal(signal);
 		}
 		else{
@@ -251,7 +251,7 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 				index++;
 			}
 			(*m_Num) = index;
-			*status = LOWER_NOTSKIP_TURN;
+			*status = LOWER_NOSKIP_TURN;
 			emit modelNotificationSignal(signal);
 		}
 		else{

@@ -44,11 +44,14 @@ void Socket::socketNotificationSlot(void)
 
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
-	signal->playerType = data[0];
-	signal->signalType = data[1];
+	signal->playerType[0] = data[0];
+	signal->playerType[1] = data[1];
+	signal->playerType[2] = data[2];
 
-	for (qint32 i = 2;i < data.size();i++)
-		temp[i - 2] = data[i];
+	signal->signalType = data[3];
+
+	for (qint32 i = 4;i < data.size();i++)
+		temp[i - 4] = data[i];
 
 	signal->cardTransfer = temp;
 	emit socketNotificationSignal(signal);

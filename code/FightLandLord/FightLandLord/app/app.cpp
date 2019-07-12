@@ -23,6 +23,9 @@ App::App(int argc, char *argv[]): app(argc, argv)
 
 	window.setOnHandNum(modelview.getOnHandNum());
 	window.setOnHandCard(modelview.getOnHandCard());
+
+	window.setSelfHandOutNum(modelview.getSelfHandOutNum());
+	window.setSelfHandOut(modelview.getSelfHandOut());
 	window.setOnHandSelected(modelview.getOnHandSelected());
 	window.setStatus(modelview.getStatus());
 

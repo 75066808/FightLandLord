@@ -41,10 +41,10 @@ std::shared_ptr<int> modelView::getStatus()
 {
 	return selfStatus;
 }
-std::shared_ptr<int> getSelfHandOutNum(){
+std::shared_ptr<int> modelView::getSelfHandOutNum(){
 	return selfHandOutNum;
 }
-std::shared_ptr<CARD20> getSelfHandOut(){
+std::shared_ptr<CARD20> modelView::getSelfHandOut(){
 	return selfHandOut;
 }
 

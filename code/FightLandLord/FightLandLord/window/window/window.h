@@ -15,6 +15,7 @@
 #define PLAYER_NUM        3
 #define COLOR_NUM         4
 #define POKER_NUM         18
+#define NUM_NUM           21
 
 #define BTN_NUM           9
 #define ENTER_BTN         0
@@ -44,11 +45,13 @@
 #define CARD_HEIGHT       0.15
 #define HEAD_WIDTH        0.1
 #define HEAD_HEIGHT       0.1
+#define NUM_WIDTH         0.1
+#define NUM_HEIGHT        0.1
 
 #define SLOT_LEFT         0.2
 #define SLOT_TOP          0.75
 #define SLOT_WIDTH        0.6
-#define SLOT_HEIGHT       0.25
+#define SLOT_HEIGHT       0.20
 
 #define ON_HAND_TOP       0.3
 #define ON_HAND_INT       0.05 
@@ -70,6 +73,8 @@
 #define UPPER_STATE_TOP   0.25
 #define UPPER_HEAD_LEFT   0.02
 #define UPPER_HEAD_TOP    0.25
+#define UPPER_NUM_LEFT    0.02
+#define UPPER_NUM_TOP     0.37
 #define UPPER_PLAY_LEFT   0.15
 #define UPPER_PLAY_TOP    0.225
 #define UPPER_PLAY_INT    0.02
@@ -78,6 +83,8 @@
 #define LOWER_STATE_TOP   0.25
 #define LOWER_HEAD_RIGHT  0.98
 #define LOWER_HEAD_TOP    0.25
+#define LOWER_NUM_RIGHT   0.98
+#define LOWER_NUM_TOP     0.37
 #define LOWER_PLAY_RIGHT  0.8
 #define LOWER_PLAY_TOP    0.225
 #define LOWER_PLAY_INT    0.02
@@ -100,6 +107,8 @@ public:
 	void setOnHandNum(std::shared_ptr<int> onHandNum) { this->onHandNum = onHandNum; }
 	void setOnHandCard(std::shared_ptr<CARD20> onHandCard) { this->onHandCard = onHandCard; }
 	void setOnHandSelected(std::shared_ptr<BOOL20> onHandSelected) { this->onHandSelected = onHandSelected; }
+	void setSelfHandOutNum(std::shared_ptr<int> selfHandOutNum) { this->selfHandOutNum = selfHandOutNum; }
+	void setSelfHandOut(std::shared_ptr<CARD20> selfHandOut) { this->selfHandOut = selfHandOut; }
 	void setStatus(std::shared_ptr<int> selfStatus) { this->selfStatus = selfStatus; }
 
 	void setLowerNum(std::shared_ptr<int> lowerNum) { this->lowerNum = lowerNum; }
@@ -127,6 +136,8 @@ private:
 	std::shared_ptr<int> onHandNum;
 	std::shared_ptr<CARD20> onHandCard;
 	std::shared_ptr<BOOL20> onHandSelected;
+	std::shared_ptr<int> selfHandOutNum;
+	std::shared_ptr<CARD20> selfHandOut;
 	std::shared_ptr<int> selfStatus;
 
 	std::shared_ptr<int> lowerNum;
@@ -148,9 +159,15 @@ private:
 	QGraphicsPixmapItem cardItem[COLOR_NUM][POKER_NUM];
 	QGraphicsPixmapItem stateItem[STATE_NUM][PLAYER_NUM];
 	QGraphicsPixmapItem headItem[HEAD_NUM][PLAYER_NUM];
+	QGraphicsPixmapItem numItem[NUM_NUM][PLAYER_NUM];
+
+	QGraphicsPixmapItem cardBackItem[PLAYER_NUM];
+
 	QPushButton button[BTN_NUM];
 
 	QGraphicsRectItem cardSlot;
+
+	qint8 drawBtnNum;
 
 	void initAll(void);
 
@@ -163,8 +180,11 @@ private:
 
 	void drawBackGround(void);
 
-	void clearScreen(void);
+	void setButtonNum(qint8 num);
+	void drawButton(QPushButton &button);
+	void drawLandLordCard(bool show);
 
+	void clearScreen(void);
 
 	void initItem(QGraphicsPixmapItem &item, QString path, qreal rw, qreal rh);
 	void initButton(QPushButton &button, QString path, qreal rw, qreal rh);
