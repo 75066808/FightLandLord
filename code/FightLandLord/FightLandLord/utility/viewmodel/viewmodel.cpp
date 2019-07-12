@@ -159,104 +159,72 @@ void modelView::viewModelCommandSlot(std::shared_ptr<Signal> signal){
 
 void modelView::viewModelNotificationSlot(std::shared_ptr<Signal> signal)
 {
-	if (signal->playerType[SELF] = 0 && signal->signalType == DEAL_CARD) {
-		qDebug() << "Model to Veiw Model and this is deal card;" << endl;
-		int tmp;
-		tmp = (*onHandNum) = (*self->get_Num());
-		(*selfStatus) = (*self->get_Status());
-		std::shared_ptr<CARD20> ctmp;
-		std::shared_ptr<BOOL20> btmp;
-		ctmp = self->get_Card();
-		btmp = self->get_Selected();
-		for (int i = 0; i < tmp; i++) {
-			onHandCard->cards[i] = ctmp->cards[i];
-		}
-		for (int i = 0; i < tmp; i++) {
-			onHandSelected->bools[i] = btmp->bools[i];
-		}
+	qDebug() << "Model to Veiw Model and this is deal card;" << endl;
+	int tmp;
+		
+	std::shared_ptr<CARD20> ctmp;
+	std::shared_ptr<BOOL20> btmp;
 
-		tmp = (*upperNum) = (*upperHouse->get_Num());
-		ctmp = upperHouse->get_Card();
-		for (int i = 0; i < tmp; i++) {
-			upperCard->cards[i] = ctmp->cards[i];
-		}
-		tmp = (*upperHandOutNum) = (*upperHouse->gets_Num());
-		ctmp = upperHouse->geto_Card();
-		for (int i = 0; i < tmp; i++) {
-			upperHandOut->cards[i] = ctmp->cards[i];
-		}
-		(*upperStatus) = (*upperHouse->get_Status());
+//self------------------------------------------------------//
 
-		tmp = (*lowerNum) = (*upperHouse->get_Num());
-		ctmp = lowerHouse->get_Card();
-		for (int i = 0; i < tmp; i++) {
-			lowerCard->cards[i] = ctmp->cards[i];
-		}
-		tmp = (*lowerHandOutNum) = (*lowerHouse->gets_Num());
-		ctmp = lowerHouse->geto_Card();
-		for (int i = 0; i < tmp; i++) {
-			lowerHandOut->cards[i] = ctmp->cards[i];
-		}
-		(*lowerStatus) = (*lowerHouse->get_Status());
-
-
-		if (signal->signalType == DEAL_CARD) {
-			(*landLordNum) = 3;
-			QByteArray whole = signal->cardTransfer;
-			QByteArray here;
-			here.resize(6);
-			for (int i = 0; i < 6; i++) {
-				here[i] = whole[i];
-			}
-			CARDSET tmp = here;
-			int index = 0;
-			while (!tmp.setIsEmpty()) {
-				landLordCard->cards[index] = tmp.setPop();
-				index++;
-			}
-		}
-		emit viewModelNotificationSignal(signal);
+	tmp = (*onHandNum) = (*self->get_Num());
+	(*selfStatus) = (*self->get_Status());
+	ctmp = self->get_Card();
+	btmp = self->get_Selected();
+	for (int i = 0; i < tmp; i++) {
+		onHandCard->cards[i] = ctmp->cards[i];
 	}
-	else if(signal->signalType != DEAL_CARD) {
-		qDebug() << "Model to Veiw Model" << endl;
-		int tmp;
-		tmp = (*onHandNum) = (*self->get_Num());
-		(*selfStatus) = (*self->get_Status());
-		std::shared_ptr<CARD20> ctmp;
-		std::shared_ptr<BOOL20> btmp;
-		ctmp = self->get_Card();
-		btmp = self->get_Selected();
-		for (int i = 0; i < tmp; i++) {
-			onHandCard->cards[i] = ctmp->cards[i];
-		}
-		for (int i = 0; i < tmp; i++) {
-			onHandSelected->bools[i] = btmp->bools[i];
-		}
-
-		tmp = (*upperNum) = (*upperHouse->get_Num());
-		ctmp = upperHouse->get_Card();
-		for (int i = 0; i < tmp; i++) {
-			upperCard->cards[i] = ctmp->cards[i];
-		}
-		tmp = (*upperHandOutNum) = (*upperHouse->gets_Num());
-		ctmp = upperHouse->geto_Card();
-		for (int i = 0; i < tmp; i++) {
-			upperHandOut->cards[i] = ctmp->cards[i];
-		}
-		(*upperStatus) = (*upperHouse->get_Status());
-
-		tmp = (*lowerNum) = (*upperHouse->get_Num());
-		ctmp = lowerHouse->get_Card();
-		for (int i = 0; i < tmp; i++) {
-			lowerCard->cards[i] = ctmp->cards[i];
-		}
-		tmp = (*lowerHandOutNum) = (*lowerHouse->gets_Num());
-		ctmp = lowerHouse->geto_Card();
-		for (int i = 0; i < tmp; i++) {
-			lowerHandOut->cards[i] = ctmp->cards[i];
-		}
-		(*lowerStatus) = (*lowerHouse->get_Status());
-
-		emit viewModelNotificationSignal(signal);
+	for (int i = 0; i < tmp; i++) {
+		onHandSelected->bools[i] = btmp->bools[i];
 	}
+	tmp = (*selfHandOutNum) = (*self->gets_Num());
+	ctmp = self->geto_Card();
+	for (int i = 0; i < tmp; i++) {
+		selfHandOut->cards[i] = ctmp->cards[i];
+	}
+
+//upper------------------------------------------------------//
+
+	tmp = (*upperNum) = (*upperHouse->get_Num());
+	ctmp = upperHouse->get_Card();
+	for (int i = 0; i < tmp; i++) {
+		upperCard->cards[i] = ctmp->cards[i];
+	}
+	tmp = (*upperHandOutNum) = (*upperHouse->gets_Num());
+	ctmp = upperHouse->geto_Card();
+	for (int i = 0; i < tmp; i++) {
+		upperHandOut->cards[i] = ctmp->cards[i];
+	}
+	(*upperStatus) = (*upperHouse->get_Status());
+
+//lower------------------------------------------------------//
+
+	tmp = (*lowerNum) = (*upperHouse->get_Num());
+	ctmp = lowerHouse->get_Card();
+	for (int i = 0; i < tmp; i++) {
+		lowerCard->cards[i] = ctmp->cards[i];
+	}
+	tmp = (*lowerHandOutNum) = (*lowerHouse->gets_Num());
+	ctmp = lowerHouse->geto_Card();
+	for (int i = 0; i < tmp; i++) {
+		lowerHandOut->cards[i] = ctmp->cards[i];
+	}
+	(*lowerStatus) = (*lowerHouse->get_Status());
+
+	if (signal->signalType == DEAL_CARD) {
+		(*landLordNum) = 3;
+		QByteArray whole = signal->cardTransfer;
+		QByteArray here;
+		here.resize(6);
+		for (int i = 0; i < 6; i++) {
+			here[i] = whole[i];
+		}
+		CARDSET tmp = here;
+		int index = 0;
+		while (!tmp.setIsEmpty()) {
+			landLordCard->cards[index] = tmp.setPop();
+			index++;
+		}
+	}
+	emit viewModelNotificationSignal(signal);
 }
