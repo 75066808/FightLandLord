@@ -150,12 +150,18 @@ public:
 	CARD20() {
 		for (int i = 0; i < 20; i++) cards[i] = 0;
 	}
+	void clear(){
+		for (int i = 0; i < 20; i++) cards[i] = 0;
+	}
 	CARD cards[20];
 };
 
 class BOOL20 {
 public:
 	BOOL20() {
+		for (int i = 0; i < 20; i++) bools[i] = 0;
+	}
+	void clear(){
 		for (int i = 0; i < 20; i++) bools[i] = 0;
 	}
 	CARD bools[20];
