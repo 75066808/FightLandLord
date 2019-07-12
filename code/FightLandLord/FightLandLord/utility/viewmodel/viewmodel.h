@@ -15,6 +15,8 @@ public:
 	std::shared_ptr<int> getOnHandNum();
 	std::shared_ptr<CARD20> getOnHandCard();
 	std::shared_ptr<BOOL20> getOnHandSelected();
+	std::shared_ptr<int> getSelfHandOutNum();
+	std::shared_ptr<CARD20> getSelfHandOut();
 	std::shared_ptr<int> getStatus();
 
 	std::shared_ptr<int> getLowerNum();
@@ -50,6 +52,8 @@ private:
 	std::shared_ptr<int> onHandNum;
 	std::shared_ptr<CARD20> onHandCard;
 	std::shared_ptr<BOOL20> onHandSelected;
+	std::shared_ptr<int> selfHandOutNum;
+	std::shared_ptr<CARD20> selfHandOut;
 	std::shared_ptr<int> selfStatus;
 
 	std::shared_ptr<int> lowerNum;

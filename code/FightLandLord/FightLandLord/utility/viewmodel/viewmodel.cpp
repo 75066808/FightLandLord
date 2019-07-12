@@ -4,6 +4,8 @@ modelView::modelView():
 	onHandNum(std::make_shared<int>(0)),
 	onHandCard(std::make_shared<CARD20>()),
 	onHandSelected(std::make_shared<BOOL20>()),
+	selfHandOut(std::make_shared<CARD20>()),
+	selfHandOutNum(std::make_shared<int>(0)),
 	selfStatus(std::make_shared<int>(0)),
 
 	lowerNum(std::make_shared<int>(0)),
@@ -38,6 +40,12 @@ std::shared_ptr<BOOL20> modelView::getOnHandSelected() {
 std::shared_ptr<int> modelView::getStatus()
 {
 	return selfStatus;
+}
+std::shared_ptr<int> getSelfHandOutNum(){
+	return selfHandOutNum;
+}
+std::shared_ptr<CARD20> getSelfHandOut(){
+	return selfHandOut;
 }
 
 //lower------------------------------------------------------------------//
@@ -151,7 +159,7 @@ void modelView::viewModelCommandSlot(std::shared_ptr<Signal> signal){
 
 void modelView::viewModelNotificationSlot(std::shared_ptr<Signal> signal)
 {
-	if (signal->playerType == SELF && signal->signalType == DEAL_CARD) {
+	if (signal->playerType[SELF] = 0 && signal->signalType == DEAL_CARD) {
 		qDebug() << "Model to Veiw Model and this is deal card;" << endl;
 		int tmp;
 		tmp = (*onHandNum) = (*self->get_Num());
@@ -209,7 +217,7 @@ void modelView::viewModelNotificationSlot(std::shared_ptr<Signal> signal)
 		}
 		emit viewModelNotificationSignal(signal);
 	}
-	else {
+	else if(signal->signalType != DEAL_CARD) {
 		qDebug() << "Model to Veiw Model" << endl;
 		int tmp;
 		tmp = (*onHandNum) = (*self->get_Num());
