@@ -6,7 +6,7 @@
 #include <QMetaType>
 
 // player type
-#define UPPERHOUSE         0xFF
+#define UPPERHOUSE         -1
 #define SELF               0x00
 #define LOWERHOUSE         0x01
 

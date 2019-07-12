@@ -29,6 +29,9 @@ public:
 	std::shared_ptr<CARD20> getUpperHandOut();
 	std::shared_ptr<int> getUpperStatus();
 
+	std::shared_ptr<int> getLandLordNum();
+	std::shared_ptr<CARD20> getLandLordCard();
+
 signals:
 	void viewModelCommandSignal(std::shared_ptr<Signal> signal);
 	void viewModelNotificationSignal(std::shared_ptr<Signal> signal);

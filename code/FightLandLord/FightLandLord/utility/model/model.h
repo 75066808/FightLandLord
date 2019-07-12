@@ -21,6 +21,9 @@ public:
 	std::shared_ptr<CARD20> get_Card() {
 		return m_Card;
 	}
+	std::shared_ptr<CARD20> geto_Card() {
+		return o_Card;
+	}
 	std::shared_ptr<BOOL20> get_Selected() {
 		return m_Selected;
 	}
@@ -50,4 +53,5 @@ private:
 	std::shared_ptr<CARD20> m_Card;
 	std::shared_ptr<int> s_Num;
 	std::shared_ptr<BOOL20> m_Selected;
+	std::shared_ptr<CARD20> o_Card;
 };
