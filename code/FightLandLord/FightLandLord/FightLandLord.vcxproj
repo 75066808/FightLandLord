@@ -27,7 +27,7 @@
     <QtMoc Include="window\window\window.h" />
     <QtMoc Include="utility\socket\socket.h" />
     <QtMoc Include="utility\viewmodel\viewmodel.h" />
-    <QtMoc Include="utility\model\algorithm\algorithm.h" />
+    <ClInclude Include="utility\model\algorithm\algorithm.h" />
     <QtMoc Include="utility\model\model.h" />
   </ItemGroup>
   <ItemGroup>
