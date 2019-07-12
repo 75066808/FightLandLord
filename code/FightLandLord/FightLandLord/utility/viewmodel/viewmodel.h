@@ -10,20 +10,24 @@ public:
 	void setSelf(const std::shared_ptr<Player>& model);
 	void setUpper(const std::shared_ptr<Player>& model);
 	void setLower(const std::shared_ptr<Player>& model);
-	void setTable(const std::shared_ptr<Table>& model);
 	void setSocket(const std::shared_ptr<Socket>& model);
 
 	std::shared_ptr<int> getOnHandNum();
 	std::shared_ptr<CARD20> getOnHandCard();
 	std::shared_ptr<BOOL20> getOnHandSelected();
+	std::shared_ptr<int> getStatus();
+
 	std::shared_ptr<int> getLowerNum();
 	std::shared_ptr<CARD20> getLowerCard();
+	std::shared_ptr<int> getLowerHandOutNum();
+	std::shared_ptr<CARD20> getLowerHandOut();
+	std::shared_ptr<int> getLowerStatus();
+
 	std::shared_ptr<int> getUpperNum();
 	std::shared_ptr<CARD20> getUpperCard();
-	std::shared_ptr<int> getOnTableNum();
-	std::shared_ptr<CARD20> getOnTableCard();
-	std::shared_ptr<int> getLandLordNum();
-	std::shared_ptr<CARD20> getLandLordCard();
+	std::shared_ptr<int> getUpperHandOutNum();
+	std::shared_ptr<CARD20> getUpperHandOut();
+	std::shared_ptr<int> getUpperStatus();
 
 signals:
 	void viewModelCommandSignal(std::shared_ptr<Signal> signal);
@@ -39,17 +43,24 @@ private:
 	std::shared_ptr<Player> self;
 	std::shared_ptr<Player> upperHouse;
 	std::shared_ptr<Player> lowerHouse;
-	std::shared_ptr<Table> m_table;
 
 	std::shared_ptr<int> onHandNum;
 	std::shared_ptr<CARD20> onHandCard;
 	std::shared_ptr<BOOL20> onHandSelected;
+	std::shared_ptr<int> selfStatus;
+
 	std::shared_ptr<int> lowerNum;
+	std::shared_ptr<int> lowerHandOutNum;
 	std::shared_ptr<CARD20> lowerCard;
+	std::shared_ptr<CARD20> lowerHandOut;
+	std::shared_ptr<int> lowerStatus;
+
 	std::shared_ptr<int> upperNum;
+	std::shared_ptr<int> upperHandOutNum;
 	std::shared_ptr<CARD20> upperCard;
-	std::shared_ptr<int> onTableNum;
-	std::shared_ptr<CARD20> onTableCard;
+	std::shared_ptr<CARD20> upperHandOut;
+	std::shared_ptr<int> upperStatus;
+
 	std::shared_ptr<int> landLordNum;
 	std::shared_ptr<CARD20> landLordCard;
 };

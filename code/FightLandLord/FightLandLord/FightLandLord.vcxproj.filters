@@ -44,9 +44,6 @@
     <QtMoc Include="utility\model\model.h">
       <Filter>utility\model</Filter>
     </QtMoc>
-    <QtMoc Include="utility\model\algorithm\algorithm.h">
-      <Filter>utility\model\algorithm</Filter>
-    </QtMoc>
     <QtMoc Include="utility\viewmodel\viewmodel.h">
       <Filter>utility\viewmodel</Filter>
     </QtMoc>
@@ -91,6 +88,9 @@
   <ItemGroup>
     <ClInclude Include="utility\common\common.h">
       <Filter>utility\common</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\model\algorithm\algorithm.h">
+      <Filter>utility\model\algorithm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
