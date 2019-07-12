@@ -4,19 +4,19 @@ modelView::modelView():
 	onHandNum(std::make_shared<int>(0)),
 	onHandCard(std::make_shared<CARD20>()),
 	onHandSelected(std::make_shared<BOOL20>()),
-	selfStatus(std::shared_ptr<int>(0)),
+	selfStatus(std::make_shared<int>(0)),
 
 	lowerNum(std::make_shared<int>(0)),
 	lowerHandOutNum(std::make_shared<int>(0)),
 	lowerCard(std::make_shared<CARD20>()),
 	lowerHandOut(std::make_shared<CARD20>()),
-	lowerStatus(std::shared_ptr<int>(0)),
+	lowerStatus(std::make_shared<int>(0)),
 
 	upperNum(std::make_shared<int>(0)),
 	upperHandOutNum(std::make_shared<int>(0)),
 	upperCard(std::make_shared<CARD20>()),
 	upperHandOut(std::make_shared<CARD20>()),
-	upperStatus(std::shared_ptr<int>(0)),
+	upperStatus(std::make_shared<int>(0)),
 
 	landLordNum(std::make_shared<int>(0)),
 	landLordCard(std::make_shared<CARD20>())
@@ -88,6 +88,15 @@ std::shared_ptr<int> modelView::getUpperStatus()
 	return upperStatus;
 }
 
+
+std::shared_ptr<int> modelView::getLandLordNum()
+{
+	return landLordNum;
+}
+std::shared_ptr<CARD20> modelView::getLandLordCard()
+{
+	return landLordCard;
+}
 
 void modelView::setSelf(const std::shared_ptr<Player>& model)
 {
@@ -164,11 +173,11 @@ void modelView::viewModelNotificationSlot(std::shared_ptr<Signal> signal)
 			upperCard->cards[i] = ctmp->cards[i];
 		}
 		tmp = (*upperHandOutNum) = (*upperHouse->gets_Num());
-		ctmp = upperHouse->get_Selected();
+		ctmp = upperHouse->geto_Card();
 		for (int i = 0; i < tmp; i++) {
 			upperHandOut->cards[i] = ctmp->cards[i];
 		}
-		(*upperStatus) = (*upperHouse->get_Status);
+		(*upperStatus) = (*upperHouse->get_Status());
 
 		tmp = (*lowerNum) = (*upperHouse->get_Num());
 		ctmp = lowerHouse->get_Card();
@@ -176,11 +185,11 @@ void modelView::viewModelNotificationSlot(std::shared_ptr<Signal> signal)
 			lowerCard->cards[i] = ctmp->cards[i];
 		}
 		tmp = (*lowerHandOutNum) = (*lowerHouse->gets_Num());
-		ctmp = lowerHouse->get_Selected();
+		ctmp = lowerHouse->geto_Card();
 		for (int i = 0; i < tmp; i++) {
 			lowerHandOut->cards[i] = ctmp->cards[i];
 		}
-		(*lowerStatus) = (*lowerHouse->get_Status);
+		(*lowerStatus) = (*lowerHouse->get_Status());
 
 
 		if (signal->signalType == DEAL_CARD) {
@@ -222,11 +231,11 @@ void modelView::viewModelNotificationSlot(std::shared_ptr<Signal> signal)
 			upperCard->cards[i] = ctmp->cards[i];
 		}
 		tmp = (*upperHandOutNum) = (*upperHouse->gets_Num());
-		ctmp = upperHouse->get_Selected();
+		ctmp = upperHouse->geto_Card();
 		for (int i = 0; i < tmp; i++) {
 			upperHandOut->cards[i] = ctmp->cards[i];
 		}
-		(*upperStatus) = (*upperHouse->get_Status);
+		(*upperStatus) = (*upperHouse->get_Status());
 
 		tmp = (*lowerNum) = (*upperHouse->get_Num());
 		ctmp = lowerHouse->get_Card();
@@ -234,11 +243,11 @@ void modelView::viewModelNotificationSlot(std::shared_ptr<Signal> signal)
 			lowerCard->cards[i] = ctmp->cards[i];
 		}
 		tmp = (*lowerHandOutNum) = (*lowerHouse->gets_Num());
-		ctmp = lowerHouse->get_Selected();
+		ctmp = lowerHouse->geto_Card();
 		for (int i = 0; i < tmp; i++) {
 			lowerHandOut->cards[i] = ctmp->cards[i];
 		}
-		(*lowerStatus) = (*lowerHouse->get_Status);
+		(*lowerStatus) = (*lowerHouse->get_Status());
 
 		emit viewModelNotificationSignal(signal);
 	}

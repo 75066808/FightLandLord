@@ -10,19 +10,22 @@ Window::Window(QWidget *parent)
 
 	initAll();
 
-	connect(&button[ENTER_BTN], SIGNAL(clicked()), this, SLOT(connectButtonClick()));
-	connect(&button[READY_BTN], SIGNAL(clicked()), this, SLOT(readyButtonClick()));
-
-	addButtonToScene(button[ENTER_BTN], 0.4, BTN_TOP);
+	connect(&button[ENTER_BTN], SIGNAL(clicked()), this, SLOT(connectBtnClick()));
+	connect(&button[READY_BTN], SIGNAL(clicked()), this, SLOT(readyBtnClick()));
+	connect(&button[QUIT_BTN], SIGNAL(clicked()), this, SLOT(disconnectBtnClick()));
+	connect(&button[CHOOSE_LL_BTN], SIGNAL(clicked()), this, SLOT(chooseLandLordBtnClick()));
 	
+}
+
+void Window::initWindow(void)
+{
+	clearScreen();
 	addParentItemToScene(cardSlot, SLOT_LEFT, SLOT_TOP, SLOT_WIDTH, SLOT_HEIGHT);
+	drawState();
 
 	ui.graphicsView->setScene(&scene);
 	ui.graphicsView->show();
-
 }
-
-
 
 void Window::windowNotificationSlot(std::shared_ptr<Signal> signal)
 {
@@ -31,22 +34,7 @@ void Window::windowNotificationSlot(std::shared_ptr<Signal> signal)
 	clearScreen();
 	addParentItemToScene(cardSlot, SLOT_LEFT, SLOT_TOP, SLOT_WIDTH, SLOT_HEIGHT);
 
-	switch (signal->signalType)
-	{
-	case CONNECT_SUCCESS:
-		qDebug() << "Connect success";
-		addButtonToScene(button[READY_BTN], 0.4, BTN_TOP);
-		break;
-	case READY:
-		qDebug() << "Ready";
-		addItemToScene(stateItem[READY_ITEM][0], 0.4, BTN_TOP);
-		break;
-	case DEAL_CARD:
-		drawSelfCard();
-		break;
-	default:
-		return;
-	}
+	drawState();
 	
 }
 
@@ -139,9 +127,85 @@ void Window::initAll(void)
 
 void Window::drawState(void)
 {
-	// switch()
+	//  0.5 - (btn_width / 2 + (n - 1) / 2 * (btn_int + btn_width))
 
-	// SELE_STATE
+	switch (*selfStatus)
+	{
+	case SELF_DIS_CONNECT:
+		addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
+		addButtonToScene(button[ENTER_BTN], 0.5 - (BTN_WIDTH / 2), BTN_TOP);
+		break;
+	case SELF_CONNECT:
+		addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
+		addButtonToScene(button[READY_BTN], 0.5 - (BTN_WIDTH / 2 + (BTN_INT + BTN_WIDTH) / 2), BTN_TOP);
+		addButtonToScene(button[QUIT_BTN], BTN_WIDTH + BTN_INT + 0.5 - (BTN_WIDTH / 2 + (BTN_INT + BTN_WIDTH) / 2), BTN_TOP);
+		break;
+	case SELF_READY:
+		addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
+		addItemToScene(stateItem[READY_STATE][1], 0.5 - (BTN_WIDTH / 2), BTN_TOP);
+		break;
+	case SELF_CHOOSE_TURN:
+		addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
+		addButtonToScene(button[CHOOSE_LL_BTN], 0.5 - (BTN_WIDTH / 2 + (BTN_INT + BTN_WIDTH) / 2), BTN_TOP);
+		addButtonToScene(button[SKIP_LL_BTN], BTN_WIDTH + BTN_INT + 0.5 - (BTN_WIDTH / 2 + (BTN_INT + BTN_WIDTH) / 2), BTN_TOP);
+		drawSelfCard();
+		break;
+	case SELF_NOT_CHOOSE_TURN:
+		addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
+		drawSelfCard();
+		break;
+	default:
+		break;
+	}
+
+	switch(*upperStatus)
+	{
+	case UPPER_DIS_CONNECT:
+		break;
+	case UPPER_CONNECT:
+		if (*selfStatus != SELF_DIS_CONNECT)
+			addItemToScene(headItem[FARMER_HEAD][0], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
+		break;
+	case UPPER_READY:
+		if (*selfStatus != SELF_DIS_CONNECT)
+		{
+			addItemToScene(headItem[FARMER_HEAD][0], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
+			addItemToScene(stateItem[READY_STATE][0], UPPER_STATE_LEFT, UPPER_STATE_TOP);
+		}
+		break;
+	case UPPER_CHOOSE_TURN:
+		addItemToScene(headItem[FARMER_HEAD][0], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
+		break;
+	case UPPER_NOT_CHOOSE_TURN:
+		addItemToScene(headItem[FARMER_HEAD][0], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
+		break;
+	default:
+		break;
+
+	}
+
+	switch (*lowerStatus)
+	{
+	case LOWER_DIS_CONNECT:
+		break;
+	case LOWER_CONNECT:
+		if (*selfStatus != SELF_DIS_CONNECT)
+			addItemToScene(headItem[FARMER_HEAD][2], LOWER_HEAD_RIGHT - HEAD_WIDTH, LOWER_HEAD_TOP);
+		break;
+	case LOWER_READY:
+		if (*selfStatus != SELF_DIS_CONNECT)
+		{
+			addItemToScene(headItem[FARMER_HEAD][2], LOWER_HEAD_RIGHT - HEAD_WIDTH, LOWER_HEAD_TOP);
+			addItemToScene(stateItem[READY_STATE][2], LOWER_STATE_RIGHT - STATE_WIDTH, LOWER_STATE_TOP);
+		}
+		break;
+	case LOWER_CHOOSE_TURN:
+		addItemToScene(headItem[FARMER_HEAD][2], LOWER_HEAD_RIGHT - HEAD_WIDTH, LOWER_HEAD_TOP);
+		break;
+	case LOWER_NOT_CHOOSE_TURN:
+		addItemToScene(headItem[FARMER_HEAD][2], LOWER_HEAD_RIGHT - HEAD_WIDTH, LOWER_HEAD_TOP);
+		break;
+	}
 
 }
 
@@ -249,9 +313,7 @@ void Window::addButtonToScene(QPushButton &button, qreal rx, qreal ry)
 }
 
 
-
-
-void Window::connectButtonClick(void)
+void Window::connectBtnClick(void)
 {
 	qDebug() << "Connect button Click";
 
@@ -263,7 +325,12 @@ void Window::connectButtonClick(void)
 	button[0].setFocus();
 }
 
-void Window::readyButtonClick(void)
+void Window::disconnectBtnClick(void)
+{
+
+}
+
+void Window::readyBtnClick(void)
 {
 	qDebug() << "Ready button Click";
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
@@ -272,6 +339,26 @@ void Window::readyButtonClick(void)
 	emit windowCommandSignal(signal);
 }
 
+
+void Window::chooseLandLordBtnClick(void)
+{
+
+}
+
+void Window::skipLandLordBtnClick(void)
+{
+
+}
+
+void Window::playCardBtnClick(void)
+{
+
+}
+
+void Window::skipCardBtnClick(void)
+{
+
+}
 
 void customScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {

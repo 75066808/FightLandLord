@@ -7,7 +7,8 @@ status(std::make_shared<int>(0)),
 m_Num(std::make_shared<int>(0)),
 s_Num(std::make_shared<int>(0)),
 m_Card(std::make_shared<CARD20>()),
-m_Selected(std::make_shared<BOOL20>())
+m_Selected(std::make_shared<BOOL20>()),
+o_Card(std::make_shared<CARD20>())
 {
 }
 
@@ -106,7 +107,7 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 		if (signal->playerType == SELF) *status = SELF_CHOOSE_TURN;
 		else *status = SELF_NOT_CHOOSE_TURN;
 
-		signal->playerType == SELF;
+		signal->playerType = SELF;
 		emit modelNotificationSignal(signal);
 	}
 	else if (signal->signalType == DEAL_CARD && *status == UPPER_READY) {
@@ -133,7 +134,7 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 		if (signal->playerType == UPPERHOUSE)  *status = UPPER_CHOOSE_TURN;
 		else *status = UPPER_NOT_CHOOSE_TURN;
 
-		signal->playerType == UPPERHOUSE;
+		signal->playerType = UPPERHOUSE;
 		emit modelNotificationSignal(signal);
 	}
 	else if (signal->signalType == DEAL_CARD && *status == LOWER_READY) {
@@ -160,7 +161,7 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 		if (signal->playerType == LOWERHOUSE )* status = LOWER_CHOOSE_TURN;
 		else *status = LOWER_NOT_CHOOSE_TURN;
 
-		signal->playerType == LOWERHOUSE;
+		signal->playerType = LOWERHOUSE;
 		emit modelNotificationSignal(signal);
 	}
 	else if (0) //this is for handing cards
