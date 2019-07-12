@@ -6,9 +6,9 @@
 #include <QMetaType>
 
 // player type
-#define UPPERHOUSE         -1
-#define SELF               0x00
-#define LOWERHOUSE         0x01
+#define UPPERHOUSE         0x00
+#define SELF               0x01
+#define LOWERHOUSE         0x02
 
 // signal type
 #define CONNECT            0x00
@@ -62,6 +62,9 @@
 #define SELF_NOT_CHOOSE_TURN  0x18
 #define UPPER_NOT_CHOOSE_TURN 0x19
 #define LOWER_NOT_CHOOSE_TURN 0x1a
+#define SELF_NOSKIP_TURN      0x1b
+#define UPPER_NOSKIP_TURN     0x1c
+#define LOWER_NOSKIP_TURN     0x1d
 
 
 #define TABLE_NO_READY        0x00
@@ -137,7 +140,7 @@ private:
 struct Signal {
 	qint8 valid;        
 	qint8 signalType;
-	qint8 playerType;    
+	qint8 playerType[3];    
 	QByteArray cardTransfer;
 };
 
@@ -147,12 +150,18 @@ public:
 	CARD20() {
 		for (int i = 0; i < 20; i++) cards[i] = 0;
 	}
+	void clear(){
+		for (int i = 0; i < 20; i++) cards[i] = 0;
+	}
 	CARD cards[20];
 };
 
 class BOOL20 {
 public:
 	BOOL20() {
+		for (int i = 0; i < 20; i++) bools[i] = 0;
+	}
+	void clear(){
 		for (int i = 0; i < 20; i++) bools[i] = 0;
 	}
 	CARD bools[20];
