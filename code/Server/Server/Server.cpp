@@ -47,18 +47,17 @@ void Server::serverNotificationSlot(void)
 
 void Server::processClientData(qint32 sender, QByteArray &data)
 {
-	QByteArray transData;
-
-	qint8 signalType = data[0];
-
-	switch (signalType)
+	QByteArray temp;
+	switch (data.at(0))
 	{
 		case READY: // player ready
 			room.ready(sender);
 			break;
 
 		case PLAY_CARD: // player plays card
-			room.playCard(sender);
+			for (qint32 i = 1;i < data.size();i++)
+				temp[i - 1] = data[i];
+			room.playCard(sender, temp);
 			break;
 
 		case SKIP_CARD: // play skips card

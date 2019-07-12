@@ -2,13 +2,9 @@
 
 GameRoom::GameRoom()
 {
-	playerConnect[0] = 0;
-	playerConnect[1] = 0;
-	playerConnect[2] = 0;
-
-	playerReady[0] = 0;
-	playerReady[1] = 0;
-	playerReady[2] = 0;
+	playerState[0] = 0;
+	playerState[1] = 0;
+	playerState[2] = 0;
 
 	skipPlayNum = 0;
 	skipLandLordNum = 0;
@@ -34,10 +30,10 @@ bool GameRoom::connectSocket(std::shared_ptr<QTcpSocket> tcpSocket)
 
 	for (qint32 i = 0;i < 3;i++)
 	{
-		if (playerConnect[i] == 0) // find empty connect slot
+		if (playerState[i] == 0) // find empty connect slot
 		{
 			tcpClient[i] = tcpSocket;
-			playerConnect[i] = 1;
+			playerState[i] = 1;
 			data[0] = CONNECT_SUCCESS;
 			broadCastData(i, data); // notify success
 			return true;
@@ -53,8 +49,7 @@ void GameRoom::disconnectSocket(qint8 index)
 	QByteArray data;
 	
 	tcpClient[index]->disconnectFromHost();
-	playerConnect[index] = 0; // clear connect signal
-	playerReady[index] = 0;   // clear ready signal
+	playerState[index] = 0; // clear state
 
 	skipPlayNum = 0;
 	skipLandLordNum = 0;
@@ -66,7 +61,7 @@ void GameRoom::disconnectSocket(qint8 index)
 
 bool GameRoom::checkConnect(qint8 index)
 {
-	return playerConnect[index];
+	return playerState[index] != 0;
 }
 
 std::shared_ptr<QTcpSocket> GameRoom::getSocket(qint8 index)
@@ -78,20 +73,24 @@ std::shared_ptr<QTcpSocket> GameRoom::getSocket(qint8 index)
 void GameRoom::ready(qint8 index)
 {
 	QByteArray data;
-	data[0] = READY;
-	broadCastData(index, data);
 
-	playerReady[index] = 1;
-
-	if (playerReady[0] && playerReady[1] && playerReady[2]) // all players ready
+	if (playerState[index] == 1) // unready state
 	{
-		QThread::msleep(100);
-		playerReady[0] = 0;
-		playerReady[1] = 0;
-		playerReady[2] = 0;
-		dealCard();
-		chooseTimer->start(TIMEOUT);
+		data[0] = READY;
+		playerState[index] = 2;
+		broadCastData(index, data);
+
+		if (playerState[0] == 2&& playerState[1] == 2&& playerState[2] == 2) // all players ready
+		{
+			QThread::msleep(100);
+			playerState[0] = 1;   // set all players to unready state
+			playerState[1] = 1;
+			playerState[2] = 1;
+			dealCard();
+			chooseTimer->start(TIMEOUT);
+		}
 	}
+	
 }
 
 
@@ -123,7 +122,7 @@ void GameRoom::skipCard(qint8 index)
 	playTimer->start(TIMEOUT);
 }
 
-void GameRoom::playCard(qint8 index)
+void GameRoom::playCard(qint8 index, QByteArray card)
 {
 	QByteArray data;
 
@@ -131,6 +130,7 @@ void GameRoom::playCard(qint8 index)
 		playTimer->stop();
 
 	data[0] =  PLAY_CARD;
+	data.append(card);
 	broadCastData(index, data);
 	skipPlayNum = 0;
 	
@@ -225,20 +225,14 @@ void GameRoom::broadCastData(qint8 sender, QByteArray data)
 	for (qint8 i = 0;i < 3;i++)
 	{
 		QByteArray broadcast;
-		if (playerConnect[i] == 0)
+		if (playerState[i] == 0)
 			continue;
 	
-		if (data.at(0) == CONNECT_SUCCESS)
+		if (data.at(0) == CONNECT_SUCCESS || data.at(0) == READY)
 		{
-			broadcast[0] = playerConnect[(i + 2) % 3];
-			broadcast[1] = playerConnect[i];
-			broadcast[2] = playerConnect[(i + 1) % 3];
-		}
-		else if (data.at(0) == READY)
-		{
-			broadcast[0] = playerReady[(i + 2) % 3];
-			broadcast[1] = playerReady[i];
-			broadcast[2] = playerReady[(i + 1) % 3];
+			broadcast[0] = playerState[(i + 2) % 3];
+			broadcast[1] = playerState[i];
+			broadcast[2] = playerState[(i + 1) % 3];
 		}
 		else
 		{

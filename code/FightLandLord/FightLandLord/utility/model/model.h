@@ -35,6 +35,16 @@ public:
 		onTable = on;
 	}
 
+	//add some changes here----------------------------------------------
+
+	static qint8 connectNum;
+	static qint8 readyNum;
+	static qint8 dealCardNum;
+	static qint8 dealLandNum;
+	static qint8 connectFailNum;
+
+	//add some changes here----------------------------------------------
+
 signals:
 	void modelCommandSignal(std::shared_ptr<Signal> signal);
 	void modelNotificationSignal(std::shared_ptr<Signal> signal);
@@ -55,3 +65,9 @@ private:
 	std::shared_ptr<BOOL20> m_Selected;
 	std::shared_ptr<CARD20> o_Card;
 };
+
+//add some changes here----------------------------------------------
+
+
+
+//add some changes here----------------------------------------------

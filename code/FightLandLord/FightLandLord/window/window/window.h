@@ -48,13 +48,13 @@
 #define NUM_WIDTH         0.1
 #define NUM_HEIGHT        0.1
 
-#define SLOT_LEFT         0.2
+#define SLOT_LEFT         0.15
 #define SLOT_TOP          0.75
-#define SLOT_WIDTH        0.6
-#define SLOT_HEIGHT       0.20
+#define SLOT_WIDTH        0.7
+#define SLOT_HEIGHT       0.25
 
 #define ON_HAND_TOP       0.3
-#define ON_HAND_INT       0.05 
+#define ON_HAND_INT       0.04 
 #define ON_HAND_RISE      0.2
 
 #define BTN_TOP           0.64
@@ -64,7 +64,7 @@
 #define LL_INT            0.05
 
 #define SELF_STATE_TOP    0.64
-#define SELF_HEAD_LEFT    0.06
+#define SELF_HEAD_LEFT    0.04
 #define SELF_HEAD_TOP     0.8
 #define SELF_PLAY_TOP     0.45
 #define SELF_PLAY_INT     0.03

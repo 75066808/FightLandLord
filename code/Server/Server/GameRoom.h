@@ -24,7 +24,7 @@ public:
 	void ready(qint8 index);
 
 	void skipCard(qint8 index);
-	void playCard(qint8 index);
+	void playCard(qint8 index, QByteArray card);
 
 	void skipLandLord(qint8 index);
 	void chooseLandLord(qint8 index);
@@ -36,8 +36,7 @@ public:
 private:
 	std::shared_ptr<QTcpSocket> tcpClient[3];  // client
 
-	qint8 playerConnect[3];  // player connect
-	qint8 playerReady[3];    // player ready  
+	qint8 playerState[3];  // player state 0: unconnected 1: unready 2:ready
   
 	qint8 skipPlayNum;     // skip times in playing card
 	qint8 skipLandLordNum; // skip times in choosing landlord

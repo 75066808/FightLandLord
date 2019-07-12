@@ -1,5 +1,10 @@
 #include "model.h"
 
+qint8 Player::connectNum = 0;
+qint8 Player::connectFailNum = 0;
+qint8 Player::readyNum = 0;
+qint8 Player::dealCardNum = 0;
+qint8 Player::dealLandNum = 0;
 
 Player::Player() :selected(std::make_shared<RuleCardSet>()),
 onHand(std::make_shared<RuleCardSet>()),
@@ -62,11 +67,27 @@ void Player::modelCommandSlot(std::shared_ptr<Signal> signal) {
 
 void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 	qDebug() << "Socket to Model" << endl;
-	if (*status == SELF_DIS_CONNECT && signal->signalType == CONNECT_SUCCESS && signal->playerType[SELF] == 1) {
-		*status = SELF_CONNECT;
-		emit modelNotificationSignal(signal);
+	if (signal->signalType == CONNECT_SUCCESS) {
+		if (*status == 0) {
+			if (signal->playerType[SELF] == 1) *status = SELF_CONNECT;
+			else *status = SELF_DIS_CONNECT;
+		}
+		else if(*status == 1) {
+			if (signal->playerType[UPPERHOUSE] == 1) *status = UPPER_CONNECT;
+			else *status = UPPER_DIS_CONNECT;
+		}
+	else if (*status == 2) {
+		if (signal->playerType[LOWERHOUSE] == 1) *status = LOWER_CONNECT;
+		else *status = LOWER_DIS_CONNECT;
 	}
-	else if(signal->signalType == DISCONNECT){
+	Player::connectNum++;
+	if (Player::connectNum == 3) {
+		emit modelNotificationSignal(signal);
+		Player::connectNum = 0;
+	}
+
+	}
+	else if (signal->signalType == DISCONNECT) {
 		(*status) %= 3;
 		selected->clear();
 		onHand->clear();
@@ -76,41 +97,38 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 		m_Card->clear();
 		m_Selected->clear();
 		o_Card->clear();
-		emit modelNotificationSignal(signal);
+
+		connectFailNum++;
+		if (connectFailNum == 3) {
+			emit modelNotificationSignal(signal);
+			connectNum = 0;
+		}
 	}
-	else if (*status == UPPER_DIS_CONNECT && signal->signalType == CONNECT_SUCCESS && signal->playerType[UPPERHOUSE] == 1) {
-		*status = UPPER_CONNECT;
-		emit modelNotificationSignal(signal);
+	else if (signal->signalType == READY) {
+		if (*status % 3 == 0) {
+			if (signal->playerType[SELF] == 1) *status = SELF_READY;
+		}
+		else if(*status % 3 == 1) {
+			if (signal->playerType[UPPERHOUSE] == 1) *status = UPPER_READY;
+		}
+		else if(*status % 3 == 2) {
+			if (signal->playerType[LOWERHOUSE] == 1) *status = LOWER_READY;
+		}
+		readyNum++;
+		if (readyNum == 3) {
+			emit modelNotificationSignal(signal);
+			readyNum = 0;
+		}
 	}
-	else if (*status == UPPER_CONNECT && signal->signalType == CONNECT_SUCCESS && signal->playerType[UPPERHOUSE] == 0) {
-		*status = UPPER_DIS_CONNECT;
-		emit modelNotificationSignal(signal);
-	}
-	else if (*status == LOWER_DIS_CONNECT && signal->signalType == CONNECT_SUCCESS && signal->playerType[LOWERHOUSE] == 1) {
-		*status = LOWER_CONNECT;
-		emit modelNotificationSignal(signal);
-	}
-	else if (*status == LOWER_CONNECT && signal->signalType == CONNECT_SUCCESS && signal->playerType[LOWERHOUSE] == 0) {
-		*status = LOWER_DIS_CONNECT;
-		emit modelNotificationSignal(signal);
-	}
-	else if (*status == SELF_CONNECT && signal->signalType == READY && signal->playerType[SELF] == 1) {
-		*status = SELF_READY;
-		emit modelNotificationSignal(signal);
-	}
-	else if (*status == UPPER_CONNECT && signal->signalType == READY && signal->playerType[UPPERHOUSE] == 1) {
-		*status = UPPER_READY;
-		emit modelNotificationSignal(signal);
-	}
-	else if (*status == LOWER_CONNECT && signal->signalType == READY && signal->playerType[LOWERHOUSE] == 1) {
-		*status = LOWER_READY;
-		emit modelNotificationSignal(signal);
-	}
-	else if (signal->signalType == DEAL_CARD && *status == SELF_READY) {
+	else if (signal->signalType == DEAL_CARD) {
 		QByteArray whole = signal->cardTransfer;
 		QByteArray here;
 		here.resize(34);
-		int start = 40;  //modify here
+		int start;
+		start = *status % 3 == 0 ? 40 :
+			(*status % 3 == 1 ? 6 : 74);
+
+
 		for (int i = 0; i < 34; i++) {
 			here[i] = whole[start + i];
 		}
@@ -124,56 +142,30 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 		}
 		(*m_Num) = index;
 
-		if (signal->playerType[SELF] == 1) *status = SELF_CHOOSE_TURN;
-		else *status = SELF_NOT_CHOOSE_TURN;
-
-		signal->playerType[SELF] = 1;
-		emit modelNotificationSignal(signal);
+		if (*status % 3 == 0) {
+			if (signal->playerType[SELF] == 1) *status = SELF_CHOOSE_TURN;
+			else *status = SELF_NOT_CHOOSE_TURN;
+		}
+		else if (*status % 3 == 1) {
+			if (signal->playerType[UPPERHOUSE] == 1)  *status = UPPER_CHOOSE_TURN;
+			else *status = UPPER_NOT_CHOOSE_TURN;
+		}
+		else {
+			if (signal->playerType[LOWERHOUSE] == 1)* status = LOWER_CHOOSE_TURN;
+			else *status = LOWER_NOT_CHOOSE_TURN;
+		}
+		dealCardNum++;
+		if (dealCardNum == 3) {
+			emit modelNotificationSignal(signal);
+			dealCardNum = 0;
+		}
 	}
-	else if (signal->signalType == DEAL_CARD && *status == UPPER_READY) {
-		QByteArray whole = signal->cardTransfer;
-		QByteArray here;
-		here.resize(34);
-		int start = 6;  //modify here
-		for (int i = 0; i < 34; i++) {
-			here[i] = whole[start + i];
-		}
-		(*onHand) = (*onHand) + RuleCardSet(here);
-		CARDSET origin;
-		int index = 0;
-		CARDSET tmp = here + origin;
-		while (!tmp.setIsEmpty()) {
-			m_Card->cards[index] = tmp.setPop();
-			index++;
-		}
-		(*m_Num) = index;
-
-		if (signal->playerType[UPPERHOUSE] == 1)  *status = UPPER_CHOOSE_TURN;
-		else *status = UPPER_NOT_CHOOSE_TURN;
-	}
-	else if (signal->signalType == DEAL_CARD && *status == LOWER_READY) {
-		QByteArray whole = signal->cardTransfer;
-		QByteArray here;
-		here.resize(34);
-		int start = 74;  //modify here
-		for (int i = 0; i < 34; i++) {
-			here[i] = whole[start + i];
-		}
-		(*onHand) = (*onHand) + RuleCardSet(here);
-		CARDSET origin;
-		int index = 0;
-		CARDSET tmp = here + origin;
-		while (!tmp.setIsEmpty()) {
-			m_Card->cards[index] = tmp.setPop();
-			index++;
-		}
-		(*m_Num) = index;
-
-		if (signal->playerType[LOWERHOUSE] == 1 )* status = LOWER_CHOOSE_TURN;
-		else *status = LOWER_NOT_CHOOSE_TURN;
-	}
-	else if (signal->signalType == DEAL_LANDLORD && (*status) % 3 == 0) {
-		if(signal->playerType[SELF] == 1){
+	else if (signal->signalType == DEAL_LANDLORD) {
+		if ((*status) % 3 == 0 && signal->playerType[SELF] == 1
+			|| (*status) % 3 == 1 && signal->playerType[UPPERHOUSE] == 1
+			|| (*status) % 3 == 2 && signal->playerType[LOWERHOUSE] == 1
+			)
+		{
 			QByteArray whole = signal->cardTransfer;
 			QByteArray here;
 			here.resize(6);
@@ -193,70 +185,15 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 				index++;
 			}
 			(*m_Num) = index;
-			*status = SELF_NOSKIP_TURN;
-			emit modelNotificationSignal(signal);
+			*status = SELF_NOSKIP_TURN + (*status) % 3;
 		}
-		else{
-			*status = SELF_PLAY;
-			emit modelNotificationSignal(signal);
+		else {
+			*status = SELF_PLAY + (*status) % 3;
 		}
-	}
-	else if (signal->signalType == DEAL_LANDLORD && (*status) % 3 == 1) {
-		if(signal->playerType[UPPERHOUSE] == 1){
-			QByteArray whole = signal->cardTransfer;
-			QByteArray here;
-			here.resize(6);
-			int start = 0;  //modify here
-			for (int i = 0; i < 6; i++) {
-				here[i] = whole[start + i];
-			}
-			(*onHand) = (*onHand) + RuleCardSet(here);
-			CARDSET origin;
-			for (int i = 0; i < (*m_Num); i++) {
-				origin.add(m_Card->cards[i]);
-			}
-			int index = 0;
-			CARDSET tmp = here + origin;
-			while (!tmp.setIsEmpty()) {
-				m_Card->cards[index] = tmp.setPop();
-				index++;
-			}
-			(*m_Num) = index;
-			*status = UPPER_NOSKIP_TURN;
+		dealLandNum++;
+		if (dealLandNum == 3) {
 			emit modelNotificationSignal(signal);
-		}
-		else{
-			*status = UPPER_PLAY;
-			emit modelNotificationSignal(signal);
-		}
-	}
-	else if (signal->signalType == DEAL_LANDLORD && (*status) % 3 == 2) {
-		if(signal->playerType[LOWERHOUSE] == 1){
-			QByteArray whole = signal->cardTransfer;
-			QByteArray here;
-			here.resize(6);
-			int start = 0;  //modify here
-			for (int i = 0; i < 6; i++) {
-				here[i] = whole[start + i];
-			}
-			(*onHand) = (*onHand) + RuleCardSet(here);
-			CARDSET origin;
-			for (int i = 0; i < (*m_Num); i++) {
-				origin.add(m_Card->cards[i]);
-			}
-			int index = 0;
-			CARDSET tmp = here + origin;
-			while (!tmp.setIsEmpty()) {
-				m_Card->cards[index] = tmp.setPop();
-				index++;
-			}
-			(*m_Num) = index;
-			*status = LOWER_NOSKIP_TURN;
-			emit modelNotificationSignal(signal);
-		}
-		else{
-			*status = LOWER_PLAY;
-			emit modelNotificationSignal(signal);
+			dealLandNum = 0;
 		}
 	}
 	else if (0) //this is for handing cards

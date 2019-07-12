@@ -135,8 +135,6 @@ void Window::initAll(void)
 		initItem(numItem[i][2], path, NUM_WIDTH, NUM_HEIGHT);
 	}
 	
-	
-	ui.graphicsView->setStyleSheet("padding: 0px; border: 0px;");
 }
 
 void Window::drawState(void)
@@ -334,7 +332,7 @@ void Window::drawLandLordCard(bool show)
 
 	for (qint32 i = 0; i < 3;i++)
 	{
-		addItemToParentItem(cardBackItem[i], cardSlot, left, top);
+		addItemToScene(cardBackItem[i], left, top);
 		left += SELF_PLAY_INT;
 	}
 }

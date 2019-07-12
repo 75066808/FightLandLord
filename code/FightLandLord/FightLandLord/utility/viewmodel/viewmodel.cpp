@@ -159,7 +159,7 @@ void modelView::viewModelCommandSlot(std::shared_ptr<Signal> signal){
 
 void modelView::viewModelNotificationSlot(std::shared_ptr<Signal> signal)
 {
-	qDebug() << "Model to Veiw Model and this is deal card;" << endl;
+	qDebug() << "Model to Veiw Model" << endl;
 	int tmp;
 		
 	std::shared_ptr<CARD20> ctmp;
