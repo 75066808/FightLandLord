@@ -20,10 +20,7 @@ typedef enum {
 	QUADRAANDTWO
 } cardsType;
 
-class RuleCardSet : public QObject {
-
-	Q_OBJECT
-
+class RuleCardSet {
 public:
 	RuleCardSet() :type(NONE), cardLog{ 0 }, compareSignal(3), subType(0){
 
@@ -60,7 +57,11 @@ public:
 	RuleCardSet findBigger(RuleCardSet& origin);  //add here
 	qint8 getSubType() { return subType; }        //add here
 	int getCompSig() { return compareSignal; }    //add here
-
+	void clear() {
+		for (int i = 0; i <= 17; i++) {
+			cardLog[i] = 0;
+		}
+	}
 	friend const RuleCardSet operator+(const RuleCardSet& left, const RuleCardSet& right);
 	friend const RuleCardSet operator-(const RuleCardSet& left, const RuleCardSet& right);
 	friend int operator<(RuleCardSet& left, RuleCardSet& right);
