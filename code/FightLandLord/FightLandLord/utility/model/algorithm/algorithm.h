@@ -48,7 +48,7 @@ public:
 		}
 		return tmp;
 	}
-	const qint8* const getArr() {
+	qint8* const getArr() {
 		return cardLog;
 	}
 	cardsType getType() {
@@ -69,7 +69,8 @@ public:
 	friend const RuleCardSet operator+(const RuleCardSet& left, const RuleCardSet& right);
 	friend const RuleCardSet operator-(const RuleCardSet& left, const RuleCardSet& right);
 	friend int operator<(RuleCardSet& left, RuleCardSet& right);
-	friend int operator>(RuleCardSet& left, RuleCardSet& right);
+	friend int operator==(RuleCardSet& left, RuleCardSet& right);
+	
 	RuleCardSet& operator=(const RuleCardSet& in) {
 		if (this == &in) return *this;
 		type = in.type;
