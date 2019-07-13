@@ -111,13 +111,13 @@ void Window::initAll(void)
 	initItem(stateItem[SKIP_CARD_STATE][1], "Resources/state/skipCardState.jpg", STATE_WIDTH, STATE_HEIGHT);
 	initItem(stateItem[SKIP_CARD_STATE][2], "Resources/state/skipCardState.jpg", STATE_WIDTH, STATE_HEIGHT);
 
-	initItem(headItem[FARMER_HEAD][0], "Resources/head/farmer.jpg", HEAD_WIDTH, HEAD_HEIGHT);
-	initItem(headItem[FARMER_HEAD][1], "Resources/head/farmer.jpg", HEAD_WIDTH, HEAD_HEIGHT);
-	initItem(headItem[FARMER_HEAD][2], "Resources/head/farmer.jpg", HEAD_WIDTH, HEAD_HEIGHT);
+	initItem(headItem[FARMER_HEAD][0], "Resources/head/farmer.png", HEAD_WIDTH, HEAD_HEIGHT);
+	initItem(headItem[FARMER_HEAD][1], "Resources/head/farmer.png", HEAD_WIDTH, HEAD_HEIGHT);
+	initItem(headItem[FARMER_HEAD][2], "Resources/head/farmer.png", HEAD_WIDTH, HEAD_HEIGHT);
 
-	initItem(headItem[LANDLORD_HEAD][0], "Resources/head/landlord.jpg", HEAD_WIDTH, HEAD_HEIGHT);
-	initItem(headItem[LANDLORD_HEAD][1], "Resources/head/landlord.jpg", HEAD_WIDTH, HEAD_HEIGHT);
-	initItem(headItem[LANDLORD_HEAD][2], "Resources/head/landlord.jpg", HEAD_WIDTH, HEAD_HEIGHT);
+	initItem(headItem[LANDLORD_HEAD][0], "Resources/head/landlord.png", HEAD_WIDTH, HEAD_HEIGHT);
+	initItem(headItem[LANDLORD_HEAD][1], "Resources/head/landlord.png", HEAD_WIDTH, HEAD_HEIGHT);
+	initItem(headItem[LANDLORD_HEAD][2], "Resources/head/landlord.png", HEAD_WIDTH, HEAD_HEIGHT);
 
 
 	initButton(button[ENTER_BTN], "border-image: url(:/Button/Resources/button/connect.jpg);", BTN_WIDTH, BTN_HEIGHT);
