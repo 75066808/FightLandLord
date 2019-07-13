@@ -7,7 +7,7 @@ Socket::Socket(): tcpSocket(std::make_shared<QTcpSocket>())
 
 Socket::~Socket()
 {
-
+	
 }
 
 
@@ -38,7 +38,6 @@ void Socket::socketCommandSlot(std::shared_ptr<Signal> signal)
 
 void Socket::socketNotificationSlot(void)
 {
-	//qDebug() << "Server to Socket" << endl;
 	QByteArray data = tcpSocket->readAll(); // read from server
 
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();

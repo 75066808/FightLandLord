@@ -105,6 +105,7 @@ class Window : public QMainWindow
 
 public:
 	Window(QWidget *parent = Q_NULLPTR);
+	~Window();
 
 	void initWindow(void);
 
