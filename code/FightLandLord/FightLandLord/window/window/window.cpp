@@ -8,6 +8,10 @@ Window::Window(QWidget *parent)
 	
 	scene.setSceneRect(0, 0, 1, 1);
 
+	QPixmap pim("Resources/background/background.jpg");
+
+	scene.setBackgroundBrush(pim);
+
 	initAll();
 
 	connect(&button[ENTER_BTN], SIGNAL(clicked()), this, SLOT(connectBtnClick()));
@@ -110,14 +114,14 @@ void Window::initAll(void)
 	initItem(stateItem[INVALID_STATE][SELF], "Resources/state/invalidState.jpg", STATE_WIDTH, STATE_HEIGHT);
 	initItem(stateItem[INVALID_STATE][LOWERHOUSE], "Resources/state/invalidState.jpg", STATE_WIDTH, STATE_HEIGHT);
 
+	initItem(headItem[FARMER_HEAD][UPPERHOUSE], "Resources/head/farmer.png", HEAD_WIDTH, HEAD_HEIGHT);
+	initItem(headItem[FARMER_HEAD][SELF], "Resources/head/farmer.png", HEAD_WIDTH, HEAD_HEIGHT);
+	initItem(headItem[FARMER_HEAD][LOWERHOUSE], "Resources/head/farmer.png", HEAD_WIDTH, HEAD_HEIGHT);
 
-	initItem(headItem[FARMER_HEAD][UPPERHOUSE], "Resources/head/farmer.jpg", HEAD_WIDTH, HEAD_HEIGHT);
-	initItem(headItem[FARMER_HEAD][SELF], "Resources/head/farmer.jpg", HEAD_WIDTH, HEAD_HEIGHT);
-	initItem(headItem[FARMER_HEAD][LOWERHOUSE], "Resources/head/farmer.jpg", HEAD_WIDTH, HEAD_HEIGHT);
+	initItem(headItem[LANDLORD_HEAD][UPPERHOUSE], "Resources/head/landlord.png", HEAD_WIDTH, HEAD_HEIGHT);
+	initItem(headItem[LANDLORD_HEAD][SELF], "Resources/head/landlord.png", HEAD_WIDTH, HEAD_HEIGHT);
+	initItem(headItem[LANDLORD_HEAD][LOWERHOUSE], "Resources/head/landlord.png", HEAD_WIDTH, HEAD_HEIGHT);
 
-	initItem(headItem[LANDLORD_HEAD][UPPERHOUSE], "Resources/head/landlord.jpg", HEAD_WIDTH, HEAD_HEIGHT);
-	initItem(headItem[LANDLORD_HEAD][SELF], "Resources/head/landlord.jpg", HEAD_WIDTH, HEAD_HEIGHT);
-	initItem(headItem[LANDLORD_HEAD][LOWERHOUSE], "Resources/head/landlord.jpg", HEAD_WIDTH, HEAD_HEIGHT);
 
 
 	initButton(button[ENTER_BTN], "border-image: url(:/Button/Resources/button/connect.jpg);", BTN_WIDTH, BTN_HEIGHT);
