@@ -21,7 +21,8 @@ m_Num(std::make_shared<int>(0)),
 s_Num(std::make_shared<int>(0)),
 m_Card(std::make_shared<CARD20>()),
 m_Selected(std::make_shared<BOOL20>()),
-o_Card(std::make_shared<CARD20>())
+o_Card(std::make_shared<CARD20>()),
+onTable(std::make_shared<RuleCardSet>())
 {
 }
 
@@ -37,51 +38,60 @@ void Player::modelCommandSlot(std::shared_ptr<Signal> signal) {
 	else if (*status == SELF_CONNECT && signal->signalType == READY) {
 		emit modelCommandSignal(signal);
 	}
-	else if(*status == SELF_CONNECT && signal->signalType == DISCONNECT){
+	else if (*status == SELF_CONNECT && signal->signalType == DISCONNECT) {
 		emit modelCommandSignal(signal);
 	}
-	else if (*status == SELF_CHOOSE_TURN && signal->signalType ==CHOOSE_LANDLORD) {
+	else if (*status == SELF_CHOOSE_TURN && signal->signalType == CHOOSE_LANDLORD) {
 		emit modelCommandSignal(signal);
 	}
 	else if (*status == SELF_CHOOSE_TURN && signal->signalType == SKIP_LANDLORD) {
 		emit modelCommandSignal(signal);
 	}
-	else if ((*status == SELF_TURN || *status == SELF_NOSKIP_TURN) && signal->signalType == SELECT )  //this is for selected
+	else if ((*status == SELF_TURN || *status == SELF_NOSKIP_TURN) && signal->signalType == SELECT)  //this is for selected
 	{
-		int index = 0;
-		m_Selected->bools[index] = 1;
-		CARDSET zero;
-		zero.add(m_Card->cards[index]);
-		(*selected) = (*selected) + zero;
-		//for some modify-----------this is for updating o_card and s_Num
-		CARDSET origin;
-		for (int i = 0; i < (*s_Num); i++) {
-			origin.add(o_Card->cards[i]);
+		int index = (signal->cardTransfer)[0];
+		if (m_Selected->bools[index] == 0) {
+			m_Selected->bools[index] = 1;
+			CARDSET zero;
+			zero.add(m_Card->cards[index]);
+			(*selected) = (*selected) + zero;
+			//for some modify-----------this is for updating o_card and s_Num
+			CARDSET origin;
+			for (int i = 0; i < (*s_Num); i++) {
+				origin.add(o_Card->cards[i]);
+			}
+			index = 0;
+			CARDSET tmp = zero + origin;
+			while (!tmp.setIsEmpty()) {
+				o_Card->cards[index] = tmp.setPop();
+				index++;
+			}
+			(*s_Num) = index;
 		}
-		int index = 0;
-		CARDSET tmp = zero + origin;
-		while (!tmp.setIsEmpty()) {
-			o_Card->cards[index] = tmp.setPop();
-			index++;
+		else {
+			m_Selected->bools[index] = 0;
+			CARDSET zero;
+			zero.add(m_Card->cards[index]);
+			(*selected) = (*selected) - zero;
+			//for some modify-----------this is for updating o_card and s_Num
+			CARDSET origin;
+			for (int i = 0; i < (*s_Num); i++) {
+				origin.add(o_Card->cards[i]);
+			}
+			index = 0;
+			CARDSET tmp = origin - zero;
+			while (!tmp.setIsEmpty()) {
+				o_Card->cards[index] = tmp.setPop();
+				index++;
+			}
+			(*s_Num) = index;
 		}
-		(*s_Num) = index;
-
 		emit modelNotificationSignal(signal);
 	}
-	else if (0)  //this is for cancel selected
-	{
-		int index = 0;
-		m_Selected->bools[index] = 0;
-		CARDSET zero;
-		zero.add(m_Card->cards[index]);
-		(*selected) = (*selected) - zero;
-		//for some modify
-		emit modelNotificationSignal(signal);
-	}
-	else if ( (*status == SELF_TURN||*status == SELF_NOSKIP_TURN ) && signal->signalType == PLAY_CARD ) //this is for try to hand cards
+	else if ((*status == SELF_TURN || *status == SELF_NOSKIP_TURN) && signal->signalType == PLAY_CARD) //this is for try to hand cards
 	{
 		//if (((*onTable) < (*selected)) == 1) {
-		if(1){
+		if (1) {
 			//for some modify
 			CARDSET origin;
 			for (int i = 0; i < (*s_Num); i++) {
@@ -152,12 +162,12 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 			else if (signal->playerType[SELF] == 2)* status = SELF_READY;
 			else *status = SELF_DIS_CONNECT;
 		}
-		else if(*status % 3 == 1) {
+		else if (*status % 3 == 1) {
 			if (signal->playerType[UPPERHOUSE] == 1)* status = UPPER_CONNECT;
 			else if (signal->playerType[UPPERHOUSE] == 2)* status = UPPER_READY;
 			else *status = UPPER_DIS_CONNECT;
 		}
-		else if(*status % 3 == 2) {
+		else if (*status % 3 == 2) {
 			if (signal->playerType[LOWERHOUSE] == 1)* status = LOWER_CONNECT;
 			else if (signal->playerType[LOWERHOUSE] == 2)* status = LOWER_READY;
 			else *status = LOWER_DIS_CONNECT;
@@ -193,8 +203,8 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 	}
 	else if (signal->signalType == CHOOSE_TURN) {
 		if (signal->playerType[SELF] == 1 && *status == SELF_NOT_CHOOSE_TURN)* status = SELF_CHOOSE_TURN;
-		else if (signal->playerType[UPPERHOUSE] == 1 && *status == UPPER_NOT_CHOOSE_TURN)* status = UPPER_CHOOSE_LAND;
-		else if (signal->playerType[LOWERHOUSE] == 1 && *status == LOWER_NOT_CHOOSE_TURN)* status = LOWER_CHOOSE_LAND;
+		else if (signal->playerType[UPPERHOUSE] == 1 && *status == UPPER_NOT_CHOOSE_TURN)* status = UPPER_CHOOSE_TURN;
+		else if (signal->playerType[LOWERHOUSE] == 1 && *status == LOWER_NOT_CHOOSE_TURN)* status = LOWER_CHOOSE_TURN;
 
 		chooseTurnNum++;
 		if (chooseTurnNum == 3) {
@@ -210,19 +220,23 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 		start = *status % 3 == 0 ? 40 :
 			(*status % 3 == 1 ? 6 : 74);
 
-
 		for (int i = 0; i < 34; i++) {
 			here[i] = whole[start + i];
 		}
-		(*onHand) = (*onHand) + RuleCardSet(here);
-		CARDSET origin;
+		(*onHand) = RuleCardSet(here);
 		int index = 0;
-		CARDSET tmp = here + origin;
+		CARDSET tmp = here;
 		while (!tmp.setIsEmpty()) {
 			m_Card->cards[index] = tmp.setPop();
 			index++;
 		}
 		(*m_Num) = index;
+
+		CARDSET zero;
+		(*selected) = zero;
+		m_Selected->clear();
+		o_Card->clear();
+		(*s_Num) = 0;
 
 		if (*status % 3 == 0) {
 			if (signal->playerType[SELF] == 1) *status = SELF_CHOOSE_TURN;
@@ -281,7 +295,7 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 	else if (signal->signalType == PLAY_CARD) //this is for handing cards
 	{
 		if (*status % 3 == 0 && signal->playerType[SELF] == 1
-		    || *status % 3 == 1 && signal->playerType[UPPERHOUSE] == 1
+			|| *status % 3 == 1 && signal->playerType[UPPERHOUSE] == 1
 			|| *status % 3 == 2 && signal->playerType[LOWERHOUSE] == 1
 			) {
 			CARDSET zero;
