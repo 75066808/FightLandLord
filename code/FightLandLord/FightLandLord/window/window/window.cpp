@@ -37,7 +37,7 @@ void Window::initWindow(void)
 
 void Window::windowNotificationSlot(std::shared_ptr<Signal> signal)
 {
-	qDebug() << "View Model to Window";
+	//qDebug() << "View Model to Window";
 
 	clearScreen();
 	drawState(signal);
@@ -92,9 +92,9 @@ void Window::initAll(void)
 	}
 
 	QString path;
-	path = "Resources/poker/joker1.jpg";
-	initItem(cardItem[0][16], path, CARD_WIDTH, CARD_HEIGHT);
 	path = "Resources/poker/joker2.jpg";
+	initItem(cardItem[0][16], path, CARD_WIDTH, CARD_HEIGHT);
+	path = "Resources/poker/joker1.jpg";
 	initItem(cardItem[0][17], path, CARD_WIDTH, CARD_HEIGHT);
 	path = "Resources/poker/card_back.png";
 	initItem(landlordItem[0], path, CARD_WIDTH, CARD_HEIGHT);
@@ -455,7 +455,7 @@ void Window::addButtonToScene(QPushButton &button, qreal rx, qreal ry)
 
 void Window::connectBtnClick(void)
 {
-	qDebug() << "Connect button Click";
+	//qDebug() << "Connect button Click";
 
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
@@ -470,7 +470,7 @@ void Window::disconnectBtnClick(void)
 
 void Window::readyBtnClick(void)
 {
-	qDebug() << "Ready button Click";
+	//qDebug() << "Ready button Click";
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
 	signal->signalType = READY;
@@ -480,7 +480,7 @@ void Window::readyBtnClick(void)
 
 void Window::chooseLandLordBtnClick(void)
 {
-	qDebug() << "Choose LandLord button Click";
+	//qDebug() << "Choose LandLord button Click";
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
 	signal->signalType = CHOOSE_LANDLORD;
@@ -489,7 +489,7 @@ void Window::chooseLandLordBtnClick(void)
 
 void Window::skipLandLordBtnClick(void)
 {
-	qDebug() << "Skip LandLord button Click";
+	//qDebug() << "Skip LandLord button Click";
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
 	signal->signalType = SKIP_LANDLORD;
@@ -498,7 +498,7 @@ void Window::skipLandLordBtnClick(void)
 
 void Window::playCardBtnClick(void)
 {
-	qDebug() << "Play Card button Click";
+	//qDebug() << "Play Card button Click";
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
 	signal->signalType = PLAY_CARD;
@@ -507,7 +507,7 @@ void Window::playCardBtnClick(void)
 
 void Window::skipCardBtnClick(void)
 {
-	qDebug() << "Skip Card button Click";
+	//qDebug() << "Skip Card button Click";
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
 	signal->signalType = SKIP_CARD;
@@ -547,7 +547,7 @@ void customScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		signal->signalType = SELECT;
 		signal->cardTransfer[0] = item->parentItem()->childItems().indexOf(item);
 		emit windowCommandSignal(signal);
-		qDebug() << "index of this item is " << index;
+		//qDebug() << "index of this item is " << index;
 	}
 
 	//event->
