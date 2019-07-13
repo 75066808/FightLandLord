@@ -42,6 +42,14 @@ public:
 	static qint8 dealCardNum;
 	static qint8 dealLandNum;
 	static qint8 connectFailNum;
+	static qint8 chooseLandNum;
+	static qint8 skipLandNum;
+	static qint8 chooseTurnNum;
+	static qint8 playCardNum;
+	static qint8 skipCardNum;
+	static qint8 playTurnNum;
+	static qint8 playnkTurnNum;
+
 
 	//add some changes here----------------------------------------------
 
@@ -65,9 +73,3 @@ private:
 	std::shared_ptr<BOOL20> m_Selected;
 	std::shared_ptr<CARD20> o_Card;
 };
-
-//add some changes here----------------------------------------------
-
-
-
-//add some changes here----------------------------------------------
