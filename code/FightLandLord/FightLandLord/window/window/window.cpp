@@ -107,9 +107,9 @@ void Window::initAll(void)
 	initItem(landlordItem[1], path, CARD_WIDTH, CARD_HEIGHT);
 	initItem(landlordItem[2], path, CARD_WIDTH, CARD_HEIGHT);
 
-	initItem(stateItem[READY_STATE][UPPERHOUSE], "Resources/state/readyState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[READY_STATE][SELF], "Resources/state/readyState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[READY_STATE][LOWERHOUSE], "Resources/state/readyState.jpg", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[READY_STATE][UPPERHOUSE], "Resources/state/readyState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[READY_STATE][SELF], "Resources/state/readyState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[READY_STATE][LOWERHOUSE], "Resources/state/readyState.png", STATE_WIDTH, STATE_HEIGHT);
 	initItem(stateItem[SKIP_LL_STATE][UPPERHOUSE], "Resources/state/skipLLState.jpg", STATE_WIDTH, STATE_HEIGHT);
 	initItem(stateItem[SKIP_LL_STATE][SELF], "Resources/state/skipLLState.jpg", STATE_WIDTH, STATE_HEIGHT);
 	initItem(stateItem[SKIP_LL_STATE][LOWERHOUSE], "Resources/state/skipLLState.jpg", STATE_WIDTH, STATE_HEIGHT);
