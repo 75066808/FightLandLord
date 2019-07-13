@@ -9,15 +9,17 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QTransform>
 #include <QPushButton>
-
 #include "../utility/common/common.h"
 
 #define PLAYER_NUM        3
 #define COLOR_NUM         4
 #define POKER_NUM         18
 #define NUM_NUM           21
-
 #define BTN_NUM           9
+#define STATE_NUM         4
+#define HEAD_NUM          2
+#define LL_NUM            3
+
 #define ENTER_BTN         0
 #define QUIT_BTN          1
 #define READY_BTN         2
@@ -28,12 +30,11 @@
 #define LOSE_BTN          7
 #define WIN_BTN           8
 
-#define STATE_NUM         3
 #define READY_STATE       0
 #define SKIP_LL_STATE     1
 #define SKIP_CARD_STATE   2
+#define INVALID_STATE     3
 
-#define HEAD_NUM          2
 #define FARMER_HEAD       0
 #define LANDLORD_HEAD     1
 
@@ -63,11 +64,11 @@
 #define LL_TOP            0.02
 #define LL_INT            0.05
 
-#define SELF_STATE_TOP    0.64
+#define SELF_STATE_TOP    0.50
 #define SELF_HEAD_LEFT    0.04
 #define SELF_HEAD_TOP     0.8
 #define SELF_PLAY_TOP     0.45
-#define SELF_PLAY_INT     0.03
+#define SELF_PLAY_INT     0.02
 
 #define UPPER_STATE_LEFT  0.2
 #define UPPER_STATE_TOP   0.25
@@ -164,7 +165,7 @@ private:
 	QGraphicsPixmapItem stateItem[STATE_NUM][PLAYER_NUM];
 	QGraphicsPixmapItem headItem[HEAD_NUM][PLAYER_NUM];
 	QGraphicsPixmapItem numItem[NUM_NUM][PLAYER_NUM];
-	QGraphicsPixmapItem cardBackItem[PLAYER_NUM];
+	QGraphicsPixmapItem landlordItem[LL_NUM];
 
 	QPushButton button[BTN_NUM];
 
@@ -174,7 +175,7 @@ private:
 
 	void initAll(void);
 
-	void drawState(void);
+	void drawState(std::shared_ptr<Signal> signal);
 	void drawSelfCard(void);
 
 	void drawSelfPlayCard(void);
@@ -185,7 +186,7 @@ private:
 
 	void setButtonNum(qint8 num);
 	void drawButton(QPushButton &button);
-	void drawLandLordCard(bool show);
+	void drawLandLordCard(void);
 
 	void clearScreen(void);
 

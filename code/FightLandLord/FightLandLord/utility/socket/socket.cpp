@@ -40,10 +40,10 @@ void Socket::socketNotificationSlot(void)
 {
 	qDebug() << "Server to Socket" << endl;
 	QByteArray data = tcpSocket->readAll(); // read from server
-	QByteArray temp;
 
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
+	signal->valid = 1;
 	signal->playerType[0] = data[0];
 	signal->playerType[1] = data[1];
 	signal->playerType[2] = data[2];
