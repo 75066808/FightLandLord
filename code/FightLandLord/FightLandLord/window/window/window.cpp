@@ -15,12 +15,16 @@ Window::Window(QWidget *parent)
 	connect(&button[QUIT_BTN], SIGNAL(clicked()), this, SLOT(disconnectBtnClick()));
 	connect(&button[CHOOSE_LL_BTN], SIGNAL(clicked()), this, SLOT(chooseLandLordBtnClick()));
 	connect(&button[SKIP_LL_BTN], SIGNAL(clicked()), this, SLOT(skipLandLordBtnClick()));
+	connect(&button[PLAY_CARD_BTN], SIGNAL(clicked()), this, SLOT(playCardBtnClick()));
+	connect(&button[SKIP_CARD_BTN], SIGNAL(clicked()), this, SLOT(skipCardBtnClick()));
+	connect(&button[LOSE_BTN], SIGNAL(clicked()), this, SLOT(loseBtnClick()));
+	connect(&button[WIN_BTN], SIGNAL(clicked()), this, SLOT(winBtnClick()));
+
 }
 
 void Window::initWindow(void)
 {
 	clearScreen();
-	addParentItemToScene(cardSlot, SLOT_LEFT, SLOT_TOP, SLOT_WIDTH, SLOT_HEIGHT);
 	drawState();
 
 	ui.graphicsView->setScene(&scene);
@@ -32,8 +36,6 @@ void Window::windowNotificationSlot(std::shared_ptr<Signal> signal)
 	qDebug() << "View Model to Window";
 
 	clearScreen();
-	addParentItemToScene(cardSlot, SLOT_LEFT, SLOT_TOP, SLOT_WIDTH, SLOT_HEIGHT);
-
 	drawState();
 	
 }
@@ -139,6 +141,7 @@ void Window::initAll(void)
 
 void Window::drawState(void)
 {
+	addParentItemToScene(cardSlot, SLOT_LEFT, SLOT_TOP, SLOT_WIDTH, SLOT_HEIGHT);
 	addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
 
 	if (*selfStatus != SELF_DIS_CONNECT)
@@ -151,7 +154,7 @@ void Window::drawState(void)
 		{
 			drawSelfCard();
 			addItemToScene(numItem[*upperNum][0], UPPER_NUM_LEFT, UPPER_NUM_TOP);
-			addItemToScene(numItem[*lowerNum][1], LOWER_NUM_RIGHT - NUM_WIDTH, LOWER_NUM_TOP);
+			addItemToScene(numItem[*lowerNum][2], LOWER_NUM_RIGHT - NUM_WIDTH, LOWER_NUM_TOP);
 			drawLandLordCard(true);
 		}
 	}
@@ -175,6 +178,9 @@ void Window::drawState(void)
 		drawButton(button[CHOOSE_LL_BTN]);
 		drawButton(button[SKIP_LL_BTN]);
 		break;
+	case SELF_SKIP_LAND:
+		addItemToScene(stateItem[SKIP_LL_STATE][1], 0.5 - (BTN_WIDTH / 2), BTN_TOP);
+		break;
 	case SELF_NOSKIP_TURN:
 		setButtonNum(1);
 		drawButton(button[PLAY_CARD_BTN]);
@@ -183,6 +189,7 @@ void Window::drawState(void)
 		setButtonNum(2);
 		drawButton(button[PLAY_CARD_BTN]);
 		drawButton(button[SKIP_CARD_BTN]);
+		break;
 	case SELF_PLAY:
 		drawSelfPlayCard();
 		break;
@@ -202,8 +209,10 @@ void Window::drawState(void)
 			addItemToScene(stateItem[READY_STATE][0], UPPER_STATE_LEFT, UPPER_STATE_TOP);
 		break;
 	case UPPER_PLAY:
-		addItemToScene(headItem[FARMER_HEAD][0], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
 		drawUpperPlayCard();
+		break;
+	case UPPER_SKIP_LAND:
+		addItemToScene(stateItem[SKIP_LL_STATE][0], UPPER_STATE_LEFT, UPPER_STATE_TOP);
 		break;
 	case UPPER_SKIP:
 		addItemToScene(stateItem[SKIP_CARD_STATE][0], UPPER_STATE_LEFT, UPPER_STATE_TOP);
@@ -221,6 +230,9 @@ void Window::drawState(void)
 		break;
 	case LOWER_PLAY:
 		drawLowerPlayCard();
+		break;
+	case LOWER_SKIP_LAND:
+		addItemToScene(stateItem[SKIP_LL_STATE][2], LOWER_STATE_RIGHT - STATE_WIDTH, LOWER_STATE_TOP);
 		break;
 	case LOWER_SKIP:
 		addItemToScene(stateItem[SKIP_CARD_STATE][2], LOWER_STATE_RIGHT - STATE_WIDTH, LOWER_STATE_TOP);
@@ -243,7 +255,7 @@ void Window::drawSelfCard(void)
 		if (onHandSelected->bools[i] != 1)
 			addItemToParentItem(cardItem[color][value], cardSlot, left, top);
 		else
-			addItemToParentItem(cardItem[color][value], cardSlot, left, top + ON_HAND_RISE);
+			addItemToParentItem(cardItem[color][value], cardSlot, left, top - ON_HAND_RISE);
 		left += ON_HAND_INT;
 	}
 }
@@ -257,7 +269,7 @@ void Window::drawSelfPlayCard(void)
 	{
 		qint32 color = selfHandOut->cards[i].color;
 		qint32 value = selfHandOut->cards[i].i;
-		addItemToParentItem(cardItem[color][value], cardSlot, left, top);
+		addItemToScene(cardItem[color][value], left, top);
 		left += SELF_PLAY_INT;
 	}
 }
@@ -271,7 +283,7 @@ void Window::drawUpperPlayCard(void)
 	{
 		qint32 color = upperHandOut->cards[i].color;
 		qint32 value = upperHandOut->cards[i].i;
-		addItemToParentItem(cardItem[color][value], cardSlot, left, top);
+		addItemToScene(cardItem[color][value], left, top);
 		left += UPPER_PLAY_INT;
 	}
 
@@ -282,11 +294,11 @@ void Window::drawLowerPlayCard(void)
 	qreal top = LOWER_PLAY_TOP;
 	qreal right = LOWER_PLAY_RIGHT - CARD_WIDTH;
 
-	for (qint32 i = 0; i < *upperHandOutNum;i++)
+	for (qint32 i = 0; i < *lowerHandOutNum;i++)
 	{
-		qint32 color = upperHandOut->cards[i].color;
-		qint32 value = upperHandOut->cards[i].i;
-		addItemToParentItem(cardItem[color][value], cardSlot, right, top);
+		qint32 color = lowerHandOut->cards[i].color;
+		qint32 value = lowerHandOut->cards[i].i;
+		addItemToScene(cardItem[color][value], right, top);
 		right -= LOWER_PLAY_INT;
 	}
 }
@@ -341,10 +353,45 @@ void Window::drawLandLordCard(bool show)
 void Window::clearScreen(void)
 {
 	auto itemList = scene.items();
+	auto childList = cardSlot.childItems();
 
-	for (qint32 i = 0;i < itemList.size();i++)
-		scene.removeItem(itemList[i]);
+	for (qint32 i = 0;i < COLOR_NUM;i++)
+	{
+		for (qint32 j = 0;j < POKER_NUM;j++)
+		{
+			if (itemList.contains(&cardItem[i][j]))
+				scene.removeItem(&cardItem[i][j]);
+			if (childList.contains(&cardItem[i][j]))
+				cardItem[i][j].setParentItem(nullptr);
+		}
+	}
+			
+		
+	for (qint32 i = 0;i < STATE_NUM;i++)
+		for (qint32 j = 0;j < PLAYER_NUM;j++)
+			if (itemList.contains(&stateItem[i][j]))
+				scene.removeItem(&stateItem[i][j]);
 
+	for (qint32 i = 0;i < HEAD_NUM;i++)
+		for (qint32 j = 0;j < PLAYER_NUM;j++)
+			if (itemList.contains(&headItem[i][j]))
+				scene.removeItem(&headItem[i][j]);
+
+
+	for (qint32 i = 0;i < NUM_NUM;i++)
+		for (qint32 j = 0;j < PLAYER_NUM;j++)
+			if (itemList.contains(&numItem[i][j]))
+				scene.removeItem(&numItem[i][j]);
+
+	for (qint32 i = 0;i < PLAYER_NUM;i++)
+		if (itemList.contains(&cardBackItem[i]))
+			scene.removeItem(&cardBackItem[i]);
+
+	for (qint32 i = 0;i < BTN_NUM;i++)
+		button[i].setVisible(false);
+
+	if (itemList.contains(&cardSlot))
+		scene.removeItem(&cardSlot);
 }
 
 
@@ -358,6 +405,8 @@ void Window::initButton(QPushButton &button, QString path, qreal rw, qreal rh)
 {
 	button.setStyleSheet(path);
 	button.setGeometry(0, 0, rw*width(), rh*height());
+	button.setVisible(false);
+	scene.addWidget(&button);
 }
 
 void Window::addItemToScene(QGraphicsPixmapItem &item, qreal rx, qreal ry)
@@ -374,6 +423,8 @@ void Window::addParentItemToScene(QGraphicsRectItem &parent, qreal rx, qreal ry,
 
 void Window::addItemToParentItem(QGraphicsPixmapItem &item, QGraphicsRectItem &parent, qreal rx, qreal ry)
 {
+	int x = parent.rect().left() + rx * parent.rect().width();
+	int y = parent.rect().top() + ry * parent.rect().height();
 	item.setPos(parent.rect().left() + rx * parent.rect().width(), parent.rect().top() + ry * parent.rect().height());
 	item.setParentItem(&parent);
 }
@@ -381,7 +432,7 @@ void Window::addItemToParentItem(QGraphicsPixmapItem &item, QGraphicsRectItem &p
 void Window::addButtonToScene(QPushButton &button, qreal rx, qreal ry)
 {
 	button.setGeometry(rx*width(), ry*height(), button.width(), button.height());
-	scene.addWidget(&button);
+	button.setVisible(true);
 }
 
 
@@ -430,13 +481,32 @@ void Window::skipLandLordBtnClick(void)
 
 void Window::playCardBtnClick(void)
 {
+	qDebug() << "Play Card button Click";
+	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
+	signal->signalType = PLAY_CARD;
+	emit windowCommandSignal(signal);
 }
 
 void Window::skipCardBtnClick(void)
 {
+	qDebug() << "Skip Card button Click";
+	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
+
+	signal->signalType = SKIP_CARD;
+	emit windowCommandSignal(signal);
+}
+
+void Window::loseBtnClick(void)
+{
 
 }
+
+void Window::winBtnClick(void)
+{
+
+}
+
 
 void customScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
@@ -453,10 +523,13 @@ void customScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	//qreal original_x = (qreal) item->pos().x()+1;
 	//qreal original_y = (qreal) item->pos().y()+1;
 
-	
 	if (item && item->parentItem())
 	{
 		int index = item->parentItem()->childItems().indexOf(item);
+		std::shared_ptr<Signal> signal = std::make_shared<Signal>();
+		signal->signalType = SELECT;
+		signal->cardTransfer[0] = item->parentItem()->childItems().indexOf(item);
+		emit windowCommandSignal(signal);
 		qDebug() << "index of this item is " << index;
 	}
 

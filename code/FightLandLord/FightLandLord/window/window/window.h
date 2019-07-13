@@ -91,7 +91,11 @@
 
 class customScene : public QGraphicsScene
 {
+	Q_OBJECT
+
 	void mousePressEvent(QGraphicsSceneMouseEvent* event);
+signals:
+	void windowCommandSignal(std::shared_ptr<Signal> signal);
 };
 
 class Window : public QMainWindow
@@ -102,7 +106,6 @@ public:
 	Window(QWidget *parent = Q_NULLPTR);
 
 	void initWindow(void);
-
 
 	void setOnHandNum(std::shared_ptr<int> onHandNum) { this->onHandNum = onHandNum; }
 	void setOnHandCard(std::shared_ptr<CARD20> onHandCard) { this->onHandCard = onHandCard; }
@@ -126,6 +129,7 @@ public:
 	void setLandLordNum(std::shared_ptr<int> landLordNum) { this->landLordNum = landLordNum; }
 	void setLandLordCard(std::shared_ptr<CARD20> landLordCard) { this->landLordCard = landLordCard; }
 
+	customScene* getScene(void) { return &scene; }
 
 protected:
 	virtual void resizeEvent(QResizeEvent* size);
@@ -160,7 +164,6 @@ private:
 	QGraphicsPixmapItem stateItem[STATE_NUM][PLAYER_NUM];
 	QGraphicsPixmapItem headItem[HEAD_NUM][PLAYER_NUM];
 	QGraphicsPixmapItem numItem[NUM_NUM][PLAYER_NUM];
-
 	QGraphicsPixmapItem cardBackItem[PLAYER_NUM];
 
 	QPushButton button[BTN_NUM];
@@ -206,6 +209,9 @@ public slots:
 	void skipLandLordBtnClick(void);
 	void playCardBtnClick(void);
 	void skipCardBtnClick(void);
+	void loseBtnClick(void);
+	void winBtnClick(void);
+
 
 	void windowNotificationSlot(std::shared_ptr<Signal> signal);
 
