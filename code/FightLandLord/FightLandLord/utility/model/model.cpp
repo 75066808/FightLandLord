@@ -31,7 +31,7 @@ Player::~Player()
 }
 
 void Player::modelCommandSlot(std::shared_ptr<Signal> signal) {
-	qDebug() << "View Model to Model" << endl;
+	//qDebug() << "View Model to Model" << endl;
 	if (*status == SELF_DIS_CONNECT && signal->signalType == CONNECT) {
 		emit modelCommandSignal(signal);
 	}
@@ -67,6 +67,7 @@ void Player::modelCommandSlot(std::shared_ptr<Signal> signal) {
 				index++;
 			}
 			(*s_Num) = index;
+			signal->valid = 1;
 		}
 		else {
 			m_Selected->bools[index] = 0;
@@ -85,6 +86,7 @@ void Player::modelCommandSlot(std::shared_ptr<Signal> signal) {
 				index++;
 			}
 			(*s_Num) = index;
+			signal->valid = 1;
 		}
 		emit modelNotificationSignal(signal);
 	}
@@ -116,7 +118,7 @@ void Player::modelCommandSlot(std::shared_ptr<Signal> signal) {
 }
 
 void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
-	qDebug() << "Socket to Model" << endl;
+	//qDebug() << "Socket to Model" << endl;
 	if (signal->signalType == CONNECT_SUCCESS) {
 		if (*status == 0) {
 			if (signal->playerType[SELF] == 1)* status = SELF_CONNECT;

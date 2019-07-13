@@ -324,6 +324,11 @@ int operator<(RuleCardSet& left,RuleCardSet& right)
 {
 	left.setType();
 	right.setType();
+
+	qDebug() << left.type << " " << right.type << endl;
+	qDebug() << left.subType << " " << right.subType << endl;
+	qDebug() << left.compareSignal << " " << right.compareSignal << endl << endl;
+
 	if (left.type == NONE || right.type == NONE) return -1;
 	else if (left.type == NOCARD && right.type != NOCARD) return 1;
 	else if (right.type == NOCARD) return -1;

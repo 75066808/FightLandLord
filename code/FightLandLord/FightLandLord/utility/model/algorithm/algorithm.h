@@ -62,6 +62,9 @@ public:
 		for (int i = 0; i <= 17; i++) {
 			cardLog[i] = 0;
 		}
+		type = NONE;
+		subType = 0;
+		compareSignal = 3;
 	}
 	friend const RuleCardSet operator+(const RuleCardSet& left, const RuleCardSet& right);
 	friend const RuleCardSet operator-(const RuleCardSet& left, const RuleCardSet& right);
@@ -73,6 +76,8 @@ public:
 		for (int i = 0; i <= 17; i++) {
 			cardLog[i] = in.cardLog[i];
 		}
+		subType = in.subType;
+		compareSignal = in.compareSignal;
 		return *this;
 	}
 private:
