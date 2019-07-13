@@ -8,6 +8,10 @@ Window::Window(QWidget *parent)
 	
 	scene.setSceneRect(0, 0, 1, 1);
 
+	QPixmap pim("Resources/background/background.jpg");
+
+	scene.setBackgroundBrush(pim);
+
 	initAll();
 
 	connect(&button[ENTER_BTN], SIGNAL(clicked()), this, SLOT(connectBtnClick()));
