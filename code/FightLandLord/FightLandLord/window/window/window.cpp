@@ -110,15 +110,15 @@ void Window::initAll(void)
 	initItem(stateItem[READY_STATE][UPPERHOUSE], "Resources/state/readyState.png", STATE_WIDTH, STATE_HEIGHT);
 	initItem(stateItem[READY_STATE][SELF], "Resources/state/readyState.png", STATE_WIDTH, STATE_HEIGHT);
 	initItem(stateItem[READY_STATE][LOWERHOUSE], "Resources/state/readyState.png", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[SKIP_LL_STATE][UPPERHOUSE], "Resources/state/skipLLState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[SKIP_LL_STATE][SELF], "Resources/state/skipLLState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[SKIP_LL_STATE][LOWERHOUSE], "Resources/state/skipLLState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[SKIP_CARD_STATE][UPPERHOUSE], "Resources/state/skipCardState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[SKIP_CARD_STATE][SELF], "Resources/state/skipCardState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[SKIP_CARD_STATE][LOWERHOUSE], "Resources/state/skipCardState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[INVALID_STATE][UPPERHOUSE], "Resources/state/invalidState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[INVALID_STATE][SELF], "Resources/state/invalidState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[INVALID_STATE][LOWERHOUSE], "Resources/state/invalidState.jpg", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[SKIP_LL_STATE][UPPERHOUSE], "Resources/state/skipLLState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[SKIP_LL_STATE][SELF], "Resources/state/skipLLState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[SKIP_LL_STATE][LOWERHOUSE], "Resources/state/skipLLState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[SKIP_CARD_STATE][UPPERHOUSE], "Resources/state/skipCardState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[SKIP_CARD_STATE][SELF], "Resources/state/skipCardState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[SKIP_CARD_STATE][LOWERHOUSE], "Resources/state/skipCardState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[INVALID_STATE][UPPERHOUSE], "Resources/state/invalidState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[INVALID_STATE][SELF], "Resources/state/invalidState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[INVALID_STATE][LOWERHOUSE], "Resources/state/invalidState.png", STATE_WIDTH, STATE_HEIGHT);
 
 	initItem(headItem[FARMER_HEAD][UPPERHOUSE], "Resources/head/farmer.png", HEAD_WIDTH, HEAD_HEIGHT);
 	initItem(headItem[FARMER_HEAD][SELF], "Resources/head/farmer.png", HEAD_WIDTH, HEAD_HEIGHT);
