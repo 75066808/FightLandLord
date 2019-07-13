@@ -282,6 +282,7 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 				index++;
 			}
 			(*m_Num) = index;
+			onTable->clear();
 			*status = SELF_NOSKIP_TURN + (*status) % 3;
 		}
 		else {
@@ -379,6 +380,7 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 			|| *status % 3 == 2 && signal->playerType[LOWERHOUSE] == 1
 			) {
 			CARDSET zero;
+			onTable->clear();
 			(*selected) = zero;
 			m_Selected->clear();
 			o_Card->clear();
