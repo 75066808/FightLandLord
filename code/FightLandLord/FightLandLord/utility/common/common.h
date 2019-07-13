@@ -71,6 +71,9 @@
 #define SELF_SKIP_LAND        0x21
 #define UPPER_SKIP_LAND       0x22
 #define LOWER_SKIP_LAND       0x23
+#define SELF_LOSE             0x24
+#define UPPER_LOSE            0x25
+#define LOWER_LOSE            0x26 
 
 
 #define TABLE_NO_READY        0x00
