@@ -90,8 +90,8 @@ void Player::modelCommandSlot(std::shared_ptr<Signal> signal) {
 	}
 	else if ((*status == SELF_TURN || *status == SELF_NOSKIP_TURN) && signal->signalType == PLAY_CARD) //this is for try to hand cards
 	{
-		//if (((*onTable) < (*selected)) == 1) {
-		if (1) {
+		if (((*onTable) < (*selected)) == 1) {
+		//if (1) {
 			//for some modify
 			CARDSET origin;
 			for (int i = 0; i < (*s_Num); i++) {
@@ -102,6 +102,7 @@ void Player::modelCommandSlot(std::shared_ptr<Signal> signal) {
 		}
 		else {
 			//for some modify
+			signal->valid = 0;
 			emit modelNotificationSignal(signal);
 		}
 	}
