@@ -24,7 +24,7 @@ GameRoom::~GameRoom()
 }
 
 
-bool GameRoom::connectSocket(std::shared_ptr<QTcpSocket> tcpSocket)
+bool GameRoom::connectSocket(std::shared_ptr<QTcpSocket> &tcpSocket)
 {
 	QByteArray data;
 
@@ -82,7 +82,6 @@ void GameRoom::ready(qint8 index)
 
 		if (playerState[0] == 2&& playerState[1] == 2&& playerState[2] == 2) // all players ready
 		{
-			QThread::msleep(TIME_INT);
 			playerState[0] = 1;   // set all players to unready state
 			playerState[1] = 1;
 			playerState[2] = 1;
@@ -105,7 +104,6 @@ void GameRoom::skipCard(qint8 index)
 	broadCastData(index, data);
 	skipPlayNum++;
 	
-	QThread::msleep(TIME_INT);
 	turnIndex = (index + 1) % 3;
 	if (skipPlayNum == 2) // if skips twice
 	{
@@ -122,7 +120,7 @@ void GameRoom::skipCard(qint8 index)
 	playTimer->start(TIMEOUT);
 }
 
-void GameRoom::playCard(qint8 index, QByteArray card)
+void GameRoom::playCard(qint8 index, QByteArray& card)
 {
 	QByteArray data;
 
@@ -134,7 +132,6 @@ void GameRoom::playCard(qint8 index, QByteArray card)
 	broadCastData(index, data);
 	skipPlayNum = 0;
 	
-	QThread::msleep(TIME_INT);
 	turnIndex = (index + 1) % 3;
 	data[0] = PLAY_TURN; // next play also can skip 
 	broadCastData(turnIndex, data);
@@ -156,7 +153,6 @@ void GameRoom::skipLandLord(qint8 index)
 
 	skipLandLordNum++;
 
-	QThread::msleep(TIME_INT);
 	if (skipLandLordNum == 3) // all skips
 	{
 		skipLandLordNum = 0;
@@ -219,7 +215,7 @@ void GameRoom::dealCard(void)
 	}
 }
 
-void GameRoom::broadCastData(qint8 sender, QByteArray data)
+void GameRoom::broadCastData(qint8 sender, QByteArray& data)
 {
 	for (qint8 i = 0;i < 3;i++)
 	{

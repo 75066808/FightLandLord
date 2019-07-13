@@ -5,7 +5,6 @@
 #include "common.h"
 
 #define TIMEOUT 15000
-#define TIME_INT 100
 
 class GameRoom : public QObject
 {
@@ -15,7 +14,7 @@ public:
 	GameRoom();
 	~GameRoom();
 
-	bool connectSocket(std::shared_ptr<QTcpSocket> tcpSocket);
+	bool connectSocket(std::shared_ptr<QTcpSocket>& tcpSocket);
 	void disconnectSocket(qint8 index);
 
 	bool checkConnect(qint8 index);
@@ -24,13 +23,13 @@ public:
 	void ready(qint8 index);
 
 	void skipCard(qint8 index);
-	void playCard(qint8 index, QByteArray card);
+	void playCard(qint8 index, QByteArray& card);
 
 	void skipLandLord(qint8 index);
 	void chooseLandLord(qint8 index);
 
 	void dealCard(void);
-	void broadCastData(qint8 sender, QByteArray data);
+	void broadCastData(qint8 sender, QByteArray& data);
 	
 
 private:
