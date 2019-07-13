@@ -82,7 +82,7 @@ void GameRoom::ready(qint8 index)
 
 		if (playerState[0] == 2&& playerState[1] == 2&& playerState[2] == 2) // all players ready
 		{
-			QThread::msleep(100);
+			QThread::msleep(TIME_INT);
 			playerState[0] = 1;   // set all players to unready state
 			playerState[1] = 1;
 			playerState[2] = 1;
@@ -105,7 +105,7 @@ void GameRoom::skipCard(qint8 index)
 	broadCastData(index, data);
 	skipPlayNum++;
 	
-	QThread::msleep(100);
+	QThread::msleep(TIME_INT);
 	turnIndex = (index + 1) % 3;
 	if (skipPlayNum == 2) // if skips twice
 	{
@@ -134,7 +134,7 @@ void GameRoom::playCard(qint8 index, QByteArray card)
 	broadCastData(index, data);
 	skipPlayNum = 0;
 	
-	QThread::msleep(100);
+	QThread::msleep(TIME_INT);
 	turnIndex = (index + 1) % 3;
 	data[0] = PLAY_TURN; // next play also can skip 
 	broadCastData(turnIndex, data);
@@ -156,7 +156,7 @@ void GameRoom::skipLandLord(qint8 index)
 
 	skipLandLordNum++;
 
-	QThread::msleep(100);
+	QThread::msleep(TIME_INT);
 	if (skipLandLordNum == 3) // all skips
 	{
 		skipLandLordNum = 0;

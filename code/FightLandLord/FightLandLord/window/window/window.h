@@ -164,7 +164,6 @@ private:
 	QGraphicsPixmapItem stateItem[STATE_NUM][PLAYER_NUM];
 	QGraphicsPixmapItem headItem[HEAD_NUM][PLAYER_NUM];
 	QGraphicsPixmapItem numItem[NUM_NUM][PLAYER_NUM];
-
 	QGraphicsPixmapItem cardBackItem[PLAYER_NUM];
 
 	QPushButton button[BTN_NUM];

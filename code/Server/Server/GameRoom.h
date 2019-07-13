@@ -5,7 +5,7 @@
 #include "common.h"
 
 #define TIMEOUT 15000
-
+#define TIME_INT 100
 
 class GameRoom : public QObject
 {

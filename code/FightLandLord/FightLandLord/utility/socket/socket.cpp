@@ -49,10 +49,7 @@ void Socket::socketNotificationSlot(void)
 	signal->playerType[2] = data[2];
 
 	signal->signalType = data[3];
+	signal->cardTransfer = data.mid(4);
 
-	for (qint32 i = 4;i < data.size();i++)
-		temp[i - 4] = data[i];
-
-	signal->cardTransfer = temp;
 	emit socketNotificationSignal(signal);
 }
