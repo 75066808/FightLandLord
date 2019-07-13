@@ -160,9 +160,8 @@ void GameRoom::skipLandLord(qint8 index)
 	if (skipLandLordNum == 3) // all skips
 	{
 		skipLandLordNum = 0;
-		data[0] = DEAL_CARD;
-		broadCastData(turnIndex, data); // shuffle the cards 
-
+		dealCard(); // shuffle the cards 
+		chooseTimer->start(TIMEOUT);
 	}
 	else
 	{

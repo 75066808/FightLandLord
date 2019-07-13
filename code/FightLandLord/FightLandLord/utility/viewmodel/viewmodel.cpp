@@ -199,7 +199,7 @@ void modelView::viewModelNotificationSlot(std::shared_ptr<Signal> signal)
 
 //lower------------------------------------------------------//
 
-	tmp = (*lowerNum) = (*upperHouse->get_Num());
+	tmp = (*lowerNum) = (*lowerHouse->get_Num());
 	ctmp = lowerHouse->get_Card();
 	for (int i = 0; i < tmp; i++) {
 		lowerCard->cards[i] = ctmp->cards[i];
