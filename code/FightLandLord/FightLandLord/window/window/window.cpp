@@ -25,7 +25,6 @@ Window::Window(QWidget *parent)
 void Window::initWindow(void)
 {
 	clearScreen();
-	addParentItemToScene(cardSlot, SLOT_LEFT, SLOT_TOP, SLOT_WIDTH, SLOT_HEIGHT);
 	drawState();
 
 	ui.graphicsView->setScene(&scene);
@@ -37,8 +36,6 @@ void Window::windowNotificationSlot(std::shared_ptr<Signal> signal)
 	qDebug() << "View Model to Window";
 
 	clearScreen();
-	addParentItemToScene(cardSlot, SLOT_LEFT, SLOT_TOP, SLOT_WIDTH, SLOT_HEIGHT);
-
 	drawState();
 	
 }
@@ -144,6 +141,7 @@ void Window::initAll(void)
 
 void Window::drawState(void)
 {
+	addParentItemToScene(cardSlot, SLOT_LEFT, SLOT_TOP, SLOT_WIDTH, SLOT_HEIGHT);
 	addItemToScene(headItem[FARMER_HEAD][1], SELF_HEAD_LEFT, SELF_HEAD_TOP);
 
 	if (*selfStatus != SELF_DIS_CONNECT)
@@ -191,6 +189,7 @@ void Window::drawState(void)
 		setButtonNum(2);
 		drawButton(button[PLAY_CARD_BTN]);
 		drawButton(button[SKIP_CARD_BTN]);
+		break;
 	case SELF_PLAY:
 		drawSelfPlayCard();
 		break;
@@ -354,12 +353,20 @@ void Window::drawLandLordCard(bool show)
 void Window::clearScreen(void)
 {
 	auto itemList = scene.items();
+	auto childList = cardSlot.childItems();
 
 	for (qint32 i = 0;i < COLOR_NUM;i++)
+	{
 		for (qint32 j = 0;j < POKER_NUM;j++)
+		{
 			if (itemList.contains(&cardItem[i][j]))
 				scene.removeItem(&cardItem[i][j]);
-
+			if (childList.contains(&cardItem[i][j]))
+				cardItem[i][j].setParentItem(nullptr);
+		}
+	}
+			
+		
 	for (qint32 i = 0;i < STATE_NUM;i++)
 		for (qint32 j = 0;j < PLAYER_NUM;j++)
 			if (itemList.contains(&stateItem[i][j]))
@@ -376,12 +383,15 @@ void Window::clearScreen(void)
 			if (itemList.contains(&numItem[i][j]))
 				scene.removeItem(&numItem[i][j]);
 
-
-	if (itemList.contains(&cardSlot))
-		scene.removeItem(&cardSlot);
+	for (qint32 i = 0;i < PLAYER_NUM;i++)
+		if (itemList.contains(&cardBackItem[i]))
+			scene.removeItem(&cardBackItem[i]);
 
 	for (qint32 i = 0;i < BTN_NUM;i++)
 		button[i].setVisible(false);
+
+	if (itemList.contains(&cardSlot))
+		scene.removeItem(&cardSlot);
 }
 
 
@@ -413,6 +423,8 @@ void Window::addParentItemToScene(QGraphicsRectItem &parent, qreal rx, qreal ry,
 
 void Window::addItemToParentItem(QGraphicsPixmapItem &item, QGraphicsRectItem &parent, qreal rx, qreal ry)
 {
+	int x = parent.rect().left() + rx * parent.rect().width();
+	int y = parent.rect().top() + ry * parent.rect().height();
 	item.setPos(parent.rect().left() + rx * parent.rect().width(), parent.rect().top() + ry * parent.rect().height());
 	item.setParentItem(&parent);
 }
