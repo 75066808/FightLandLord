@@ -26,6 +26,11 @@ modelView::modelView():
 	
 }
 
+modelView::~modelView()
+{
+
+}
+
 //self------------------------------------------------------------------//
 
 std::shared_ptr<int> modelView::getOnHandNum() {

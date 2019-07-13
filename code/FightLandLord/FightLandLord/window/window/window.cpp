@@ -26,6 +26,12 @@ Window::Window(QWidget *parent)
 
 }
 
+
+Window::~Window()
+{
+
+}
+
 void Window::initWindow(void)
 {
 	clearScreen();
@@ -542,7 +548,6 @@ void customScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 	if (item && item->parentItem())
 	{
-		int index = item->parentItem()->childItems().indexOf(item);
 		std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 		signal->signalType = SELECT;
 		signal->cardTransfer[0] = item->parentItem()->childItems().indexOf(item);

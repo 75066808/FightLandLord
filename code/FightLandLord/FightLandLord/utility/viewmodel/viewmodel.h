@@ -7,6 +7,7 @@ class modelView : public QObject {
 
 public:
 	modelView();
+	~modelView();
 	void setSelf(const std::shared_ptr<Player>& model);
 	void setUpper(const std::shared_ptr<Player>& model);
 	void setLower(const std::shared_ptr<Player>& model);
