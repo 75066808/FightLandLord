@@ -4,6 +4,7 @@
 
 typedef enum {
 	NONE,
+	NOCARD,
 	SINGLE,
 	PAIR,
 	TRIPLE,

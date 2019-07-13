@@ -58,7 +58,7 @@ void RuleCardSet::setType()
 	switch (sum)
 	{
 	case 0:
-		type = NONE;
+		type = NOCARD;
 		break;
 	case 1:
 		type = SINGLE;
@@ -325,6 +325,8 @@ int operator<(RuleCardSet& left,RuleCardSet& right)
 	left.setType();
 	right.setType();
 	if (left.type == NONE || right.type == NONE) return -1;
+	else if (left.type == NOCARD && right.type != NOCARD) return 1;
+	else if (right.type == NOCARD) return -1;
 	if (left.type != BOMB && left.type != ROCKET && right.type != BOMB && right.type != ROCKET) {
 		if (left.type != right.type) return -1;
 		else if (left.type == right.type && left.subType != right.subType) {
