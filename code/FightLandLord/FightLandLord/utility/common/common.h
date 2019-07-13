@@ -65,6 +65,12 @@
 #define SELF_NOSKIP_TURN      0x1b
 #define UPPER_NOSKIP_TURN     0x1c
 #define LOWER_NOSKIP_TURN     0x1d
+#define SELF_CHOOSE_LAND      0x1e
+#define UPPER_CHOOSE_LAND     0x1f
+#define LOWER_CHOOSE_LAND     0x20
+#define SELF_SKIP_LAND        0x21
+#define UPPER_SKIP_LAND       0x22
+#define LOWER_SKIP_LAND       0x23
 
 
 #define TABLE_NO_READY        0x00
