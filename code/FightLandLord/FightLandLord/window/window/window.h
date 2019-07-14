@@ -27,8 +27,8 @@
 #define SKIP_LL_BTN       4
 #define PLAY_CARD_BTN     5
 #define SKIP_CARD_BTN     6
-#define LOSE_BTN          7
-#define WIN_BTN           8
+#define PROCEED_BTN      7
+#define END_BTN           8
 
 #define READY_STATE       0
 #define SKIP_LL_STATE     1
@@ -186,7 +186,7 @@ private:
 	void drawUpperPlayCard(void);
 	void drawLowerPlayCard(void);
 
-	void drawBackGround(void);
+	//void drawBackGround(void);
 
 	void setButtonNum(qint8 num);
 	void drawButton(QPushButton &button);
@@ -216,8 +216,8 @@ public slots:
 	void skipLandLordBtnClick(void);
 	void playCardBtnClick(void);
 	void skipCardBtnClick(void);
-	void loseBtnClick(void);
-	void winBtnClick(void);
+	void proceedBtnClick(void);
+	void endBtnClick(void);
 
 
 	void windowNotificationSlot(std::shared_ptr<Signal> signal);

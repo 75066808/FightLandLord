@@ -21,8 +21,8 @@ Window::Window(QWidget *parent)
 	connect(&button[SKIP_LL_BTN], SIGNAL(clicked()), this, SLOT(skipLandLordBtnClick()));
 	connect(&button[PLAY_CARD_BTN], SIGNAL(clicked()), this, SLOT(playCardBtnClick()));
 	connect(&button[SKIP_CARD_BTN], SIGNAL(clicked()), this, SLOT(skipCardBtnClick()));
-	connect(&button[LOSE_BTN], SIGNAL(clicked()), this, SLOT(loseBtnClick()));
-	connect(&button[WIN_BTN], SIGNAL(clicked()), this, SLOT(winBtnClick()));
+	connect(&button[PROCEED_BTN], SIGNAL(clicked()), this, SLOT(proceedBtnClick()));
+	connect(&button[END_BTN], SIGNAL(clicked()), this, SLOT(endBtnClick()));
 
 }
 
@@ -137,8 +137,8 @@ void Window::initAll(void)
 	initButton(button[SKIP_LL_BTN], "border-image: url(:/Button/Resources/button/skipLL.jpg);", BTN_WIDTH, BTN_HEIGHT);
 	initButton(button[PLAY_CARD_BTN], "border-image: url(:/Button/Resources/button/playCard.jpg);", BTN_WIDTH, BTN_HEIGHT);
 	initButton(button[SKIP_CARD_BTN], "border-image: url(:/Button/Resources/button/skipCard.jpg);", BTN_WIDTH, BTN_HEIGHT);
-	initButton(button[LOSE_BTN], "border-image: url(:/Button/Resources/button/lose.jpg);", BTN_WIDTH, BTN_HEIGHT);
-	initButton(button[WIN_BTN], "border-image: url(:/Button/Resources/button/win.jpg);", BTN_WIDTH, BTN_HEIGHT);
+	initButton(button[PROCEED_BTN], "border-image: url(:/Button/Resources/button/proceed.jpg);", BTN_WIDTH, BTN_HEIGHT);
+	initButton(button[END_BTN], "border-image: url(:/Button/Resources/button/end.jpg);", BTN_WIDTH, BTN_HEIGHT);
 
 	for (qint8 i = 0;i < NUM_NUM;i++)
 	{
@@ -225,14 +225,16 @@ void Window::updateWindow(std::shared_ptr<Signal> signal)
 		break;
 	case SELF_SKIP:
 		drawState(stateItem[SKIP_CARD_STATE][SELF], SELF);
-		break;	
+		break;
 	case SELF_LOSE:
-		setButtonNum(1);;
-		drawButton(button[LOSE_BTN]);
+		setButtonNum(2);
+		drawButton(button[PROCEED_BTN]);
+		drawButton(button[END_BTN]);
 		break;
 	case SELF_WIN:
-		setButtonNum(1);;
-		drawButton(button[WIN_BTN]);
+		setButtonNum(2);
+		drawButton(button[PROCEED_BTN]);
+		drawButton(button[END_BTN]);
 		break;
 	default:
 		break;
@@ -342,10 +344,10 @@ void Window::drawLowerPlayCard(void)
 	}
 }
 
-void Window::drawBackGround(void)
-{
+// void Window::drawBackGround(void)
+// {
 
-}
+// }
 
 void Window::setButtonNum(qint8 num)
 {
@@ -507,7 +509,10 @@ void Window::connectBtnClick(void)
 
 void Window::disconnectBtnClick(void)
 {
+	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
+	signal->signalType = DISCONNECT;
+	emit windowCommandSignal(signal);
 }
 
 void Window::readyBtnClick(void)
@@ -556,7 +561,7 @@ void Window::skipCardBtnClick(void)
 	emit windowCommandSignal(signal);
 }
 
-void Window::loseBtnClick(void)
+void Window::proceedBtnClick(void)
 {
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
@@ -564,11 +569,12 @@ void Window::loseBtnClick(void)
 	emit windowCommandSignal(signal);
 }
 
-void Window::winBtnClick(void)
+void Window::endBtnClick(void)
 {
+	qDebug() << "endBtn clicked." ;
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
-	signal->signalType = CONT;
+	signal->signalType = DISCONNECT;
 	emit windowCommandSignal(signal);
 }
 

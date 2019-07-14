@@ -6,8 +6,8 @@
         <file>Resources/button/ready.jpg</file>
         <file>Resources/button/skipCard.jpg</file>
         <file>Resources/button/chooseLL.jpg</file>
-        <file>Resources/button/lose.jpg</file>
         <file>Resources/button/skipLL.jpg</file>
-        <file>Resources/button/win.jpg</file>
+        <file>Resources/button/end.jpg</file>
+        <file>Resources/button/proceed.jpg</file>
     </qresource>
 </RCC>
