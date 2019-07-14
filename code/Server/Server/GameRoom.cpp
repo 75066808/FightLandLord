@@ -82,9 +82,10 @@ void GameRoom::ready(qint8 index)
 
 		if (playerState[0] == 2&& playerState[1] == 2&& playerState[2] == 2) // all players ready
 		{
-			playerState[0] = 1;   // set all players to unready state
-			playerState[1] = 1;
-			playerState[2] = 1;
+			QThread::msleep(TIME_INT);
+			playerState[0] = 3;   // set all players to play state
+			playerState[1] = 3;
+			playerState[2] = 3;
 			dealCard();
 			chooseTimer->start(TIMEOUT);
 		}
@@ -92,6 +93,16 @@ void GameRoom::ready(qint8 index)
 	
 }
 
+void GameRoom::continues(qint8 index)
+{
+	QByteArray data;
+	if (playerState[index] == 3)
+	{
+		data[0] = CONT;
+		playerState[index] = 1; // set to unready
+		broadCastData(index, data);
+	}
+}
 
 void GameRoom::skipCard(qint8 index)
 {
@@ -103,7 +114,8 @@ void GameRoom::skipCard(qint8 index)
 	data[0] = SKIP_CARD;
 	broadCastData(index, data);
 	skipPlayNum++;
-	
+
+	QThread::msleep(TIME_INT);
 	turnIndex = (index + 1) % 3;
 	if (skipPlayNum == 2) // if skips twice
 	{
@@ -132,11 +144,21 @@ void GameRoom::playCard(qint8 index, QByteArray& card)
 	broadCastData(index, data);
 	skipPlayNum = 0;
 	
-	turnIndex = (index + 1) % 3;
-	data[0] = PLAY_TURN; // next play also can skip 
-	broadCastData(turnIndex, data);
-
-	playTimer->start(TIMEOUT);
+	QThread::msleep(TIME_INT);
+	person[index].resize(person[index].size() - card.size());
+	if (person[index].size() == 0) // no card left
+	{
+		data[0] = WIN_GAME;
+		broadCastData(turnIndex, data);
+	}
+	else
+	{
+		turnIndex = (index + 1) % 3;
+		data[0] = PLAY_TURN; // next play also can skip 
+		broadCastData(turnIndex, data);
+		playTimer->start(TIMEOUT);
+	}
+	
 }
 
 
@@ -152,9 +174,10 @@ void GameRoom::skipLandLord(qint8 index)
 	broadCastData(index, data);
 
 	skipLandLordNum++;
-
+	QThread::msleep(TIME_INT);
 	if (skipLandLordNum == 3) // all skips
 	{
+		
 		skipLandLordNum = 0;
 		dealCard(); // shuffle the cards 
 		chooseTimer->start(TIMEOUT);
@@ -177,12 +200,13 @@ void GameRoom::chooseLandLord(qint8 index)
 		chooseTimer->stop();
 
 	turnIndex = index;
+	landlordIndex = index;
 	data[0] = DEAL_LANDLORD;
 	data.append(person[3]); // land lord
 
-	broadCastData(turnIndex, data);
 	skipLandLordNum = 0;
-
+	broadCastData(turnIndex, data);
+	
 	playTimer->start(TIMEOUT);
 }
 
@@ -223,11 +247,28 @@ void GameRoom::broadCastData(qint8 sender, QByteArray& data)
 		if (playerState[i] == 0)
 			continue;
 	
-		if (data.at(0) == CONNECT_SUCCESS || data.at(0) == READY)
+		if (data.at(0) == CONNECT_SUCCESS || data.at(0) == READY || data.at(0) == CONT)
 		{
 			broadcast[0] = playerState[(i + 2) % 3];
 			broadcast[1] = playerState[i];
 			broadcast[2] = playerState[(i + 1) % 3];
+		}
+		else if (data.at(0) == WIN_GAME)
+		{
+			if (sender == landlordIndex) // landlord win
+			{
+				broadcast[0] = 0;
+				broadcast[1] = 0;
+				broadcast[2] = 0;
+				broadcast[(sender - i + 4) % 3] = 1;
+			}
+			else // farmer win
+			{
+				broadcast[0] = 1;
+				broadcast[1] = 1;
+				broadcast[2] = 1;
+				broadcast[(landlordIndex - i + 4) % 3] = 0;
+			}
 		}
 		else
 		{

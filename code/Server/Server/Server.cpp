@@ -94,6 +94,10 @@ void Server::processClientData(qint32 roomNum, qint32 sender, QByteArray &data)
 			rooms.at(roomNum)->skipLandLord(sender);
 			break;
 
+		case CONT:
+			rooms.at(roomNum)->continues(sender);
+			break;
+
 		default:
 			return;
 	}

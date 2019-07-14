@@ -176,7 +176,8 @@ private:
 
 	void initAll(void);
 
-	void drawState(std::shared_ptr<Signal> signal);
+	void updateWindow(std::shared_ptr<Signal> signal);
+
 	void drawSelfCard(void);
 
 	void drawSelfPlayCard(void);
@@ -187,6 +188,8 @@ private:
 
 	void setButtonNum(qint8 num);
 	void drawButton(QPushButton &button);
+	void drawState(QGraphicsPixmapItem &stateItem, qint8 player);
+
 	void drawLandLordCard(void);
 
 	void clearScreen(void);
