@@ -118,6 +118,9 @@ void Player::modelCommandSlot(std::shared_ptr<Signal> signal) {
 			emit modelCommandSignal(signal);
 		}
 	}
+	else if (*status % 3 == 0 && signal->signalType == CONT) {
+		emit modelCommandSignal(signal);
+	}
 }
 
 void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
@@ -138,10 +141,53 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 			else if (signal->playerType[LOWERHOUSE] == 2)* status = LOWER_READY;
 			else *status = LOWER_DIS_CONNECT;
 		}
+
+		selected->clear();
+		onHand->clear();
+		onTable->clear();
+		(*m_Num) = 0;
+		(*s_Num) = 0;
+		m_Card->clear();
+		m_Selected->clear();
+		o_Card->clear();
+
 		connectNum++;
 		if (connectNum == 3) {
 			emit modelNotificationSignal(signal);
 			connectNum = 0;
+		}
+
+	}
+	else if (signal->signalType == CONT) {
+		if (*status % 3 == 0) {
+			if (signal->playerType[SELF] == 1)* status = SELF_CONNECT;
+			else if (signal->playerType[SELF] == 2)* status = SELF_READY;
+			else *status = SELF_DIS_CONNECT;
+		}
+		else if (*status % 3 == 1) {
+			if (signal->playerType[UPPERHOUSE] == 1)* status = UPPER_CONNECT;
+			else if (signal->playerType[UPPERHOUSE] == 2)* status = UPPER_READY;
+			else *status = UPPER_DIS_CONNECT;
+		}
+		else if (*status % 3 == 2) {
+			if (signal->playerType[LOWERHOUSE] == 1)* status = LOWER_CONNECT;
+			else if (signal->playerType[LOWERHOUSE] == 2)* status = LOWER_READY;
+			else *status = LOWER_DIS_CONNECT;
+		}
+
+		selected->clear();
+		onHand->clear();
+		onTable->clear();
+		(*m_Num) = 0;
+		(*s_Num) = 0;
+		m_Card->clear();
+		m_Selected->clear();
+		o_Card->clear();
+
+		loseGameNum++;
+		if (loseGameNum == 3) {
+			emit modelNotificationSignal(signal);
+			loseGameNum = 0;
 		}
 
 	}
@@ -402,23 +448,22 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 	else if (signal->signalType == WIN_GAME) //this is for win
 	{
 		if (*status % 3 == 0) {
-			(*status) = SELF_WIN;
+			if (signal->playerType[SELF] == 1) (*status) = SELF_WIN;
+			else (*status) = SELF_LOSE;
 		}
+		else if (*status % 3 == 1) {
+			if (signal->playerType[UPPERHOUSE] == 1) (*status) = UPPER_WIN;
+			else (*status) = UPPER_LOSE;
+		}
+		else if (*status % 3 == 2) {
+			if (signal->playerType[LOWERHOUSE] == 1) (*status) = LOWER_WIN;
+			else (*status) = LOWER_LOSE;
+		}
+
 		winGameNum++;
 		if (winGameNum == 3) {
 			emit modelNotificationSignal(signal);
 			winGameNum = 0;
-		}
-	}
-	else if (signal->signalType == LOSE_GAME) //this is for lose
-	{
-		if (*status % 3 == 0) {
-			(*status) = SELF_LOSE;
-		}
-		loseGameNum++;
-		if (loseGameNum == 3) {
-			emit modelNotificationSignal(signal);
-			loseGameNum = 0;
 		}
 	}
 	else if (signal->signalType == COM_PLAY) //this is for constraint play
