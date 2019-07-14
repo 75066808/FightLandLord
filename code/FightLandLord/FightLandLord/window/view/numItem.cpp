@@ -63,7 +63,7 @@ void NumItem::clearNum(QGraphicsScene &scene)
 			if (itemList.contains(&numItem[i][j]))
 				scene.removeItem(&numItem[i][j]);
 
-	for (qint32 i = 0;i < NUM_NUM;i++)
+	for (qint32 i = 0;i < CLOCK_NUM;i++)
 		for (qint32 j = 0;j < PLAYER_NUM;j++)
 			if (itemList.contains(&clockItem[i][j]))
 				scene.removeItem(&clockItem[i][j]);
