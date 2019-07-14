@@ -509,7 +509,10 @@ void Window::connectBtnClick(void)
 
 void Window::disconnectBtnClick(void)
 {
+	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
+	signal->signalType = DISCONNECT;
+	emit windowCommandSignal(signal);
 }
 
 void Window::readyBtnClick(void)
@@ -570,7 +573,7 @@ void Window::endBtnClick(void)
 {
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
-	signal->signalType = CONT;
+	signal->signalType = DISCONNECT;
 	emit windowCommandSignal(signal);
 }
 
