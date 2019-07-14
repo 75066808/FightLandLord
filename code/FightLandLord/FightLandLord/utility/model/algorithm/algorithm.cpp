@@ -482,7 +482,7 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 		return RuleCardSet();
 	case(NOCARD):
 	{
-		qint8 max = contArr[0].back().second;
+		qint8 max = contArr[0].front().first;
 		CARD c_max(max);//construct
 		CARDSET zero;
 		zero.add(c_max);
@@ -492,13 +492,19 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 	case(SINGLE):
 		if (!contArr[0].empty()) {
 			qint8 max = contArr[0].back().second;
-
-			CARD c_max(max);//construct
-			CARDSET zero;
-			zero.add(c_max);
-			RuleCardSet tmp = RuleCardSet(zero);
-
-			if (compSig < max) return tmp;
+			if (compSig < max) {
+				mySet origin;
+				for (int i = 3; i <= compSig; i++) {
+					origin.push(i);
+				}
+				std::queue<int> diff = numSet[0] - origin;
+				max = diff.front();
+				CARD c_max(max);//construct
+				CARDSET zero;
+				zero.add(c_max);
+				RuleCardSet tmp = RuleCardSet(zero);
+				return tmp;
+			}
 			else if (!fourArr.empty()) {
 				qint8 min = fourArr.front();
 				char ch[] = { min,(qint8)1,min,(qint8)1,min,(qint8)1,min,(qint8)1,(qint8)0 };

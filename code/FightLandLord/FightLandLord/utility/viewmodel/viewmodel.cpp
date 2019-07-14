@@ -22,7 +22,9 @@ modelView::modelView() :
 
 	landLordNum(std::make_shared<int>(0)),
 	landLordCard(std::make_shared<CARD20>()),
-	landLord(std::make_shared<int>(-1))
+	landLord(std::make_shared<int>(-1)),
+	
+	timeSec(std::make_shared<qint8>(-1))
 {
 	
 }
@@ -238,6 +240,7 @@ void modelView::viewModelNotificationSlot(std::shared_ptr<Signal> signal)
 		else if (signal->playerType[LOWERHOUSE] == 1)* landLord = LOWERHOUSE;
 	}
 	else if (signal->signalType == CONT && (signal->playerType[SELF] == 1 || signal->playerType[SELF] == 2))* landLord = -1;
+	else if (signal->signalType == TIME_SEC)* timeSec = signal->cardTransfer[0];
 
 	emit viewModelNotificationSignal(signal);
 }
