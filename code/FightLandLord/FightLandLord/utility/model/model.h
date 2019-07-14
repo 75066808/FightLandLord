@@ -49,6 +49,8 @@ public:
 	static qint8 skipCardNum;
 	static qint8 playTurnNum;
 	static qint8 playnkTurnNum;
+	static qint8 winGameNum;
+	static qint8 loseGameNum;
 
 
 	//add some changes here----------------------------------------------

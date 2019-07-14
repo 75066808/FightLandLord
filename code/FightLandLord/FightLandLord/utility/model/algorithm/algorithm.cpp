@@ -342,9 +342,12 @@ int operator<(RuleCardSet& left,RuleCardSet& right)
 	else return left.compareSignal < right.compareSignal;
 }
 
-int operator>(RuleCardSet& left, RuleCardSet& right)
+int operator==(RuleCardSet& left, RuleCardSet& right)
 {
-	return 0;
+	for (int i = 0; i <= 17; i++) {
+		if (left.cardLog[i] != right.cardLog[i]) return 0;
+	}
+	return 1;
 }
 
 class mySet {
@@ -460,6 +463,15 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 	{
 	case(NONE):
 		return RuleCardSet();
+	case(NOCARD):
+	{
+		qint8 max = contArr[0].back().second;
+		CARD c_max(max);//construct
+		CARDSET zero;
+		zero.add(c_max);
+		RuleCardSet tmp = RuleCardSet(zero);
+		return tmp;
+	}
 	case(SINGLE):
 		if (!contArr[0].empty()) {
 			qint8 max = contArr[0].back().second;
@@ -472,15 +484,14 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 			if (compSig < max) return tmp;
 			else if (!fourArr.empty()) {
 				qint8 min = fourArr.front();
-
-				char ch[] = { min,1,min,1,min,1,min,1,0 };
+				char ch[] = { min,(qint8)1,min,(qint8)1,min,(qint8)1,min,(qint8)1,(qint8)0 };
 				QByteArray barr(ch);
 				CARDSET cs(barr);
 				RuleCardSet tmp = RuleCardSet(cs);
 				return tmp;
 			}
 			else if (cardLog[16] == 1 && cardLog[17] == 1) {
-				char ch[] = { 16,1,17,1,0 };
+				char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
 				QByteArray barr(ch);
 				CARDSET cs(barr);
 				RuleCardSet tmp = RuleCardSet(cs);
@@ -493,7 +504,7 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 		if (!contArr[1].empty()) {
 			qint8 max = contArr[1].back().second;
 
-			char ch[] = { max,1,max,1,0 };
+			char ch[] = { max,(qint8)1,max,(qint8)1,(qint8)0 };
 			QByteArray barr(ch);
 			CARDSET cs(barr);
 			RuleCardSet tmp = RuleCardSet(cs);
@@ -502,14 +513,14 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 			else if (!fourArr.empty()) {
 				qint8 min = fourArr.front();
 
-				char ch[] = { min,1,min,1,min,1,min,1,0 };
+				char ch[] = { min,(qint8)1,min,(qint8)1,min,(qint8)1,min,(qint8)1,(qint8)0 };
 				QByteArray barr(ch);
 				CARDSET cs(barr);
 				RuleCardSet tmp = RuleCardSet(cs);
 				return tmp;
 			}
 			else if (cardLog[16] == 1 && cardLog[17] == 1) {
-				char ch[] = { 16,1,17,1,0 };
+				char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
 				QByteArray barr(ch);
 				CARDSET cs(barr);
 				RuleCardSet tmp = RuleCardSet(cs);
@@ -522,7 +533,7 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 		if (!contArr[2].empty()) {
 			qint8 max = contArr[2].back().second;
 
-			char ch[] = { max,1,max,1,max,1,0 };
+			char ch[] = { max,(qint8)1,max,(qint8)1,max,(qint8)1,(qint8)0 };
 			QByteArray barr(ch);
 			CARDSET cs(barr);
 			RuleCardSet tmp = RuleCardSet(cs);
@@ -531,14 +542,14 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 			else if (!fourArr.empty()) {
 				qint8 min = fourArr.front();
 
-				char ch[] = { min,1,min,1,min,1,min,1,0 };
+				char ch[] = { min,(qint8)1,min,(qint8)1,min,(qint8)1,min,(qint8)1,(qint8)0 };
 				QByteArray barr(ch);
 				CARDSET cs(barr);
 				RuleCardSet tmp = RuleCardSet(cs);
 				return tmp;
 			}
 			else if (cardLog[16] == 1 && cardLog[17] == 1) {
-				char ch[] = { 16,1,17,1,0 };
+				char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
 				QByteArray barr(ch);
 				CARDSET cs(barr);
 				RuleCardSet tmp = RuleCardSet(cs);
@@ -555,8 +566,8 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 			zero.push(max);
 			std::queue<int> diff = (numSet[0] - zero);
 			if (diff.size() >= 1) {
-				int acco = diff.front();
-				char ch[] = { max,1,max,1,max,1,acco,1,0 };
+				qint8 acco = diff.front();
+				char ch[] = { max,(qint8)1,max,(qint8)1,max,(qint8)1,acco,(qint8)1,(qint8)0 };
 				QByteArray barr(ch);
 				CARDSET cs(barr);
 				RuleCardSet tmp = RuleCardSet(cs);
@@ -564,14 +575,14 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 				else if (!fourArr.empty()) {
 					qint8 min = fourArr.front();
 
-					char ch[] = { min,1,min,1,min,1,min,1,0 };
+					char ch[] = { min,(qint8)1,min,(qint8)1,min,(qint8)1,min,(qint8)1,(qint8)0 };
 					QByteArray barr(ch);
 					CARDSET cs(barr);
 					RuleCardSet tmp = RuleCardSet(cs);
 					return tmp;
 				}
 				else if (cardLog[16] == 1 && cardLog[17] == 1) {
-					char ch[] = { 16,1,17,1,0 };
+					char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
 					QByteArray barr(ch);
 					CARDSET cs(barr);
 					RuleCardSet tmp = RuleCardSet(cs);

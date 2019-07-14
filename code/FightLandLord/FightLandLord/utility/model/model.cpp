@@ -13,6 +13,9 @@ qint8 Player::playCardNum = 0;
 qint8 Player::skipCardNum = 0;
 qint8 Player::playTurnNum = 0;
 qint8 Player::playnkTurnNum = 0;
+qint8 Player::winGameNum = 0;
+qint8 Player::loseGameNum = 0;
+
 
 Player::Player() :selected(std::make_shared<RuleCardSet>()),
 onHand(std::make_shared<RuleCardSet>()),
@@ -335,7 +338,7 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 			playCardNum = 0;
 		}
 	}
-	else if (signal->signalType == SKIP_CARD) //this is for handing cards
+	else if (signal->signalType == SKIP_CARD) //this is for skipping cards
 	{
 		if (*status % 3 == 0 && signal->playerType[SELF] == 1
 			|| *status % 3 == 1 && signal->playerType[UPPERHOUSE] == 1
@@ -355,7 +358,7 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 			skipCardNum = 0;
 		}
 	}
-	else if (signal->signalType == PLAY_TURN) //this is for handing cards
+	else if (signal->signalType == PLAY_TURN) //this is for turn changing
 	{
 		if (*status % 3 == 0 && signal->playerType[SELF] == 1
 			|| *status % 3 == 1 && signal->playerType[UPPERHOUSE] == 1
@@ -375,7 +378,7 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 			playTurnNum = 0;
 		}
 	}
-	else if (signal->signalType == PLAY_TURN_NO_SKIP) //this is for handing cards
+	else if (signal->signalType == PLAY_TURN_NO_SKIP) //this is for special turn changing
 	{
 		if (*status % 3 == 0 && signal->playerType[SELF] == 1
 			|| *status % 3 == 1 && signal->playerType[UPPERHOUSE] == 1
@@ -394,6 +397,60 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 		if (playnkTurnNum == 3) {
 			emit modelNotificationSignal(signal);
 			playnkTurnNum = 0;
+		}
+	}
+	else if (signal->signalType == WIN_GAME) //this is for win
+	{
+		if (*status % 3 == 0) {
+			(*status) = SELF_WIN;
+		}
+		winGameNum++;
+		if (winGameNum == 3) {
+			emit modelNotificationSignal(signal);
+			winGameNum = 0;
+		}
+	}
+	else if (signal->signalType == LOSE_GAME) //this is for lose
+	{
+		if (*status % 3 == 0) {
+			(*status) = SELF_LOSE;
+		}
+		loseGameNum++;
+		if (loseGameNum == 3) {
+			emit modelNotificationSignal(signal);
+			loseGameNum = 0;
+		}
+	}
+	else if (signal->signalType == COM_PLAY) //this is for constraint play
+	{
+		if (*status % 3 == 0) {
+			RuleCardSet tmp = onHand->findBigger(*onTable);
+			RuleCardSet zero;
+			if (tmp == zero) {
+				signal->signalType = SKIP_CARD;
+				emit modelCommandSignal(signal);
+			}
+			else {
+				CARDSET origin;
+				qint8* arr = tmp.getArr();
+				for (int i = 0; i < (*m_Num); i++) {
+					qint8 num = m_Card->cards[i].i;
+					if (arr[num] > 0) {
+						arr[num]--;
+						origin.add(m_Card->cards[i]);
+					}
+				}
+				signal->signalType = PLAY_CARD;
+				signal->cardTransfer = origin.tranToSig();
+				emit modelCommandSignal(signal);
+			}
+		}
+	}
+	else if (signal->signalType == COM_CHOOSE) //this is for constraint choose
+	{
+		if (*status == SELF_CHOOSE_TURN) {
+			signal->signalType = CHOOSE_LANDLORD;
+			emit modelCommandSignal(signal);
 		}
 	}
 }
