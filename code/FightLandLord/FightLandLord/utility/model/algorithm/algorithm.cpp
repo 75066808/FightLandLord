@@ -526,13 +526,21 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 	case(PAIR):
 		if (!contArr[1].empty()) {
 			qint8 max = contArr[1].back().second;
+			if (compSig < max) {
+				mySet origin;
+				for (int i = 3; i <= compSig; i++) {
+					origin.push(i);
+				}
+				std::queue<int> diff = numSet[1] - origin;
+				max = diff.front();
 
-			char ch[] = { max,(qint8)1,max,(qint8)1,(qint8)0 };
-			QByteArray barr(ch);
-			CARDSET cs(barr);
-			RuleCardSet tmp = RuleCardSet(cs);
+				char ch[] = { max,(qint8)1,max,(qint8)1,(qint8)0 };
+				QByteArray barr(ch);
+				CARDSET cs(barr);
+				RuleCardSet tmp = RuleCardSet(cs);
 
-			if (compSig < max) return tmp;
+				return tmp;
+			}
 			else if (!fourArr.empty()) {
 				qint8 min = fourArr.front();
 
@@ -555,13 +563,21 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 	case(TRIPLE):
 		if (!contArr[2].empty()) {
 			qint8 max = contArr[2].back().second;
+			if (compSig < max) {
+				mySet origin;
+				for (int i = 3; i <= compSig; i++) {
+					origin.push(i);
+				}
+				std::queue<int> diff = numSet[2] - origin;
+				max = diff.front();
 
-			char ch[] = { max,(qint8)1,max,(qint8)1,max,(qint8)1,(qint8)0 };
-			QByteArray barr(ch);
-			CARDSET cs(barr);
-			RuleCardSet tmp = RuleCardSet(cs);
+				char ch[] = { max,(qint8)1,max,(qint8)1,max,(qint8)1,(qint8)0 };
+				QByteArray barr(ch);
+				CARDSET cs(barr);
+				RuleCardSet tmp = RuleCardSet(cs);
 
-			if (compSig < max) return tmp;
+				return tmp;
+			}
 			else if (!fourArr.empty()) {
 				qint8 min = fourArr.front();
 
