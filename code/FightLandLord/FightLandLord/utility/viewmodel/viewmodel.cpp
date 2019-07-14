@@ -1,6 +1,6 @@
 #include "viewmodel.h"
 
-modelView::modelView():
+modelView::modelView() :
 	onHandNum(std::make_shared<int>(0)),
 	onHandCard(std::make_shared<CARD20>()),
 	onHandSelected(std::make_shared<BOOL20>()),
@@ -21,7 +21,8 @@ modelView::modelView():
 	upperStatus(std::make_shared<int>(0)),
 
 	landLordNum(std::make_shared<int>(0)),
-	landLordCard(std::make_shared<CARD20>())
+	landLordCard(std::make_shared<CARD20>()),
+	landLord(-1)
 {
 	
 }
@@ -230,6 +231,12 @@ void modelView::viewModelNotificationSlot(std::shared_ptr<Signal> signal)
 			landLordCard->cards[index] = tmp.setPop();
 			index++;
 		}
+	}
+
+	if (signal->signalType == CHOOSE_LANDLORD) {
+		if (signal->playerType[SELF] == 1) landLord = SELF;
+		else if (signal->playerType[UPPERHOUSE] == 1) landLord = UPPERHOUSE;
+		else if (signal->playerType[LOWERHOUSE] == 1) landLord = LOWERHOUSE;
 	}
 	emit viewModelNotificationSignal(signal);
 }

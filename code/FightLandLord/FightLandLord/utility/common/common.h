@@ -33,6 +33,7 @@
 #define COM_PLAY_NO_SKIP   0x13
 #define COM_CHOOSE         0x14
 #define SELECT             0x15
+#define CONT               0x16
 
 
 #define SELF_DIS_CONNECT      0x00   
