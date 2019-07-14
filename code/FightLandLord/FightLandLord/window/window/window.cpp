@@ -97,6 +97,8 @@ void Window::updateWindow(std::shared_ptr<Signal> signal)
 		buttonItems.setButtonNum(2);
 		buttonItems.drawButton(scene, CHOOSE_LL_BTN, width, height);
 		buttonItems.drawButton(scene, SKIP_LL_BTN, width, height);
+		if (*timeSec != -1)
+			numItems.drawSelfClock(scene, *timeSec, width, height);
 		break;
 	case SELF_SKIP_LAND:
 		stateItems.drawSelfState(scene, SKIP_LL_STATE, width, height);
@@ -106,6 +108,8 @@ void Window::updateWindow(std::shared_ptr<Signal> signal)
 		buttonItems.drawButton(scene, PLAY_CARD_BTN, width, height);
 		if (!signal->valid)
 			stateItems.drawSelfState(scene, INVALID_STATE, width, height);
+		if (*timeSec != -1)
+			numItems.drawSelfClock(scene, *timeSec, width, height);
 		break;
 	case SELF_TURN:
 		buttonItems.setButtonNum(2);
@@ -113,6 +117,8 @@ void Window::updateWindow(std::shared_ptr<Signal> signal)
 		buttonItems.drawButton(scene, SKIP_CARD_BTN, width, height);
 		if (!signal->valid)
 			stateItems.drawSelfState(scene, INVALID_STATE, width, height);
+		if (*timeSec != -1)
+			numItems.drawSelfClock(scene, *timeSec, width, height);
 		break;
 	case SELF_PLAY:
 		cardItems.drawSelfPlayCard(scene, width, height, selfHandOutNum, selfHandOut);
@@ -152,6 +158,12 @@ void Window::updateWindow(std::shared_ptr<Signal> signal)
 	case UPPER_SKIP:
 		stateItems.drawUpperState(scene, SKIP_CARD_STATE, width, height);
 		break;
+	case UPPER_CHOOSE_TURN:
+	case UPPER_TURN:
+	case UPPER_NOSKIP_TURN:
+		if (*timeSec != -1)
+			numItems.drawUpperClock(scene, *timeSec, width, height);
+		break;
 	default:
 		break;
 
@@ -171,6 +183,12 @@ void Window::updateWindow(std::shared_ptr<Signal> signal)
 		break;
 	case LOWER_SKIP:
 		stateItems.drawLowerState(scene, SKIP_CARD_STATE, width, height);
+		break;
+	case LOWER_CHOOSE_TURN:
+	case LOWER_TURN:
+	case LOWER_NOSKIP_TURN:
+		if (*timeSec != -1)
+			numItems.drawLowerClock(scene, *timeSec, width, height);
 		break;
 	default:
 		break;
