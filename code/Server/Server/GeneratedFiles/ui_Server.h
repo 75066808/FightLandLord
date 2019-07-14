@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'Server.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.8
+** Created by: Qt User Interface Compiler version 5.13.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,10 +10,7 @@
 #define UI_SERVER_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
@@ -33,19 +30,19 @@ public:
     void setupUi(QMainWindow *ServerClass)
     {
         if (ServerClass->objectName().isEmpty())
-            ServerClass->setObjectName(QStringLiteral("ServerClass"));
+            ServerClass->setObjectName(QString::fromUtf8("ServerClass"));
         ServerClass->resize(600, 400);
         menuBar = new QMenuBar(ServerClass);
-        menuBar->setObjectName(QStringLiteral("menuBar"));
+        menuBar->setObjectName(QString::fromUtf8("menuBar"));
         ServerClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(ServerClass);
-        mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
+        mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
         ServerClass->addToolBar(mainToolBar);
         centralWidget = new QWidget(ServerClass);
-        centralWidget->setObjectName(QStringLiteral("centralWidget"));
+        centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         ServerClass->setCentralWidget(centralWidget);
         statusBar = new QStatusBar(ServerClass);
-        statusBar->setObjectName(QStringLiteral("statusBar"));
+        statusBar->setObjectName(QString::fromUtf8("statusBar"));
         ServerClass->setStatusBar(statusBar);
 
         retranslateUi(ServerClass);
@@ -55,7 +52,7 @@ public:
 
     void retranslateUi(QMainWindow *ServerClass)
     {
-        ServerClass->setWindowTitle(QApplication::translate("ServerClass", "Server", Q_NULLPTR));
+        ServerClass->setWindowTitle(QCoreApplication::translate("ServerClass", "Server", nullptr));
     } // retranslateUi
 
 };
