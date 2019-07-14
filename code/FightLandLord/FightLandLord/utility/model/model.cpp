@@ -159,9 +159,16 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 
 	}
 	else if (signal->signalType == CONT) {
+		int sig = 0;
 		if (*status % 3 == 0) {
-			if (signal->playerType[SELF] == 1)* status = SELF_CONNECT;
-			else if (signal->playerType[SELF] == 2)* status = SELF_READY;
+			if (signal->playerType[SELF] == 1) {
+				*status = SELF_CONNECT;
+				sig = 1;
+			}
+			else if (signal->playerType[SELF] == 2) {
+				*status = SELF_READY;
+				sig = 1;
+			}
 			else if (signal->playerType[SELF] == 0)* status = SELF_DIS_CONNECT;
 		}
 		else if (*status % 3 == 1) {
@@ -174,15 +181,16 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 			else if (signal->playerType[LOWERHOUSE] == 2)* status = LOWER_READY;
 			else if (signal->playerType[LOWERHOUSE] == 0)* status = LOWER_DIS_CONNECT;
 		}
-
-		selected->clear();
-		onHand->clear();
-		onTable->clear();
-		(*m_Num) = 0;
-		(*s_Num) = 0;
-		m_Card->clear();
-		m_Selected->clear();
-		o_Card->clear();
+		if (sig == 1) {
+			selected->clear();
+			onHand->clear();
+			onTable->clear();
+			(*m_Num) = 0;
+			(*s_Num) = 0;
+			m_Card->clear();
+			m_Selected->clear();
+			o_Card->clear();
+		}
 
 		loseGameNum++;
 		if (loseGameNum == 3) {
