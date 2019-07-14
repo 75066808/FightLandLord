@@ -7,7 +7,7 @@ Socket::Socket(): tcpSocket(std::make_shared<QTcpSocket>())
 
 Socket::~Socket()
 {
-	
+	tcpSocket->disconnectFromHost();
 }
 
 
