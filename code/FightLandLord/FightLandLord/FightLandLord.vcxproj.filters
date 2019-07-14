@@ -79,6 +79,9 @@
     <ClCompile Include="utility\common\common.cpp">
       <Filter>utility\common</Filter>
     </ClCompile>
+    <ClCompile Include="stateItem.cpp">
+      <Filter>window\view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="window\window\window.ui">
@@ -91,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="utility\model\algorithm\algorithm.h">
       <Filter>utility\model\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="stateItem.h">
+      <Filter>window\view</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

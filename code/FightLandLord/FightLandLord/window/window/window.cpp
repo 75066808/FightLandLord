@@ -159,11 +159,9 @@ void Window::updateWindow(std::shared_ptr<Signal> signal)
 		//landlordItem[0] = cardItem[landLordCard->cards[0].color][landLordCard->cards[0].i];
 	}
 
-
-	addItemToScene(headItem[FARMER_HEAD][SELF], SELF_HEAD_LEFT, SELF_HEAD_TOP);
-
 	if (*selfStatus != SELF_DIS_CONNECT)
 	{
+		addItemToScene(headItem[FARMER_HEAD][SELF], SELF_HEAD_LEFT, SELF_HEAD_TOP);
 		if(*upperStatus != UPPER_DIS_CONNECT)
 			addItemToScene(headItem[FARMER_HEAD][UPPERHOUSE], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
 		if(*lowerStatus != LOWER_DIS_CONNECT)
@@ -218,6 +216,14 @@ void Window::updateWindow(std::shared_ptr<Signal> signal)
 	case SELF_SKIP:
 		drawState(stateItem[SKIP_CARD_STATE][SELF], SELF);
 		break;	
+	case SELF_LOSE:
+		setButtonNum(1);;
+		drawButton(button[LOSE_BTN]);
+		break;
+	case SELF_WIN:
+		setButtonNum(1);;
+		drawButton(button[WIN_BTN]);
+		break;
 	default:
 		break;
 	}
@@ -542,12 +548,18 @@ void Window::skipCardBtnClick(void)
 
 void Window::loseBtnClick(void)
 {
+	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
+	signal->signalType = CONT;
+	emit windowCommandSignal(signal);
 }
 
 void Window::winBtnClick(void)
 {
+	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
+	signal->signalType = CONT;
+	emit windowCommandSignal(signal);
 }
 
 

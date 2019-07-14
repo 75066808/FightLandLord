@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="app\app.cpp" />
     <ClCompile Include="app\main.cpp" />
+    <ClCompile Include="stateItem.cpp" />
     <ClCompile Include="utility\common\common.cpp" />
     <ClCompile Include="utility\model\algorithm\algorithm.cpp" />
     <ClCompile Include="utility\model\model.cpp" />
@@ -27,6 +28,7 @@
     <QtMoc Include="window\window\window.h" />
     <QtMoc Include="utility\socket\socket.h" />
     <QtMoc Include="utility\viewmodel\viewmodel.h" />
+    <ClInclude Include="stateItem.h" />
     <ClInclude Include="utility\model\algorithm\algorithm.h" />
     <QtMoc Include="utility\model\model.h" />
   </ItemGroup>
