@@ -520,9 +520,8 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 				RuleCardSet tmp = RuleCardSet(cs);
 				return tmp;
 			}
-			else return RuleCardSet();
 		}
-		else return RuleCardSet();
+		return RuleCardSet();
 	case(PAIR):
 		if (!contArr[1].empty()) {
 			qint8 max = contArr[1].back().second;
@@ -550,14 +549,13 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 				RuleCardSet tmp = RuleCardSet(cs);
 				return tmp;
 			}
-			else if (cardLog[16] == 1 && cardLog[17] == 1) {
-				char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
-				QByteArray barr(ch);
-				CARDSET cs(barr);
-				RuleCardSet tmp = RuleCardSet(cs);
-				return tmp;
-			}
-			else return RuleCardSet();
+		}
+		if (cardLog[16] == 1 && cardLog[17] == 1) {
+			char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
+			QByteArray barr(ch);
+			CARDSET cs(barr);
+			RuleCardSet tmp = RuleCardSet(cs);
+			return tmp;
 		}
 		else return RuleCardSet();
 	case(TRIPLE):
@@ -587,14 +585,13 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 				RuleCardSet tmp = RuleCardSet(cs);
 				return tmp;
 			}
-			else if (cardLog[16] == 1 && cardLog[17] == 1) {
-				char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
-				QByteArray barr(ch);
-				CARDSET cs(barr);
-				RuleCardSet tmp = RuleCardSet(cs);
-				return tmp;
-			}
-			else return RuleCardSet();
+		}
+		if (cardLog[16] == 1 && cardLog[17] == 1) {
+			char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
+			QByteArray barr(ch);
+			CARDSET cs(barr);
+			RuleCardSet tmp = RuleCardSet(cs);
+			return tmp;
 		}
 		else return RuleCardSet();
 	case(TRIPLEANDONE):
@@ -620,16 +617,14 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 					RuleCardSet tmp = RuleCardSet(cs);
 					return tmp;
 				}
-				else if (cardLog[16] == 1 && cardLog[17] == 1) {
-					char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
-					QByteArray barr(ch);
-					CARDSET cs(barr);
-					RuleCardSet tmp = RuleCardSet(cs);
-					return tmp;
-				}
-				else return RuleCardSet();
 			}
-			else return RuleCardSet();
+		}
+		if (cardLog[16] == 1 && cardLog[17] == 1) {
+			char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
+			QByteArray barr(ch);
+			CARDSET cs(barr);
+			RuleCardSet tmp = RuleCardSet(cs);
+			return tmp;
 		}
 		else return RuleCardSet();
 	case(STRAIGHT):
