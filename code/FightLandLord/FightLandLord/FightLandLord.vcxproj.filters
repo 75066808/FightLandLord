@@ -79,7 +79,22 @@
     <ClCompile Include="utility\common\common.cpp">
       <Filter>utility\common</Filter>
     </ClCompile>
-    <ClCompile Include="stateItem.cpp">
+    <ClCompile Include="window\view\button.cpp">
+      <Filter>window\view</Filter>
+    </ClCompile>
+    <ClCompile Include="window\view\cardItem.cpp">
+      <Filter>window\view</Filter>
+    </ClCompile>
+    <ClCompile Include="window\view\headItem.cpp">
+      <Filter>window\view</Filter>
+    </ClCompile>
+    <ClCompile Include="window\view\item.cpp">
+      <Filter>window\view</Filter>
+    </ClCompile>
+    <ClCompile Include="window\view\numItem.cpp">
+      <Filter>window\view</Filter>
+    </ClCompile>
+    <ClCompile Include="window\view\stateItem.cpp">
       <Filter>window\view</Filter>
     </ClCompile>
   </ItemGroup>
@@ -95,7 +110,22 @@
     <ClInclude Include="utility\model\algorithm\algorithm.h">
       <Filter>utility\model\algorithm</Filter>
     </ClInclude>
-    <ClInclude Include="stateItem.h">
+    <ClInclude Include="window\view\button.h">
+      <Filter>window\view</Filter>
+    </ClInclude>
+    <ClInclude Include="window\view\cardItem.h">
+      <Filter>window\view</Filter>
+    </ClInclude>
+    <ClInclude Include="window\view\headItem.h">
+      <Filter>window\view</Filter>
+    </ClInclude>
+    <ClInclude Include="window\view\item.h">
+      <Filter>window\view</Filter>
+    </ClInclude>
+    <ClInclude Include="window\view\numItem.h">
+      <Filter>window\view</Filter>
+    </ClInclude>
+    <ClInclude Include="window\view\stateItem.h">
       <Filter>window\view</Filter>
     </ClInclude>
   </ItemGroup>

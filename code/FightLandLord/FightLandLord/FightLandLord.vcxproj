@@ -13,22 +13,32 @@
   <ItemGroup>
     <ClCompile Include="app\app.cpp" />
     <ClCompile Include="app\main.cpp" />
-    <ClCompile Include="stateItem.cpp" />
     <ClCompile Include="utility\common\common.cpp" />
     <ClCompile Include="utility\model\algorithm\algorithm.cpp" />
     <ClCompile Include="utility\model\model.cpp" />
     <ClCompile Include="utility\socket\socket.cpp" />
     <ClCompile Include="utility\viewmodel\viewmodel.cpp" />
+    <ClCompile Include="window\view\button.cpp" />
+    <ClCompile Include="window\view\cardItem.cpp" />
+    <ClCompile Include="window\view\headItem.cpp" />
+    <ClCompile Include="window\view\item.cpp" />
+    <ClCompile Include="window\view\numItem.cpp" />
+    <ClCompile Include="window\view\stateItem.cpp" />
     <ClCompile Include="window\window\window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="app\app.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="window\view\button.h" />
+    <ClInclude Include="window\view\cardItem.h" />
+    <ClInclude Include="window\view\headItem.h" />
+    <ClInclude Include="window\view\item.h" />
+    <ClInclude Include="window\view\numItem.h" />
+    <ClInclude Include="window\view\stateItem.h" />
     <QtMoc Include="window\window\window.h" />
     <QtMoc Include="utility\socket\socket.h" />
     <QtMoc Include="utility\viewmodel\viewmodel.h" />
-    <ClInclude Include="stateItem.h" />
     <ClInclude Include="utility\model\algorithm\algorithm.h" />
     <QtMoc Include="utility\model\model.h" />
   </ItemGroup>
