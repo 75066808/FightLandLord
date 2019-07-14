@@ -162,17 +162,17 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 		if (*status % 3 == 0) {
 			if (signal->playerType[SELF] == 1)* status = SELF_CONNECT;
 			else if (signal->playerType[SELF] == 2)* status = SELF_READY;
-			else *status = SELF_DIS_CONNECT;
+			else if (signal->playerType[SELF] == 0)* status = SELF_DIS_CONNECT;
 		}
 		else if (*status % 3 == 1) {
 			if (signal->playerType[UPPERHOUSE] == 1)* status = UPPER_CONNECT;
 			else if (signal->playerType[UPPERHOUSE] == 2)* status = UPPER_READY;
-			else *status = UPPER_DIS_CONNECT;
+			else if (signal->playerType[UPPERHOUSE] == 0)* status = UPPER_DIS_CONNECT;
 		}
 		else if (*status % 3 == 2) {
 			if (signal->playerType[LOWERHOUSE] == 1)* status = LOWER_CONNECT;
 			else if (signal->playerType[LOWERHOUSE] == 2)* status = LOWER_READY;
-			else *status = LOWER_DIS_CONNECT;
+			else if (signal->playerType[LOWERHOUSE] == 0)* status = LOWER_DIS_CONNECT;
 		}
 
 		selected->clear();
