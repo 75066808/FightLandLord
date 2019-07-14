@@ -291,8 +291,11 @@ void GameRoom::playTimeOut(void)
 	if (playTimer->isActive())
 		playTimer->stop();
 
-	data[0] = COM_PLAY;
-	broadCastData(turnIndex, data);
+	data[0] = 0;
+	data[1] = 0;
+	data[2] = 0;
+	data[3] = COM_PLAY;
+	tcpClient[turnIndex]->write(data);
 
 }
 
@@ -304,6 +307,9 @@ void GameRoom::chooseTimeOut(void)
 	if (chooseTimer->isActive())
 		chooseTimer->stop();
 
-	data[0] = COM_CHOOSE;
-	broadCastData(turnIndex, data);
+	data[0] = 0;
+	data[1] = 0;
+	data[2] = 0;
+	data[3] = COM_CHOOSE;
+	tcpClient[turnIndex]->write(data);
 }
