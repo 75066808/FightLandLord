@@ -549,7 +549,7 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 		}
 	}
 	else if (signal->signalType == TIME_SEC) {
-		emit modelCommandSignal(signal);
+		emit modelNotificationSignal(signal);
 	}
 }
 

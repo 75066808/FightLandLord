@@ -54,7 +54,7 @@ public:
 	void setLandLordNum(std::shared_ptr<int> landLordNum) { this->landLordNum = landLordNum; }
 	void setLandLordCard(std::shared_ptr<CARD20> landLordCard) { this->landLordCard = landLordCard; }
 	void setLandLord(std::shared_ptr<int> landLord) { this->landLord = landLord; }
-
+	void setTimeSec(std::shared_ptr<qint8> timeSec) { this->timeSec = timeSec; }
 	customScene* getScene(void) { return &scene; }
 
 protected:
@@ -85,6 +85,7 @@ private:
 	std::shared_ptr<int> landLordNum;
 	std::shared_ptr<CARD20> landLordCard;
 	std::shared_ptr<int> landLord;
+	std::shared_ptr<qint8> timeSec;
 
 	customScene scene;
 	Button buttonItems;

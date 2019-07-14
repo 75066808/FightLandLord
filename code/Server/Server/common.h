@@ -34,6 +34,7 @@
 #define COM_CHOOSE         0x14
 #define SELECT             0x15
 #define CONT               0x16
+#define TIME_SEC           0x17
 
 #define SELF_DIS_CONNECT      0x00   
 #define UPPER_DIS_CONNECT     0x01 
