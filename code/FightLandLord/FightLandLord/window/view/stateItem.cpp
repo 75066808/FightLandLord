@@ -23,11 +23,16 @@ void StateItem::initState(qint32 width, qint32 height)
 	Item::initItem(stateItem[INVALID_STATE][UPPERHOUSE], "Resources/state/invalidState.png", STATE_WIDTH * width, STATE_HEIGHT * height);
 	Item::initItem(stateItem[INVALID_STATE][SELF], "Resources/state/invalidState.png", STATE_WIDTH * width, STATE_HEIGHT * height);
 	Item::initItem(stateItem[INVALID_STATE][LOWERHOUSE], "Resources/state/invalidState.png", STATE_WIDTH * width, STATE_HEIGHT * height);
+	Item::initItem(stateItem[WIN_STATE][SELF], "Resources/state/winState.png", STATE_WIDTH * 2 * width, STATE_HEIGHT * 2 * height);
+	Item::initItem(stateItem[LOSE_STATE][SELF], "Resources/state/loseState.png", STATE_WIDTH * 2 * width, STATE_HEIGHT * 2 * height);
 }
 
 void StateItem::drawSelfState(QGraphicsScene &scene, qint32 index, qint32 width, qint32 height)
 {
-	Item::addItemToScene(scene, stateItem[index][SELF], (0.5 - (STATE_WIDTH / 2)) * width, SELF_STATE_TOP * height);
+	if(index != WIN_STATE && index != LOSE_STATE)
+		Item::addItemToScene(scene, stateItem[index][SELF], (0.5 - (STATE_WIDTH / 2)) * width, SELF_STATE_TOP * height);
+	else
+		Item::addItemToScene(scene, stateItem[index][SELF], (0.5 - (STATE_WIDTH / 2) - 0.1) * width, (SELF_STATE_TOP) * height);
 }
 
 void StateItem::drawUpperState(QGraphicsScene &scene, qint32 index, qint32 width, qint32 height)

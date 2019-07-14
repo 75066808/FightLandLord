@@ -133,11 +133,13 @@ void Window::updateWindow(std::shared_ptr<Signal> signal)
 		stateItems.drawSelfState(scene, SKIP_CARD_STATE, width, height);
 		break;
 	case SELF_LOSE:
+		stateItems.drawSelfState(scene, LOSE_STATE, width, height);
 		buttonItems.setButtonNum(2);
 		buttonItems.drawButton(scene, PROCEED_BTN, width, height);
 		buttonItems.drawButton(scene, END_BTN, width, height);
 		break;
 	case SELF_WIN:
+		stateItems.drawSelfState(scene, WIN_STATE, width, height);
 		buttonItems.setButtonNum(2);
 		buttonItems.drawButton(scene, PROCEED_BTN, width, height);
 		buttonItems.drawButton(scene, END_BTN, width, height);
