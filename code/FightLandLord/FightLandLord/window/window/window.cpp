@@ -48,6 +48,12 @@ void Window::updateWindow(std::shared_ptr<Signal> signal)
 	qint32 width = this->width();
 	qint32 height = this->height();
 
+	if (signal->signalType == DEAL_LANDLORD)
+		cardItems.setLandLord(width, height, landLordCard);
+	if(signal->signalType == DEAL_CARD)
+		cardItems.resetLandLord(width, height);
+
+
 	if (*selfStatus != SELF_DIS_CONNECT)
 	{
 		if (*landLord == SELF)
