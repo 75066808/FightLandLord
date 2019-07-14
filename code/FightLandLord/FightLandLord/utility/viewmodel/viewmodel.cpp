@@ -232,11 +232,12 @@ void modelView::viewModelNotificationSlot(std::shared_ptr<Signal> signal)
 			index++;
 		}
 	}
-
-	if (signal->signalType == DEAL_LANDLORD) {
-		if (signal->playerType[SELF] == 1) *landLord = SELF;
-		else if (signal->playerType[UPPERHOUSE] == 1) *landLord = UPPERHOUSE;
-		else if (signal->playerType[LOWERHOUSE] == 1) *landLord = LOWERHOUSE;
+	else if (signal->signalType == DEAL_LANDLORD) {
+		if (signal->playerType[SELF] == 1)* landLord = SELF;
+		else if (signal->playerType[UPPERHOUSE] == 1)* landLord = UPPERHOUSE;
+		else if (signal->playerType[LOWERHOUSE] == 1)* landLord = LOWERHOUSE;
 	}
+	else if (signal->signalType == CONT && (signal->playerType[SELF] == 1 || signal->playerType[SELF] == 2))* landLord = -1;
+
 	emit viewModelNotificationSignal(signal);
 }

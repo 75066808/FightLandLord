@@ -19,8 +19,8 @@ void Button::initButtons(QGraphicsScene &scene, qint32 width, qint32 height)
 	Button::initButton(scene, button[SKIP_LL_BTN], "border-image: url(:/Button/Resources/button/skipLL.jpg);", BTN_WIDTH * width, BTN_HEIGHT * height);
 	Button::initButton(scene, button[PLAY_CARD_BTN], "border-image: url(:/Button/Resources/button/playCard.jpg);", BTN_WIDTH * width, BTN_HEIGHT * height);
 	Button::initButton(scene, button[SKIP_CARD_BTN], "border-image: url(:/Button/Resources/button/skipCard.jpg);", BTN_WIDTH * width, BTN_HEIGHT * height);
-	Button::initButton(scene, button[LOSE_BTN], "border-image: url(:/Button/Resources/button/lose.jpg);", BTN_WIDTH * width, BTN_HEIGHT * height);
-	Button::initButton(scene, button[WIN_BTN], "border-image: url(:/Button/Resources/button/win.jpg);", BTN_WIDTH * width, BTN_HEIGHT * height);
+	Button::initButton(scene, button[PROCEED_BTN], "border-image: url(:/Button/Resources/button/proceed.jpg);", BTN_WIDTH * width, BTN_HEIGHT * height);
+	Button::initButton(scene, button[END_BTN], "border-image: url(:/Button/Resources/button/end.jpg);", BTN_WIDTH * width, BTN_HEIGHT * height);
 }
 
 void Button::setButtonNum(qint8 num)

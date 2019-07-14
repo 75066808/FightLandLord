@@ -1,7 +1,6 @@
 
 #include "window.h"
 
-
 Window::Window(QWidget *parent): QMainWindow(parent)
 {
 	ui.setupUi(this);
@@ -31,8 +30,8 @@ void Window::initWindow(void)
 	connect(&buttonItems.getButton(SKIP_LL_BTN), SIGNAL(clicked()), this, SLOT(skipLandLordBtnClick()));
 	connect(&buttonItems.getButton(PLAY_CARD_BTN), SIGNAL(clicked()), this, SLOT(playCardBtnClick()));
 	connect(&buttonItems.getButton(SKIP_CARD_BTN), SIGNAL(clicked()), this, SLOT(skipCardBtnClick()));
-	connect(&buttonItems.getButton(LOSE_BTN), SIGNAL(clicked()), this, SLOT(loseBtnClick()));
-	connect(&buttonItems.getButton(WIN_BTN), SIGNAL(clicked()), this, SLOT(winBtnClick()));
+	connect(&buttonItems.getButton(PROCEED_BTN), SIGNAL(clicked()), this, SLOT(proceedBtnClick()));
+	connect(&buttonItems.getButton(END_BTN), SIGNAL(clicked()), this, SLOT(endBtnClick()));
 
 	updateWindow(std::make_shared<Signal>());
 
@@ -40,6 +39,8 @@ void Window::initWindow(void)
 	ui.graphicsView->show();
 
 }
+
+
 
 
 void Window::updateWindow(std::shared_ptr<Signal> signal)
@@ -64,9 +65,9 @@ void Window::updateWindow(std::shared_ptr<Signal> signal)
 		if (*lowerStatus != LOWER_DIS_CONNECT)
 		{
 			if (*landLord == LOWERHOUSE)
-				headItems.drawLowerHead(scene, LANDLORD_HEAD, width, height); // draw landlord head;
+				headItems.drawLowerHead(scene, LANDLORD_HEAD, width, height); // draw landlord head
 			else
-				headItems.drawLowerHead(scene, FARMER_HEAD, width, height); // draw landlord head;
+				headItems.drawLowerHead(scene, FARMER_HEAD, width, height); // draw landlord head
 		}
 
 		if (*selfStatus != SELF_CONNECT && *selfStatus != SELF_READY)
@@ -120,13 +121,16 @@ void Window::updateWindow(std::shared_ptr<Signal> signal)
 		stateItems.drawSelfState(scene, SKIP_CARD_STATE, width, height);
 		break;
 	case SELF_LOSE:
-		buttonItems.setButtonNum(1);
-		buttonItems.drawButton(scene, LOSE_BTN, width, height);
+		buttonItems.setButtonNum(2);
+		buttonItems.drawButton(scene, PROCEED_BTN, width, height);
+		buttonItems.drawButton(scene, END_BTN, width, height);
 		break;
 	case SELF_WIN:
-		buttonItems.setButtonNum(1);
-		buttonItems.drawButton(scene, WIN_BTN, width, height);
+		buttonItems.setButtonNum(2);
+		buttonItems.drawButton(scene, PROCEED_BTN, width, height);
+		buttonItems.drawButton(scene, END_BTN, width, height);
 		break;
+
 	default:
 		break;
 	}
@@ -195,7 +199,6 @@ void Window::windowNotificationSlot(std::shared_ptr<Signal> signal)
 }
 
 
-
 void Window::resizeEvent(QResizeEvent* size)
 {
 	static qreal preWidth = width();
@@ -212,17 +215,11 @@ void Window::resizeEvent(QResizeEvent* size)
 
 
 
-
-
-
-
 void Window::drawBackGround(void)
 {
 	QPixmap pim("Resources/background/background.jpg");
 	scene.setBackgroundBrush(pim);
 }
-
-
 
 
 void Window::connectBtnClick(void)
@@ -237,7 +234,10 @@ void Window::connectBtnClick(void)
 
 void Window::disconnectBtnClick(void)
 {
+	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
+	signal->signalType = DISCONNECT;
+	emit windowCommandSignal(signal);
 }
 
 void Window::readyBtnClick(void)
@@ -286,7 +286,7 @@ void Window::skipCardBtnClick(void)
 	emit windowCommandSignal(signal);
 }
 
-void Window::loseBtnClick(void)
+void Window::proceedBtnClick(void)
 {
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
@@ -294,11 +294,12 @@ void Window::loseBtnClick(void)
 	emit windowCommandSignal(signal);
 }
 
-void Window::winBtnClick(void)
+void Window::endBtnClick(void)
 {
+	qDebug() << "endBtn clicked." ;
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
-	signal->signalType = CONT;
+	signal->signalType = DISCONNECT;
 	emit windowCommandSignal(signal);
 }
 

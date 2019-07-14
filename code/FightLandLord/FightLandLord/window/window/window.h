@@ -5,12 +5,12 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QTransform>
+
 #include "../view/button.h"
 #include "../view/numItem.h"
 #include "../view/cardItem.h"
 #include "../view/headItem.h"
 #include "../view/stateItem.h"
-
 
 
 class customScene : public QGraphicsScene
@@ -97,6 +97,7 @@ private:
 	void updateWindow(std::shared_ptr<Signal> signal);
 	void drawBackGround(void);
 
+
 signals:
 	void windowCommandSignal(std::shared_ptr<Signal> signal);
 
@@ -108,8 +109,8 @@ public slots:
 	void skipLandLordBtnClick(void);
 	void playCardBtnClick(void);
 	void skipCardBtnClick(void);
-	void loseBtnClick(void);
-	void winBtnClick(void);
+	void proceedBtnClick(void);
+	void endBtnClick(void);
 
 	void windowNotificationSlot(std::shared_ptr<Signal> signal);
 };

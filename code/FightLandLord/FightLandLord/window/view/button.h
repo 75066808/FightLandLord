@@ -11,8 +11,8 @@
 #define SKIP_LL_BTN       4
 #define PLAY_CARD_BTN     5
 #define SKIP_CARD_BTN     6
-#define LOSE_BTN          7
-#define WIN_BTN           8
+#define PROCEED_BTN       7
+#define END_BTN           8
 
 #define BTN_WIDTH         0.16
 #define BTN_HEIGHT        0.08
