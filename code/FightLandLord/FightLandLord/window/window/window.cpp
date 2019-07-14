@@ -571,6 +571,7 @@ void Window::proceedBtnClick(void)
 
 void Window::endBtnClick(void)
 {
+	qDebug() << "endBtn clicked." ;
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
 	signal->signalType = DISCONNECT;
