@@ -35,7 +35,7 @@ Window::~Window()
 void Window::initWindow(void)
 {
 	clearScreen();
-	drawState(std::make_shared<Signal>());
+	updateWindow(std::make_shared<Signal>());
 
 	ui.graphicsView->setScene(&scene);
 	ui.graphicsView->show();
@@ -46,7 +46,7 @@ void Window::windowNotificationSlot(std::shared_ptr<Signal> signal)
 	//qDebug() << "View Model to Window";
 
 	clearScreen();
-	drawState(signal);
+	updateWindow(signal);
 }
 
 void Window::resizeEvent(QResizeEvent* size)
@@ -107,18 +107,18 @@ void Window::initAll(void)
 	initItem(landlordItem[1], path, CARD_WIDTH, CARD_HEIGHT);
 	initItem(landlordItem[2], path, CARD_WIDTH, CARD_HEIGHT);
 
-	initItem(stateItem[READY_STATE][UPPERHOUSE], "Resources/state/readyState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[READY_STATE][SELF], "Resources/state/readyState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[READY_STATE][LOWERHOUSE], "Resources/state/readyState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[SKIP_LL_STATE][UPPERHOUSE], "Resources/state/skipLLState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[SKIP_LL_STATE][SELF], "Resources/state/skipLLState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[SKIP_LL_STATE][LOWERHOUSE], "Resources/state/skipLLState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[SKIP_CARD_STATE][UPPERHOUSE], "Resources/state/skipCardState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[SKIP_CARD_STATE][SELF], "Resources/state/skipCardState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[SKIP_CARD_STATE][LOWERHOUSE], "Resources/state/skipCardState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[INVALID_STATE][UPPERHOUSE], "Resources/state/invalidState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[INVALID_STATE][SELF], "Resources/state/invalidState.jpg", STATE_WIDTH, STATE_HEIGHT);
-	initItem(stateItem[INVALID_STATE][LOWERHOUSE], "Resources/state/invalidState.jpg", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[READY_STATE][UPPERHOUSE], "Resources/state/readyState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[READY_STATE][SELF], "Resources/state/readyState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[READY_STATE][LOWERHOUSE], "Resources/state/readyState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[SKIP_LL_STATE][UPPERHOUSE], "Resources/state/skipLLState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[SKIP_LL_STATE][SELF], "Resources/state/skipLLState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[SKIP_LL_STATE][LOWERHOUSE], "Resources/state/skipLLState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[SKIP_CARD_STATE][UPPERHOUSE], "Resources/state/skipCardState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[SKIP_CARD_STATE][SELF], "Resources/state/skipCardState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[SKIP_CARD_STATE][LOWERHOUSE], "Resources/state/skipCardState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[INVALID_STATE][UPPERHOUSE], "Resources/state/invalidState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[INVALID_STATE][SELF], "Resources/state/invalidState.png", STATE_WIDTH, STATE_HEIGHT);
+	initItem(stateItem[INVALID_STATE][LOWERHOUSE], "Resources/state/invalidState.png", STATE_WIDTH, STATE_HEIGHT);
 
 	initItem(headItem[FARMER_HEAD][UPPERHOUSE], "Resources/head/farmer.png", HEAD_WIDTH, HEAD_HEIGHT);
 	initItem(headItem[FARMER_HEAD][SELF], "Resources/head/farmer.png", HEAD_WIDTH, HEAD_HEIGHT);
@@ -152,23 +152,30 @@ void Window::initAll(void)
 	
 }
 
-void Window::drawState(std::shared_ptr<Signal> signal)
+void Window::updateWindow(std::shared_ptr<Signal> signal)
 {
-	if (signal->signalType == DEAL_LANDLORD)
-	{
-		//landlordItem[0] = cardItem[landLordCard->cards[0].color][landLordCard->cards[0].i];
-	}
-
-
-	addParentItemToScene(cardSlot, SLOT_LEFT, SLOT_TOP, SLOT_WIDTH, SLOT_HEIGHT);
-	addItemToScene(headItem[FARMER_HEAD][SELF], SELF_HEAD_LEFT, SELF_HEAD_TOP);
-
 	if (*selfStatus != SELF_DIS_CONNECT)
 	{
-		if(*upperStatus != UPPER_DIS_CONNECT)
-			addItemToScene(headItem[FARMER_HEAD][UPPERHOUSE], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
-		if(*lowerStatus != LOWER_DIS_CONNECT)
-			addItemToScene(headItem[FARMER_HEAD][LOWERHOUSE], LOWER_HEAD_RIGHT - HEAD_WIDTH, LOWER_HEAD_TOP);
+		if(*landLord == SELF)
+			addItemToScene(headItem[LANDLORD_HEAD][SELF], SELF_HEAD_LEFT, SELF_HEAD_TOP);
+		else
+			addItemToScene(headItem[FARMER_HEAD][SELF], SELF_HEAD_LEFT, SELF_HEAD_TOP);
+		if (*upperStatus != UPPER_DIS_CONNECT)
+		{
+			if (*landLord == UPPERHOUSE)
+				addItemToScene(headItem[LANDLORD_HEAD][UPPERHOUSE], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
+			else
+				addItemToScene(headItem[FARMER_HEAD][UPPERHOUSE], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
+		}
+			
+		if (*lowerStatus != LOWER_DIS_CONNECT)
+		{
+			if (*landLord == LOWERHOUSE)
+				addItemToScene(headItem[LANDLORD_HEAD][LOWERHOUSE], LOWER_HEAD_RIGHT - HEAD_WIDTH, LOWER_HEAD_TOP);
+			else
+				addItemToScene(headItem[FARMER_HEAD][LOWERHOUSE], LOWER_HEAD_RIGHT - HEAD_WIDTH, LOWER_HEAD_TOP);
+		}
+			
 		if (*selfStatus != SELF_CONNECT && *selfStatus != SELF_READY)
 		{
 			drawSelfCard();
@@ -190,7 +197,7 @@ void Window::drawState(std::shared_ptr<Signal> signal)
 		drawButton(button[QUIT_BTN]);
 		break;
 	case SELF_READY:
-		addItemToScene(stateItem[READY_STATE][SELF], 0.5 - (STATE_WIDTH / 2), SELF_STATE_TOP);
+		drawState(stateItem[READY_STATE][SELF], SELF);
 		break;
 	case SELF_CHOOSE_TURN:
 		setButtonNum(2);
@@ -198,27 +205,35 @@ void Window::drawState(std::shared_ptr<Signal> signal)
 		drawButton(button[SKIP_LL_BTN]);
 		break;
 	case SELF_SKIP_LAND:
-		addItemToScene(stateItem[SKIP_LL_STATE][SELF], 0.5 - (STATE_WIDTH / 2), SELF_STATE_TOP);
+		drawState(stateItem[SKIP_LL_STATE][SELF], SELF);
 		break;
 	case SELF_NOSKIP_TURN:
 		setButtonNum(1);
 		drawButton(button[PLAY_CARD_BTN]);
 		if (!signal->valid)
-			addItemToScene(stateItem[INVALID_STATE][SELF], 0.5 - (STATE_WIDTH / 2), SELF_STATE_TOP);
+			drawState(stateItem[INVALID_STATE][SELF], SELF);
 		break;
 	case SELF_TURN:
 		setButtonNum(2);
 		drawButton(button[PLAY_CARD_BTN]);
 		drawButton(button[SKIP_CARD_BTN]);
 		if (!signal->valid)
-			addItemToScene(stateItem[INVALID_STATE][SELF], 0.5 - (STATE_WIDTH / 2), SELF_STATE_TOP);
+			drawState(stateItem[INVALID_STATE][SELF], SELF);
 		break;
 	case SELF_PLAY:
 		drawSelfPlayCard();
 		break;
 	case SELF_SKIP:
-		addItemToScene(stateItem[SKIP_CARD_STATE][SELF], 0.5 - (STATE_WIDTH / 2), SELF_STATE_TOP);
+		drawState(stateItem[SKIP_CARD_STATE][SELF], SELF);
 		break;	
+	case SELF_LOSE:
+		setButtonNum(1);;
+		drawButton(button[LOSE_BTN]);
+		break;
+	case SELF_WIN:
+		setButtonNum(1);;
+		drawButton(button[WIN_BTN]);
+		break;
 	default:
 		break;
 	}
@@ -229,16 +244,16 @@ void Window::drawState(std::shared_ptr<Signal> signal)
 
 	case UPPER_READY:
 		if (*selfStatus != SELF_DIS_CONNECT)
-			addItemToScene(stateItem[READY_STATE][UPPERHOUSE], UPPER_STATE_LEFT, UPPER_STATE_TOP);
+			drawState(stateItem[READY_STATE][UPPERHOUSE], UPPERHOUSE);
 		break;
 	case UPPER_PLAY:
 		drawUpperPlayCard();
 		break;
 	case UPPER_SKIP_LAND:
-		addItemToScene(stateItem[SKIP_LL_STATE][UPPERHOUSE], UPPER_STATE_LEFT, UPPER_STATE_TOP);
+		drawState(stateItem[SKIP_LL_STATE][UPPERHOUSE], UPPERHOUSE);
 		break;
 	case UPPER_SKIP:
-		addItemToScene(stateItem[SKIP_CARD_STATE][UPPERHOUSE], UPPER_STATE_LEFT, UPPER_STATE_TOP);
+		drawState(stateItem[SKIP_CARD_STATE][UPPERHOUSE], UPPERHOUSE);
 		break;
 	default:
 		break;
@@ -249,16 +264,16 @@ void Window::drawState(std::shared_ptr<Signal> signal)
 	{
 	case LOWER_READY:
 		if (*selfStatus != SELF_DIS_CONNECT)
-			addItemToScene(stateItem[READY_STATE][LOWERHOUSE], LOWER_STATE_RIGHT - STATE_WIDTH, LOWER_STATE_TOP);
+			drawState(stateItem[READY_STATE][LOWERHOUSE], LOWERHOUSE);
 		break;
 	case LOWER_PLAY:
 		drawLowerPlayCard();
 		break;
 	case LOWER_SKIP_LAND:
-		addItemToScene(stateItem[SKIP_LL_STATE][LOWERHOUSE], LOWER_STATE_RIGHT - STATE_WIDTH, LOWER_STATE_TOP);
+		drawState(stateItem[SKIP_LL_STATE][LOWERHOUSE], LOWERHOUSE);
 		break;
 	case LOWER_SKIP:
-		addItemToScene(stateItem[SKIP_CARD_STATE][LOWERHOUSE], LOWER_STATE_RIGHT - STATE_WIDTH, LOWER_STATE_TOP);
+		drawState(stateItem[SKIP_CARD_STATE][LOWERHOUSE], LOWERHOUSE);
 		break;
 	default:
 		break;
@@ -271,6 +286,7 @@ void Window::drawSelfCard(void)
 	qreal top = ON_HAND_TOP;
 	qreal left = 0.5 - ((*onHandNum - 1) * ON_HAND_INT + CARD_WIDTH / SLOT_WIDTH) / 2;
 
+	addParentItemToScene(cardSlot, SLOT_LEFT, SLOT_TOP, SLOT_WIDTH, SLOT_HEIGHT);
 	for (qint32 i = 0; i < *onHandNum;i++)
 	{
 		qint32 color = onHandCard->cards[i].color;
@@ -358,6 +374,26 @@ void Window::drawButton(QPushButton &button)
 
 	if (drawBtnNum == 0)
 		over = true;
+}
+
+void Window::drawState(QGraphicsPixmapItem &stateItem, qint8 player)
+{
+	switch (player)
+	{
+	case SELF:
+		addItemToScene(stateItem, 0.5 - (STATE_WIDTH / 2), SELF_STATE_TOP);
+		break;
+	case UPPERHOUSE:
+		addItemToScene(stateItem, UPPER_STATE_LEFT, UPPER_STATE_TOP);
+		break;
+	case LOWERHOUSE:
+		addItemToScene(stateItem, LOWER_STATE_RIGHT - STATE_WIDTH, LOWER_STATE_TOP);
+		break;
+	default:
+		break;
+
+	}
+
 }
 
 void Window::drawLandLordCard(void)
@@ -522,12 +558,18 @@ void Window::skipCardBtnClick(void)
 
 void Window::loseBtnClick(void)
 {
+	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
+	signal->signalType = CONT;
+	emit windowCommandSignal(signal);
 }
 
 void Window::winBtnClick(void)
 {
+	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
+	signal->signalType = CONT;
+	emit windowCommandSignal(signal);
 }
 
 

@@ -34,7 +34,7 @@ public:
 
 	std::shared_ptr<int> getLandLordNum();
 	std::shared_ptr<CARD20> getLandLordCard();
-	int getLandLord() { return landLord; }
+	std::shared_ptr<int> getLandLord() { return landLord; }
 
 signals:
 	void viewModelCommandSignal(std::shared_ptr<Signal> signal);
@@ -72,5 +72,5 @@ private:
 
 	std::shared_ptr<int> landLordNum;
 	std::shared_ptr<CARD20> landLordCard;
-	int landLord;
+	std::shared_ptr<int> landLord;
 };
