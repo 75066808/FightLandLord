@@ -130,6 +130,7 @@ public:
 
 	void setLandLordNum(std::shared_ptr<int> landLordNum) { this->landLordNum = landLordNum; }
 	void setLandLordCard(std::shared_ptr<CARD20> landLordCard) { this->landLordCard = landLordCard; }
+	void setLandLord(std::shared_ptr<int> landLord) { this->landLord = landLord; }
 
 	customScene* getScene(void) { return &scene; }
 
@@ -160,6 +161,7 @@ private:
 
 	std::shared_ptr<int> landLordNum;
 	std::shared_ptr<CARD20> landLordCard;
+	std::shared_ptr<int> landLord;
 
 	customScene scene;
 	QGraphicsPixmapItem cardItem[COLOR_NUM][POKER_NUM];
@@ -176,7 +178,8 @@ private:
 
 	void initAll(void);
 
-	void drawState(std::shared_ptr<Signal> signal);
+	void updateWindow(std::shared_ptr<Signal> signal);
+
 	void drawSelfCard(void);
 
 	void drawSelfPlayCard(void);
@@ -187,6 +190,8 @@ private:
 
 	void setButtonNum(qint8 num);
 	void drawButton(QPushButton &button);
+	void drawState(QGraphicsPixmapItem &stateItem, qint8 player);
+
 	void drawLandLordCard(void);
 
 	void clearScreen(void);

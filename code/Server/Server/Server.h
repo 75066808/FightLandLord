@@ -4,12 +4,10 @@
 #include <QtNetwork/QTcpServer>
 #include <QtNetwork/QTcpSocket>
 #include <QThread>
-
 #include "GameRoom.h"
 #include "ui_Server.h"
 
 #define PORT_NUM 6000
-
 
 class Server : public QMainWindow
 {
@@ -21,7 +19,8 @@ private:
 	Ui::ServerClass ui;
 
 	QTcpServer tcpServer;
-	GameRoom room;
+	QVector<std::shared_ptr<GameRoom>> rooms;
+
 
 private slots:
 	void connectionSlot(void);
@@ -29,6 +28,6 @@ private slots:
 	void serverNotificationSlot(void);
 
 private:
-	void processClientData(qint32 sender, QByteArray &data);
+	void processClientData(qint32 roomNum, qint32 sender, QByteArray &data);
 
 };
