@@ -326,10 +326,10 @@ void Window::drawLowerPlayCard(void)
 	}
 }
 
-void Window::drawBackGround(void)
-{
+// void Window::drawBackGround(void)
+// {
 
-}
+// }
 
 void Window::setButtonNum(qint8 num)
 {
