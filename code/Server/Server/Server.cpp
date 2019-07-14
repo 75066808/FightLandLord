@@ -13,13 +13,14 @@ void Server::connectionSlot(void)
 	qint32 roomNum;
 	std::shared_ptr<QTcpSocket> socket = std::shared_ptr<QTcpSocket>(tcpServer.nextPendingConnection());
 
-	
+	qDebug() << "In connectSlot";
 	for (roomNum = 0;roomNum < rooms.size();roomNum++)
 	{
 		if (rooms.at(roomNum)->connectSocket(socket)) // has unfull room
 		{
 			connect(&*socket, SIGNAL(readyRead()), this, SLOT(serverNotificationSlot()));
 			connect(&*socket, SIGNAL(disconnected()), this, SLOT(disconnectionSlot()));
+			qDebug() << "Connect ";
 			break;
 		}
 	}
@@ -36,6 +37,7 @@ void Server::connectionSlot(void)
 
 void Server::disconnectionSlot(void)
 {
+	qDebug() << "In disconnectSlot";
 	for (qint32 roomNum = 0;roomNum < rooms.size(); roomNum++) // for each room
 	{
 		for (qint32 index = 0;index < 3;index++) // check unconnected
