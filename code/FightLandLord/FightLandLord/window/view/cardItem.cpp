@@ -129,13 +129,57 @@ void CardItem::drawLowerPlayCard(QGraphicsScene &scene, qint32 width, qint32 hei
 void CardItem::drawLandLordCard(QGraphicsScene &scene, qint32 width, qint32 height)
 {
 	qreal top = LL_TOP;
-	qreal left = 0.5 - (2 * LL_INT + CARD_WIDTH) / 2;
+	qreal left = 0.5 - 1.5 * CARD_WIDTH - LL_INT;
 
 	for (qint32 i = 0; i < 3;i++)
 	{
 		Item::addItemToScene(scene, landlordItem[i], left * width, top * height);
-		left += SELF_PLAY_INT;
+		left += LL_INT + CARD_WIDTH;
 	}
+}
+
+void CardItem::setLandLord(qint32 width, qint32 height, std::shared_ptr<CARD20> &landLordCard)
+{
+	QString colorName[4];
+	QString tempName("JQKA2");
+
+	colorName[0] = "spade";
+	colorName[1] = "heart";
+	colorName[2] = "club";
+	colorName[3] = "diamond";
+
+	for (qint32 i = 0;i < 3;i++)
+	{
+		QString path;
+		qint32 color = landLordCard->cards[i].color;
+		qint32 value = landLordCard->cards[i].i;
+		
+		if (value < 16)
+		{
+			path.append("Resources/poker/");
+			path.append(colorName[color]);
+			if (value >= 0 && value <= 10)
+				path.append(QString::number(value));
+			else
+				path.append(tempName[value - 11]);
+			path.append(".jpg");
+		}
+		else if(value == 16)
+			path = "Resources/poker/joker2.jpg";
+		else
+			path = "Resources/poker/joker1.jpg";
+
+		Item::initItem(landlordItem[i], path, CARD_WIDTH * width, CARD_HEIGHT * height);
+	}
+}
+
+
+void CardItem::resetLandLord(qint32 width, qint32 height)
+{
+	QString path = "Resources/poker/card_back.png";
+	Item::initItem(landlordItem[0], path, CARD_WIDTH * width, CARD_HEIGHT * height);
+	Item::initItem(landlordItem[1], path, CARD_WIDTH * width, CARD_HEIGHT * height);
+	Item::initItem(landlordItem[2], path, CARD_WIDTH * width, CARD_HEIGHT * height);
 }
 
 void CardItem::clearCard(QGraphicsScene &scene)

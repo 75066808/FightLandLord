@@ -16,7 +16,6 @@
 #define ON_HAND_INT       0.04 
 #define ON_HAND_RISE      0.2
 
-
 #define LL_TOP            0.02
 #define LL_INT            0.05
 
@@ -62,6 +61,10 @@ public:
 	void drawLandLordCard(QGraphicsScene &scene, qint32 width, qint32 height);
 
 	void clearCard(QGraphicsScene &scene);
+
+	void setLandLord(qint32 width, qint32 height, std::shared_ptr<CARD20> &landLordCard);
+
+	void resetLandLord(qint32 width, qint32 height);
 
 private:
 	QGraphicsRectItem cardSlot;
