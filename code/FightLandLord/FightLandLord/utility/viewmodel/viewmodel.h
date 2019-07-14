@@ -35,6 +35,7 @@ public:
 	std::shared_ptr<int> getLandLordNum();
 	std::shared_ptr<CARD20> getLandLordCard();
 	std::shared_ptr<int> getLandLord() { return landLord; }
+	std::shared_ptr<qint8> getTimeSec() { return timeSec; }
 
 signals:
 	void viewModelCommandSignal(std::shared_ptr<Signal> signal);
@@ -73,4 +74,6 @@ private:
 	std::shared_ptr<int> landLordNum;
 	std::shared_ptr<CARD20> landLordCard;
 	std::shared_ptr<int> landLord;
+
+	std::shared_ptr<qint8> timeSec;
 };
