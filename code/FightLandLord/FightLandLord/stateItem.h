@@ -3,7 +3,7 @@
 
 #define STATE_NUM   4
 #define PLAYER_NUM  3
-
+/*
 class StateItem {
 	
 public:
@@ -18,4 +18,4 @@ public:
 
 private:
 	QGraphicsPixmapItem stateItem[STATE_NUM][PLAYER_NUM];
-};
+};*/

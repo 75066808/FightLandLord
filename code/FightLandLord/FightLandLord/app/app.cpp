@@ -43,6 +43,8 @@ App::App(int argc, char *argv[]): app(argc, argv)
 
 	window.setLandLordNum(modelview.getLandLordNum());
 	window.setLandLordCard(modelview.getLandLordCard());
+	window.setLandLord(modelview.getLandLord());
+
 
 	connect(&modelview, SIGNAL(viewModelNotificationSignal(std::shared_ptr<Signal>)),
 		&window, SLOT(windowNotificationSlot(std::shared_ptr<Signal>)));

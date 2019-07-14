@@ -130,6 +130,7 @@ public:
 
 	void setLandLordNum(std::shared_ptr<int> landLordNum) { this->landLordNum = landLordNum; }
 	void setLandLordCard(std::shared_ptr<CARD20> landLordCard) { this->landLordCard = landLordCard; }
+	void setLandLord(std::shared_ptr<int> landLord) { this->landLord = landLord; }
 
 	customScene* getScene(void) { return &scene; }
 
@@ -160,6 +161,7 @@ private:
 
 	std::shared_ptr<int> landLordNum;
 	std::shared_ptr<CARD20> landLordCard;
+	std::shared_ptr<int> landLord;
 
 	customScene scene;
 	QGraphicsPixmapItem cardItem[COLOR_NUM][POKER_NUM];

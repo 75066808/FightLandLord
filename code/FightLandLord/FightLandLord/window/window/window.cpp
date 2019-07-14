@@ -154,18 +154,28 @@ void Window::initAll(void)
 
 void Window::updateWindow(std::shared_ptr<Signal> signal)
 {
-	if (signal->signalType == DEAL_LANDLORD)
-	{
-		//landlordItem[0] = cardItem[landLordCard->cards[0].color][landLordCard->cards[0].i];
-	}
-
 	if (*selfStatus != SELF_DIS_CONNECT)
 	{
-		addItemToScene(headItem[FARMER_HEAD][SELF], SELF_HEAD_LEFT, SELF_HEAD_TOP);
-		if(*upperStatus != UPPER_DIS_CONNECT)
-			addItemToScene(headItem[FARMER_HEAD][UPPERHOUSE], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
-		if(*lowerStatus != LOWER_DIS_CONNECT)
-			addItemToScene(headItem[FARMER_HEAD][LOWERHOUSE], LOWER_HEAD_RIGHT - HEAD_WIDTH, LOWER_HEAD_TOP);
+		if(*landLord == SELF)
+			addItemToScene(headItem[LANDLORD_HEAD][SELF], SELF_HEAD_LEFT, SELF_HEAD_TOP);
+		else
+			addItemToScene(headItem[FARMER_HEAD][SELF], SELF_HEAD_LEFT, SELF_HEAD_TOP);
+		if (*upperStatus != UPPER_DIS_CONNECT)
+		{
+			if (*landLord == UPPERHOUSE)
+				addItemToScene(headItem[LANDLORD_HEAD][UPPERHOUSE], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
+			else
+				addItemToScene(headItem[FARMER_HEAD][UPPERHOUSE], UPPER_HEAD_LEFT, UPPER_HEAD_TOP);
+		}
+			
+		if (*lowerStatus != LOWER_DIS_CONNECT)
+		{
+			if (*landLord == LOWERHOUSE)
+				addItemToScene(headItem[LANDLORD_HEAD][LOWERHOUSE], LOWER_HEAD_RIGHT - HEAD_WIDTH, LOWER_HEAD_TOP);
+			else
+				addItemToScene(headItem[FARMER_HEAD][LOWERHOUSE], LOWER_HEAD_RIGHT - HEAD_WIDTH, LOWER_HEAD_TOP);
+		}
+			
 		if (*selfStatus != SELF_CONNECT && *selfStatus != SELF_READY)
 		{
 			drawSelfCard();

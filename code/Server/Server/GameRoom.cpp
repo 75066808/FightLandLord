@@ -204,6 +204,8 @@ void GameRoom::chooseLandLord(qint8 index)
 	data[0] = DEAL_LANDLORD;
 	data.append(person[3]); // land lord
 
+	person[index].resize(person[index].size() + person[3].size()); // add land lord card
+
 	skipLandLordNum = 0;
 	broadCastData(turnIndex, data);
 	
