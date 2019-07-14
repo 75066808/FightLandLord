@@ -455,6 +455,23 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 			}
 		}
 	}
+
+	if (oneS > 0) {
+		tmp.first = oneS;
+		tmp.second = 17;
+		contArr[0].push(tmp);
+	}
+	if (twoS > 0) {
+		tmp.first = twoS;
+		tmp.second = 17;
+		contArr[1].push(tmp);
+	}
+	if (threeS > 0) {
+		tmp.first = threeS;
+		tmp.second = 17;
+		contArr[2].push(tmp);
+	}
+
 	origin.setType();
 	cardsType originType = origin.getType();
 	qint8 originSubType = origin.getSubType();
