@@ -4,8 +4,9 @@
 #include <QTimer>  
 #include "common.h"
 
-#define TIMEOUT 15000
-#define TIME_INT 50
+#define TIME_TURN 15
+#define TIME_INT  50
+#define TIME_COUNT 1000
 
 class GameRoom : public QObject
 {
@@ -45,6 +46,7 @@ private:
 	qint8 turnIndex;       // turn index
 	qint8 landlordIndex;   // landlord index
 
+	qint8 counter;
 	QByteArray person[4];
 
 	std::shared_ptr<QTimer> playTimer;

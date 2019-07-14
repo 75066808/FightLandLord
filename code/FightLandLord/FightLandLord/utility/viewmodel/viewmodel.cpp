@@ -241,6 +241,7 @@ void modelView::viewModelNotificationSlot(std::shared_ptr<Signal> signal)
 	}
 	else if (signal->signalType == CONT && (signal->playerType[SELF] == 1 || signal->playerType[SELF] == 2))* landLord = -1;
 	else if (signal->signalType == TIME_SEC)* timeSec = signal->cardTransfer[0];
+	else if (signal->signalType == DISCONNECT) * timeSec = -1;
 
 	emit viewModelNotificationSignal(signal);
 }

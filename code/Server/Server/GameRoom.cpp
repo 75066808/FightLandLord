@@ -10,6 +10,8 @@ GameRoom::GameRoom()
 	skipLandLordNum = 0;
 
 	turnIndex = 0;
+	counter = TIME_OUT;
+
 	playTimer = std::make_shared<QTimer>();
 	chooseTimer = std::make_shared<QTimer>();
 	
@@ -32,6 +34,7 @@ bool GameRoom::connectSocket(std::shared_ptr<QTcpSocket> &tcpSocket)
 	{
 		if (playerState[i] == 0) // find empty connect slot
 		{
+			qDebug() << i << " Connected";
 			tcpClient[i] = tcpSocket;
 			playerState[i] = 1;
 			data[0] = CONNECT_SUCCESS;
@@ -48,14 +51,34 @@ void GameRoom::disconnectSocket(qint8 index)
 {
 	QByteArray data;
 	
+	qDebug() << index << " Disconnected";
+
 	tcpClient[index]->disconnectFromHost();
 	playerState[index] = 0; // clear state
+	
+	skipPlayNum = 0;
+	skipLandLordNum = 0;
+	counter = TIME_OUT;
+
+	if (playTimer->isActive())
+		playTimer->stop();
+	if (chooseTimer->isActive())
+		chooseTimer->stop();
+
+	for (qint32 i = 0;i < 3;i++)
+	{
+		if (i == index)
+			continue;
+		if (playerState[i] != 0)
+			playerState[i] = 1;
+	}
+
 
 	skipPlayNum = 0;
 	skipLandLordNum = 0;
 	turnIndex = 0;
 
-	data[0] = CONNECT_SUCCESS;
+	data[0] = DISCONNECT;
 	broadCastData(index, data); 
 }
 
@@ -87,7 +110,14 @@ void GameRoom::ready(qint8 index)
 			playerState[1] = 3;
 			playerState[2] = 3;
 			dealCard();
-			chooseTimer->start(TIMEOUT);
+
+			QThread::msleep(TIME_INT);
+			data[0] = TIME_SEC;
+			data[1] = -1;
+			broadCastData(turnIndex, data);
+
+			counter = TIME_TURN;
+			chooseTimer->start(TIME_COUNT);
 		}
 	}
 	
@@ -115,8 +145,14 @@ void GameRoom::skipCard(qint8 index)
 	broadCastData(index, data);
 	skipPlayNum++;
 
-	QThread::msleep(TIME_INT);
 	turnIndex = (index + 1) % 3;
+
+	QThread::msleep(TIME_INT);
+	data[0] = TIME_SEC;
+	data[1] = -1;
+	broadCastData(turnIndex, data);
+
+	QThread::msleep(TIME_INT);
 	if (skipPlayNum == 2) // if skips twice
 	{
 		skipPlayNum = 0;
@@ -129,7 +165,8 @@ void GameRoom::skipCard(qint8 index)
 		broadCastData(turnIndex, data);
 	}
 
-	playTimer->start(TIMEOUT);
+	counter = TIME_TURN;
+	playTimer->start(TIME_COUNT);
 }
 
 void GameRoom::playCard(qint8 index, QByteArray& card)
@@ -144,23 +181,34 @@ void GameRoom::playCard(qint8 index, QByteArray& card)
 	broadCastData(index, data);
 	skipPlayNum = 0;
 	
+
 	QThread::msleep(TIME_INT);
 	person[index].resize(person[index].size() - card.size());
 	if (person[index].size() == 0) // no card left
 	{
+		data[0] = TIME_SEC;
+		data[1] = -1;
+		broadCastData(turnIndex, data);
+
+		QThread::msleep(TIME_INT);
 		data[0] = WIN_GAME;
 		broadCastData(turnIndex, data);
 	}
 	else
 	{
 		turnIndex = (index + 1) % 3;
+		data[0] = TIME_SEC;
+		data[1] = -1;
+		broadCastData(turnIndex, data);
+
+		QThread::msleep(TIME_INT);
 		data[0] = PLAY_TURN; // next play also can skip 
 		broadCastData(turnIndex, data);
-		playTimer->start(TIMEOUT);
+		counter = TIME_TURN;
+		playTimer->start(TIME_COUNT);
 	}
 	
 }
-
 
 
 void GameRoom::skipLandLord(qint8 index)
@@ -177,19 +225,28 @@ void GameRoom::skipLandLord(qint8 index)
 	QThread::msleep(TIME_INT);
 	if (skipLandLordNum == 3) // all skips
 	{
-		
+		data[0] = TIME_SEC;
+		data[1] = -1;
+		broadCastData(turnIndex, data);
+
+		QThread::msleep(TIME_INT);
 		skipLandLordNum = 0;
 		dealCard(); // shuffle the cards 
-		chooseTimer->start(TIMEOUT);
 	}
 	else
 	{
 		turnIndex = (index + 1) % 3;
+		data[0] = TIME_SEC;
+		data[1] = -1;
+		broadCastData(turnIndex, data);
+		
+		QThread::msleep(TIME_INT);
 		data[0] = CHOOSE_TURN;
 		broadCastData(turnIndex, data);  // notify to next player
 	}
 
-	chooseTimer->start(TIMEOUT);
+	counter = TIME_TURN;
+	chooseTimer->start(TIME_COUNT);
 }
 
 void GameRoom::chooseLandLord(qint8 index)
@@ -201,15 +258,22 @@ void GameRoom::chooseLandLord(qint8 index)
 
 	turnIndex = index;
 	landlordIndex = index;
+
+	data[0] = TIME_SEC;
+	data[1] = -1;
+	broadCastData(turnIndex, data);
+
+	QThread::msleep(TIME_INT);
+	data.resize(0);
 	data[0] = DEAL_LANDLORD;
 	data.append(person[3]); // land lord
 
 	person[index].resize(person[index].size() + person[3].size()); // add land lord card
-
 	skipLandLordNum = 0;
 	broadCastData(turnIndex, data);
-	
-	playTimer->start(TIMEOUT);
+
+	counter = TIME_TURN;
+	playTimer->start(TIME_COUNT);
 }
 
 void GameRoom::dealCard(void)
@@ -249,7 +313,7 @@ void GameRoom::broadCastData(qint8 sender, QByteArray& data)
 		if (playerState[i] == 0)
 			continue;
 	
-		if (data.at(0) == CONNECT_SUCCESS || data.at(0) == READY || data.at(0) == CONT)
+		if (data.at(0) == CONNECT_SUCCESS || data.at(0) == READY || data.at(0) == CONT || data.at(0) == DISCONNECT)
 		{
 			broadcast[0] = playerState[(i + 2) % 3];
 			broadcast[1] = playerState[i];
@@ -293,12 +357,28 @@ void GameRoom::playTimeOut(void)
 	if (playTimer->isActive())
 		playTimer->stop();
 
-	data[0] = 0;
-	data[1] = 0;
-	data[2] = 0;
-	data[3] = COM_PLAY;
-	tcpClient[turnIndex]->write(data);
+	if (counter == -1)
+	{
+		data[0] = TIME_SEC;
+		data[1] = counter;
+		broadCastData(turnIndex, data);
+		QThread::msleep(TIME_INT);
 
+		data[0] = 0;
+		data[1] = 0;
+		data[2] = 0;
+		data[3] = COM_PLAY;
+		tcpClient[turnIndex]->write(data);
+		counter = TIME_TURN;
+	}
+	else
+	{
+		data[0] = TIME_SEC;
+		data[1] = counter;
+		broadCastData(turnIndex, data);
+		counter--;
+		playTimer->start(TIME_COUNT);
+	}
 }
 
 
@@ -309,9 +389,26 @@ void GameRoom::chooseTimeOut(void)
 	if (chooseTimer->isActive())
 		chooseTimer->stop();
 
-	data[0] = 0;
-	data[1] = 0;
-	data[2] = 0;
-	data[3] = COM_CHOOSE;
-	tcpClient[turnIndex]->write(data);
+	if (counter == -1)
+	{
+		data[0] = TIME_SEC;
+		data[1] = counter;
+		broadCastData(turnIndex, data);
+		QThread::msleep(TIME_INT);
+
+		data[0] = 0;
+		data[1] = 0;
+		data[2] = 0;
+		data[3] = COM_CHOOSE;
+		tcpClient[turnIndex]->write(data);
+		counter = TIME_TURN;
+	}
+	else
+	{
+		data[0] = TIME_SEC;
+		data[1] = counter;
+		broadCastData(turnIndex, data);
+		counter--;
+		chooseTimer->start(TIME_COUNT);
+	}
 }
