@@ -11,5 +11,6 @@ before_build:
   - if "%platform%"=="x64" set vcvarsall=%vs%\vcvarsall.bat
   - if "%platform%"=="x64" call "%vcvarsall%" x64
 build_script:
-  - qmake QtTest.pro
+  - qmake FightLandLord.pri
+  - qmake FightLandLord.pro
   - nmake
