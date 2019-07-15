@@ -4,6 +4,7 @@
 Window::Window(QWidget *parent): QMainWindow(parent)
 {
 	ui.setupUi(this);
+	curSignal = std::make_shared<Signal>();
 }
 
 
@@ -33,7 +34,7 @@ void Window::initWindow(void)
 	connect(&buttonItems.getButton(PROCEED_BTN), SIGNAL(clicked()), this, SLOT(proceedBtnClick()));
 	connect(&buttonItems.getButton(END_BTN), SIGNAL(clicked()), this, SLOT(endBtnClick()));
 
-	updateWindow(std::make_shared<Signal>());
+	updateWindow();
 
 	ui.graphicsView->setScene(&scene);
 	ui.graphicsView->show();
@@ -43,14 +44,14 @@ void Window::initWindow(void)
 
 
 
-void Window::updateWindow(std::shared_ptr<Signal> signal)
+void Window::updateWindow(void)
 {
-	qint32 width = this->width();
-	qint32 height = this->height();
+	static qint32 width = this->width();
+	static qint32 height = this->height();
 
-	if (signal->signalType == DEAL_LANDLORD)
+	if (curSignal->signalType == DEAL_LANDLORD)
 		cardItems.setLandLord(width, height, landLordCard);
-	if(signal->signalType == DEAL_CARD)
+	if(curSignal->signalType == DEAL_CARD)
 		cardItems.resetLandLord(width, height);
 
 
@@ -112,7 +113,7 @@ void Window::updateWindow(std::shared_ptr<Signal> signal)
 	case SELF_NOSKIP_TURN:
 		buttonItems.setButtonNum(1);
 		buttonItems.drawButton(scene, PLAY_CARD_BTN, width, height);
-		if (!signal->valid)
+		if (!curSignal->valid)
 			stateItems.drawSelfState(scene, INVALID_STATE, width, height);
 		if (*timeSec != -1)
 			numItems.drawSelfClock(scene, *timeSec, width, height);
@@ -121,7 +122,7 @@ void Window::updateWindow(std::shared_ptr<Signal> signal)
 		buttonItems.setButtonNum(2);
 		buttonItems.drawButton(scene, PLAY_CARD_BTN, width, height);
 		buttonItems.drawButton(scene, SKIP_CARD_BTN, width, height);
-		if (!signal->valid)
+		if (!curSignal->valid)
 			stateItems.drawSelfState(scene, INVALID_STATE, width, height);
 		if (*timeSec != -1)
 			numItems.drawSelfClock(scene, *timeSec, width, height);
@@ -219,23 +220,27 @@ void Window::clearWindow(void)
 void Window::windowNotificationSlot(std::shared_ptr<Signal> signal)
 {
 	qDebug() << "View Model to window";
+	curSignal = signal;
 	clearWindow();
-	updateWindow(signal);
+	updateWindow();
 }
 
 
 void Window::resizeEvent(QResizeEvent* size)
 {
+	static qreal ratio = (qreal)width() / height();
 	static qreal preWidth = width();
 	static qreal preHeight = height();
 
-	qreal curWidth = width();
+	qreal curWidth = height() * ratio;
 	qreal curHeight = height();
 
-	ui.graphicsView->scale(curWidth / preWidth, curHeight / preHeight);
+	ui.graphicsView->scale(curHeight / preHeight, curHeight / preHeight);
 
 	preWidth = curWidth;
 	preHeight = curHeight;
+
+	resize(curWidth, curHeight);
 }
 
 

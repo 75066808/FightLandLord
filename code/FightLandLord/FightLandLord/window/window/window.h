@@ -87,6 +87,8 @@ private:
 	std::shared_ptr<int> landLord;
 	std::shared_ptr<qint8> timeSec;
 
+	std::shared_ptr<Signal> curSignal;
+
 	customScene scene;
 	Button buttonItems;
 	NumItem numItems;
@@ -94,8 +96,10 @@ private:
 	HeadItem headItems;
 	StateItem stateItems;
 
+
+
 	void clearWindow(void);
-	void updateWindow(std::shared_ptr<Signal> signal);
+	void updateWindow(void);
 	void drawBackGround(void);
 
 
