@@ -17,8 +17,8 @@
 #define LOWER_NUM_RIGHT   0.98
 #define LOWER_NUM_TOP     0.37
 
-#define SELF_CLOCK_LEFT   0.42
-#define SELF_CLOCK_TOP    0.50
+#define SELF_CLOCK_LEFT   0.10
+#define SELF_CLOCK_TOP    0.64
 
 #define UPPER_CLOCK_LEFT  0.15
 #define UPPER_CLOCK_TOP   0.25
