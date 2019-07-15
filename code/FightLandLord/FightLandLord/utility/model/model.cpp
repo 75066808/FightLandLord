@@ -522,11 +522,12 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 	}
 	else if (signal->signalType == COM_PLAY) //this is for constraint play
 	{
-		if (*status % 3 == 0) {
+		if ((*status == SELF_TURN || *status == SELF_NOSKIP_TURN)) {
 			RuleCardSet tmp = onHand->findBigger(*onTable);
 			RuleCardSet zero;
 			if (tmp == zero) {
 				signal->signalType = SKIP_CARD;
+				*status = SELF_SKIP;
 				emit modelCommandSignal(signal);
 			}
 			else {
@@ -540,6 +541,7 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 					}
 				}
 				signal->signalType = PLAY_CARD;
+				*status = SELF_PLAY;
 				signal->cardTransfer = origin.tranToSig();
 				emit modelCommandSignal(signal);
 			}
@@ -549,6 +551,7 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 	{
 		if (*status == SELF_CHOOSE_TURN) {
 			signal->signalType = CHOOSE_LANDLORD;
+			*status = SELF_NOSKIP_TURN;
 			emit modelCommandSignal(signal);
 		}
 	}
