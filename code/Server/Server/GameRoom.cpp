@@ -66,7 +66,7 @@ void GameRoom::disconnectSocket(qint8 index)
 	{
 		if (i == index)
 			continue;
-		if (playerState[i] != 0 && playerState[i] != 3)
+		if (playerState[i] != 0 && playerState[i] != 4)
 			playerState[i] = 1;
 	}
 
@@ -123,7 +123,7 @@ void GameRoom::ready(qint8 index)
 void GameRoom::continues(qint8 index)
 {
 	QByteArray data;
-	if (playerState[index] == 3)
+	if (playerState[index] == 4)
 	{
 		data[0] = CONT;
 		playerState[index] = 1; // set to unready
@@ -189,6 +189,9 @@ void GameRoom::playCard(qint8 index, QByteArray& card)
 
 		QThread::msleep(TIME_INT);
 		data[0] = WIN_GAME;
+		playerState[0] = 4;
+		playerState[1] = 4;
+		playerState[2] = 4;
 		broadCastData(turnIndex, data);
 	}
 	else

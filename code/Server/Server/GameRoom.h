@@ -5,7 +5,7 @@
 #include "common.h"
 
 #define TIME_TURN 15
-#define TIME_INT  50
+#define TIME_INT  200
 #define TIME_COUNT 1000
 
 class GameRoom : public QObject

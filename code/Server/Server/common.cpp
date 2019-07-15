@@ -1,5 +1,6 @@
 #include "common.h"
 #include <random>
+#include <time.h>
 
 CARDSET::CARDSET() :c_num(0)
 {
