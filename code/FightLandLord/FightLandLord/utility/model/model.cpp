@@ -25,7 +25,8 @@ s_Num(std::make_shared<int>(0)),
 m_Card(std::make_shared<CARD20>()),
 m_Selected(std::make_shared<BOOL20>()),
 o_Card(std::make_shared<CARD20>()),
-onTable(std::make_shared<RuleCardSet>())
+onTable(std::make_shared<RuleCardSet>()),
+sig(0)
 {
 }
 
@@ -34,7 +35,7 @@ Player::~Player()
 }
 
 void Player::modelCommandSlot(std::shared_ptr<Signal> signal) {
-	//qDebug() << "View Model to Model" << endl;
+	qDebug() << "View Model to Model";
 	if (*status == SELF_DIS_CONNECT && signal->signalType == CONNECT) {
 		emit modelCommandSignal(signal);
 	}
@@ -127,7 +128,7 @@ void Player::modelCommandSlot(std::shared_ptr<Signal> signal) {
 }
 
 void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
-	//qDebug() << "Socket to Model" << endl;
+	qDebug() << "Socket to Model";
 	if (signal->signalType == CONNECT_SUCCESS) {
 		if (*status == 0) {
 			if (signal->playerType[SELF] == 1)* status = SELF_CONNECT;
@@ -162,7 +163,7 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 
 	}
 	else if (signal->signalType == CONT) {
-		int sig = 0;
+	    sig = 0;
 		if (*status % 3 == 0) {
 			if (signal->playerType[SELF] == 1) {
 				*status = SELF_CONNECT;
@@ -199,11 +200,12 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 		if (loseGameNum == 3) {
 			emit modelNotificationSignal(signal);
 			loseGameNum = 0;
+			sig = 0;
 		}
 
 	}
 	else if (signal->signalType == DISCONNECT) {
-		int sig = 0;
+		sig = 0;
 		if (*status % 3 == 0) {
 			if (signal->playerType[SELF] == 1)* status = SELF_CONNECT;
 			else if (signal->playerType[SELF] == 2)* status = SELF_READY;
@@ -256,7 +258,8 @@ void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
 		connectFailNum++;
 		if (connectFailNum == 3) {
 			emit modelNotificationSignal(signal);
-			connectNum = 0;
+			sig = 0;
+			connectFailNum = 0;
 		}
 	}
 	else if (signal->signalType == READY) {

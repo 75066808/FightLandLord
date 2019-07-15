@@ -15,7 +15,7 @@ Socket::~Socket()
 void Socket::socketCommandSlot(std::shared_ptr<Signal> signal)
 {
 	QByteArray data;
-
+	qDebug() << "Model to socket";
 	switch (signal->signalType)
 	{
 	case CONNECT:
@@ -39,6 +39,7 @@ void Socket::socketCommandSlot(std::shared_ptr<Signal> signal)
 
 void Socket::socketNotificationSlot(void)
 {
+	qDebug() << "Server to socket";
 	QByteArray data = tcpSocket->readAll(); // read from server
 
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();

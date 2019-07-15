@@ -74,4 +74,5 @@ private:
 	std::shared_ptr<int> s_Num;
 	std::shared_ptr<BOOL20> m_Selected;
 	std::shared_ptr<CARD20> o_Card;
+	int sig;
 };

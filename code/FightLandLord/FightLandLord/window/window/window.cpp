@@ -218,6 +218,7 @@ void Window::clearWindow(void)
 
 void Window::windowNotificationSlot(std::shared_ptr<Signal> signal)
 {
+	qDebug() << "View Model to window";
 	clearWindow();
 	updateWindow(signal);
 }
@@ -313,6 +314,7 @@ void Window::proceedBtnClick(void)
 
 void Window::endBtnClick(void)
 {
+	qDebug() << "end btn click";
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
 	signal->signalType = DISCONNECT;
