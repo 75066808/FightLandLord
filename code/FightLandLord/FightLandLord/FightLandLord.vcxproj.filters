@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="app">
+      <UniqueIdentifier>{e65f51ab-53eb-482a-938e-2d13b60b9f16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utility">
+      <UniqueIdentifier>{2ed0ffd7-2da3-443a-8ad6-cb90b432fb65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utility\common">
+      <UniqueIdentifier>{1e3b8c17-5179-4e31-8720-b9c414357559}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utility\model">
+      <UniqueIdentifier>{40a15e7b-fd04-4088-b3a6-bfb99e04879e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utility\model\algorithm">
+      <UniqueIdentifier>{ea50de61-eb10-4e9c-9488-1f84bfca2737}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utility\socket">
+      <UniqueIdentifier>{2dbef7d2-496f-4cef-a394-510a548d7137}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utility\viewmodel">
+      <UniqueIdentifier>{ccb05eaa-125c-426f-92bc-83ad55d6d01e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="window">
+      <UniqueIdentifier>{acebf3ee-abb7-4f44-9258-c07b6d86726e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="window\window">
+      <UniqueIdentifier>{f7d7de1e-042e-42df-8409-3b8fd17f66e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="window\view">
+      <UniqueIdentifier>{9b0b7399-f2d9-4b9c-a783-02f5799645f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="app\app.h">
+      <Filter>app</Filter>
+    </QtMoc>
+    <QtMoc Include="utility\model\model.h">
+      <Filter>utility\model</Filter>
+    </QtMoc>
+    <QtMoc Include="utility\viewmodel\viewmodel.h">
+      <Filter>utility\viewmodel</Filter>
+    </QtMoc>
+    <QtMoc Include="utility\socket\socket.h">
+      <Filter>utility\socket</Filter>
+    </QtMoc>
+    <QtMoc Include="window\window\window.h">
+      <Filter>window\window</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="app\app.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="app\main.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="utility\model\model.cpp">
+      <Filter>utility\model</Filter>
+    </ClCompile>
+    <ClCompile Include="utility\model\algorithm\algorithm.cpp">
+      <Filter>utility\model\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="utility\viewmodel\viewmodel.cpp">
+      <Filter>utility\viewmodel</Filter>
+    </ClCompile>
+    <ClCompile Include="utility\socket\socket.cpp">
+      <Filter>utility\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="window\window\window.cpp">
+      <Filter>window\window</Filter>
+    </ClCompile>
+    <ClCompile Include="utility\common\common.cpp">
+      <Filter>utility\common</Filter>
+    </ClCompile>
+    <ClCompile Include="window\view\button.cpp">
+      <Filter>window\view</Filter>
+    </ClCompile>
+    <ClCompile Include="window\view\cardItem.cpp">
+      <Filter>window\view</Filter>
+    </ClCompile>
+    <ClCompile Include="window\view\headItem.cpp">
+      <Filter>window\view</Filter>
+    </ClCompile>
+    <ClCompile Include="window\view\item.cpp">
+      <Filter>window\view</Filter>
+    </ClCompile>
+    <ClCompile Include="window\view\numItem.cpp">
+      <Filter>window\view</Filter>
+    </ClCompile>
+    <ClCompile Include="window\view\stateItem.cpp">
+      <Filter>window\view</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="window\window\window.ui">
+      <Filter>window\window</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="utility\common\common.h">
+      <Filter>utility\common</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\model\algorithm\algorithm.h">
+      <Filter>utility\model\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="window\view\button.h">
+      <Filter>window\view</Filter>
+    </ClInclude>
+    <ClInclude Include="window\view\cardItem.h">
+      <Filter>window\view</Filter>
+    </ClInclude>
+    <ClInclude Include="window\view\headItem.h">
+      <Filter>window\view</Filter>
+    </ClInclude>
+    <ClInclude Include="window\view\item.h">
+      <Filter>window\view</Filter>
+    </ClInclude>
+    <ClInclude Include="window\view\numItem.h">
+      <Filter>window\view</Filter>
+    </ClInclude>
+    <ClInclude Include="window\view\stateItem.h">
+      <Filter>window\view</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="Resource.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+  </ItemGroup>
+</Project>

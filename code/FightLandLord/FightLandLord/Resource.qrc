@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/Button">
+        <file>Resources/button/connect.jpg</file>
+        <file>Resources/button/disconnect.jpg</file>
+        <file>Resources/button/playCard.jpg</file>
+        <file>Resources/button/ready.jpg</file>
+        <file>Resources/button/skipCard.jpg</file>
+        <file>Resources/button/chooseLL.jpg</file>
+        <file>Resources/button/skipLL.jpg</file>
+        <file>Resources/button/end.jpg</file>
+        <file>Resources/button/proceed.jpg</file>
+    </qresource>
+</RCC>
