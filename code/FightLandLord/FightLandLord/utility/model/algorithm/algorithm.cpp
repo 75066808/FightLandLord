@@ -718,7 +718,7 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 	case(STRAIGHT):
 		if (!contArr[0].empty()) {
 			std::pair<qint8, qint8> tmp;
-			while (!contArr[0].empty) {
+			while (!contArr[0].empty()) {
 				if (contArr[0].front().second - contArr[0].back().first < originSubType - 1) {
 					contArr[0].pop();
 				}

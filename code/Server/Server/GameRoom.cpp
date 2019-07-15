@@ -34,7 +34,6 @@ bool GameRoom::connectSocket(std::shared_ptr<QTcpSocket> &tcpSocket)
 	{
 		if (playerState[i] == 0) // find empty connect slot
 		{
-			qDebug() << i << " Connected";
 			tcpClient[i] = tcpSocket;
 			playerState[i] = 1;
 			data[0] = CONNECT_SUCCESS;
@@ -50,8 +49,6 @@ bool GameRoom::connectSocket(std::shared_ptr<QTcpSocket> &tcpSocket)
 void GameRoom::disconnectSocket(qint8 index)
 {
 	QByteArray data;
-	
-	qDebug() << index << " Disconnected";
 
 	tcpClient[index]->disconnectFromHost();
 	playerState[index] = 0; // clear state
@@ -69,7 +66,7 @@ void GameRoom::disconnectSocket(qint8 index)
 	{
 		if (i == index)
 			continue;
-		if (playerState[i] != 0)
+		if (playerState[i] != 0 && playerState[i] != 3)
 			playerState[i] = 1;
 	}
 

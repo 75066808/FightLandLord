@@ -16,8 +16,6 @@ void Socket::socketCommandSlot(std::shared_ptr<Signal> signal)
 {
 	QByteArray data;
 
-	//qDebug() << "Model to Socket" << endl;
-
 	switch (signal->signalType)
 	{
 	case CONNECT:
@@ -26,6 +24,9 @@ void Socket::socketCommandSlot(std::shared_ptr<Signal> signal)
 		break;
 	case DISCONNECT:
 		tcpSocket->disconnectFromHost(); // disconnect from host
+		signal->playerType[UPPERHOUSE] = 0;
+		signal->playerType[SELF] = 0;
+		signal->playerType[LOWERHOUSE] = 0;
 		emit socketNotificationSignal(signal);
 		break;
 	default:

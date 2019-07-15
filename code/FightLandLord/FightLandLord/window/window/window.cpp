@@ -133,11 +133,13 @@ void Window::updateWindow(std::shared_ptr<Signal> signal)
 		stateItems.drawSelfState(scene, SKIP_CARD_STATE, width, height);
 		break;
 	case SELF_LOSE:
+		stateItems.drawSelfState(scene, LOSE_STATE, width, height);
 		buttonItems.setButtonNum(2);
 		buttonItems.drawButton(scene, PROCEED_BTN, width, height);
 		buttonItems.drawButton(scene, END_BTN, width, height);
 		break;
 	case SELF_WIN:
+		stateItems.drawSelfState(scene, WIN_STATE, width, height);
 		buttonItems.setButtonNum(2);
 		buttonItems.drawButton(scene, PROCEED_BTN, width, height);
 		buttonItems.drawButton(scene, END_BTN, width, height);
@@ -216,8 +218,6 @@ void Window::clearWindow(void)
 
 void Window::windowNotificationSlot(std::shared_ptr<Signal> signal)
 {
-	//qDebug() << "View Model to Window";
-
 	clearWindow();
 	updateWindow(signal);
 }
@@ -248,8 +248,6 @@ void Window::drawBackGround(void)
 
 void Window::connectBtnClick(void)
 {
-	//qDebug() << "Connect button Click";
-
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
 	signal->signalType = CONNECT;
@@ -266,7 +264,6 @@ void Window::disconnectBtnClick(void)
 
 void Window::readyBtnClick(void)
 {
-	//qDebug() << "Ready button Click";
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
 	signal->signalType = READY;
@@ -276,7 +273,6 @@ void Window::readyBtnClick(void)
 
 void Window::chooseLandLordBtnClick(void)
 {
-	//qDebug() << "Choose LandLord button Click";
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
 	signal->signalType = CHOOSE_LANDLORD;
@@ -285,7 +281,6 @@ void Window::chooseLandLordBtnClick(void)
 
 void Window::skipLandLordBtnClick(void)
 {
-	//qDebug() << "Skip LandLord button Click";
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
 	signal->signalType = SKIP_LANDLORD;
@@ -294,7 +289,6 @@ void Window::skipLandLordBtnClick(void)
 
 void Window::playCardBtnClick(void)
 {
-	//qDebug() << "Play Card button Click";
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
 	signal->signalType = PLAY_CARD;
@@ -303,7 +297,6 @@ void Window::playCardBtnClick(void)
 
 void Window::skipCardBtnClick(void)
 {
-	//qDebug() << "Skip Card button Click";
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
 	signal->signalType = SKIP_CARD;
@@ -320,7 +313,6 @@ void Window::proceedBtnClick(void)
 
 void Window::endBtnClick(void)
 {
-	qDebug() << "endBtn clicked." ;
 	std::shared_ptr<Signal> signal = std::make_shared<Signal>();
 
 	signal->signalType = DISCONNECT;
@@ -333,15 +325,8 @@ void customScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	QTransform transform;
 	QGraphicsItem *item;
 
-	QGraphicsScene::mousePressEvent(event);
-	//qreal orignal_x = this->itemAt(event->scenePos(), transform)->pos().rx();
-	//qreal orignal_y = this->itemAt(event->scenePos(), transform)->pos().ry();
-	//this->itemAt(event->scenePos(), transform)->setPos(orignal_x, orignal_y - 30);
+	QGraphicsScene::mousePressEvent(event);	
 	item = this->itemAt(event->scenePos(), transform);
-	//int indexOfCard = item->childItems().indexOf(//tems(Qt::AscendingOrder).indexOf(item);
-	//item->setPos(event->scenePos().x(), event->scenePos().y() - 30);
-	//qreal original_x = (qreal) item->pos().x()+1;
-	//qreal original_y = (qreal) item->pos().y()+1;
 
 	if (item && item->parentItem())
 	{
@@ -349,10 +334,6 @@ void customScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		signal->signalType = SELECT;
 		signal->cardTransfer[0] = item->parentItem()->childItems().indexOf(item);
 		emit windowCommandSignal(signal);
-		//qDebug() << "index of this item is " << index;
-	}
-
-	//event->
-	//item->setPos(original_x, original_y - 30); */
-	
+		
+	}	
 }
