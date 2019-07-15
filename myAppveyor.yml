@@ -13,4 +13,4 @@ before_build:
 build_script:
   - qmake code\FightLandLord\FightLandLord\FightLandLord.pri
   - qmake code\FightLandLord\FightLandLord\FightLandLord.pro
-  - mingw32-make
+  - make
