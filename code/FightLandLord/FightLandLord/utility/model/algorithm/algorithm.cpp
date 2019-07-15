@@ -2,7 +2,7 @@
 
 class MyQueue {
 public:
-	MyQueue() :lbound(0),ubound(0),cont(0) {
+	MyQueue() :lbound(0),ubound(0),cont(0){
 	}
 	void push(qint8 in) {
 		if (lists.empty()) {
@@ -32,7 +32,7 @@ public:
 	void pop() {
 		lists.pop();
 	}
-	bool getCont() {
+	int getCont() {
 		return cont;
 	}
 	qint8 getUpper() {
@@ -42,7 +42,7 @@ private:
 	std::priority_queue<qint8> lists;
 	qint8 lbound;
 	qint8 ubound;
-	bool cont;
+	int cont;
 };
 void RuleCardSet::setType()
 {
@@ -55,6 +55,7 @@ void RuleCardSet::setType()
 		sum += cardLog[i];
 		numList[cardLog[i]].push(i);
 	}
+
 	switch (sum)
 	{
 	case 0:
@@ -186,10 +187,6 @@ void RuleCardSet::setType()
 			compareSignal = numList[3].top();
 			subType = 2;
 		}
-		else if (numSum[4] == 1 && numSum[2] == 2) {
-			type = QUADRAANDTWO;
-			compareSignal = numList[4].top();
-		}
 		else type = NONE;
 		break;
 	case 11:
@@ -221,7 +218,65 @@ void RuleCardSet::setType()
 			compareSignal = numList[3].top();
 			subType = 3;
 		}
-		else type = NONE;
+		else {
+			std::queue<std::pair<qint8, qint8>> contArr;
+
+			std::pair<qint8, qint8> tmp;
+			qint8 threeS = 0;
+			for (int i = 3; i <= 17; i++) {
+				if (cardLog[i] == 0) {
+					if (threeS > 0) {
+						tmp.first = threeS;
+						tmp.second = i - 1;
+						contArr.push(tmp);
+						threeS = 0;
+					}
+				}
+				else if (cardLog[i] == 1) {
+					if (threeS > 0) {
+						tmp.first = threeS;
+						tmp.second = i - 1;
+						contArr.push(tmp);
+						threeS = 0;
+					}
+				}
+				else if (cardLog[i] == 2) {
+					if (threeS > 0) {
+						tmp.first = threeS;
+						tmp.second = i - 1;
+						contArr.push(tmp);
+						threeS = 0;
+					}
+				}
+				else if (cardLog[i] >= 3) {
+					if (threeS == 0) {
+						threeS = i;
+					}
+				}
+			}
+			if (threeS > 0) {
+				tmp.first = threeS;
+				tmp.second = 17;
+				contArr.push(tmp);
+			}
+
+			if (numSum[3] == 4 && contArr.size() == 2) {
+				if (contArr.front().second - contArr.front().first == 2) {
+					type = CONTTRIPLEANDONE;
+					compareSignal = contArr.front().second;
+					subType = 3;
+				}
+				else if (contArr.back().second - contArr.back().first == 2) {
+					type = CONTTRIPLEANDONE;
+					compareSignal = contArr.back().second;
+					subType = 3;
+				}
+				else type = NONE;
+			}
+			else type = NONE;
+
+		}
+		//else type = NONE;
 		break;
 	case 13:
 		type = NONE;
@@ -353,7 +408,7 @@ int operator==(RuleCardSet& left, RuleCardSet& right)
 class mySet {
 	bool setArr[18];
 public:
-	mySet() {
+	mySet():setArr() {
 		for (int i = 0; i < 18; i++) setArr[i] = 0;
 	}
 	void push(qint8 index) { setArr[index] = 1; }
@@ -374,6 +429,7 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 	int sum = 0;
 	qint8 numSum[5] = { 0 };
 	std::queue<std::pair<qint8, qint8>> contArr[3];
+	std::queue<std::pair<qint8, qint8>> tmpArr;
 	std::queue<qint8> fourArr;
 	mySet numSet[4];
 
@@ -520,19 +576,26 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 				RuleCardSet tmp = RuleCardSet(cs);
 				return tmp;
 			}
-			else return RuleCardSet();
 		}
-		else return RuleCardSet();
+		return RuleCardSet();
 	case(PAIR):
 		if (!contArr[1].empty()) {
 			qint8 max = contArr[1].back().second;
+			if (compSig < max) {
+				mySet origin;
+				for (int i = 3; i <= compSig; i++) {
+					origin.push(i);
+				}
+				std::queue<int> diff = numSet[1] - origin;
+				max = diff.front();
 
-			char ch[] = { max,(qint8)1,max,(qint8)1,(qint8)0 };
-			QByteArray barr(ch);
-			CARDSET cs(barr);
-			RuleCardSet tmp = RuleCardSet(cs);
+				char ch[] = { max,(qint8)1,max,(qint8)1,(qint8)0 };
+				QByteArray barr(ch);
+				CARDSET cs(barr);
+				RuleCardSet tmp = RuleCardSet(cs);
 
-			if (compSig < max) return tmp;
+				return tmp;
+			}
 			else if (!fourArr.empty()) {
 				qint8 min = fourArr.front();
 
@@ -542,26 +605,33 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 				RuleCardSet tmp = RuleCardSet(cs);
 				return tmp;
 			}
-			else if (cardLog[16] == 1 && cardLog[17] == 1) {
-				char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
-				QByteArray barr(ch);
-				CARDSET cs(barr);
-				RuleCardSet tmp = RuleCardSet(cs);
-				return tmp;
-			}
-			else return RuleCardSet();
+		}
+		if (cardLog[16] == 1 && cardLog[17] == 1) {
+			char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
+			QByteArray barr(ch);
+			CARDSET cs(barr);
+			RuleCardSet tmp = RuleCardSet(cs);
+			return tmp;
 		}
 		else return RuleCardSet();
 	case(TRIPLE):
 		if (!contArr[2].empty()) {
 			qint8 max = contArr[2].back().second;
+			if (compSig < max) {
+				mySet origin;
+				for (int i = 3; i <= compSig; i++) {
+					origin.push(i);
+				}
+				std::queue<int> diff = numSet[2] - origin;
+				max = diff.front();
 
-			char ch[] = { max,(qint8)1,max,(qint8)1,max,(qint8)1,(qint8)0 };
-			QByteArray barr(ch);
-			CARDSET cs(barr);
-			RuleCardSet tmp = RuleCardSet(cs);
+				char ch[] = { max,(qint8)1,max,(qint8)1,max,(qint8)1,(qint8)0 };
+				QByteArray barr(ch);
+				CARDSET cs(barr);
+				RuleCardSet tmp = RuleCardSet(cs);
 
-			if (compSig < max) return tmp;
+				return tmp;
+			}
 			else if (!fourArr.empty()) {
 				qint8 min = fourArr.front();
 
@@ -571,14 +641,13 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 				RuleCardSet tmp = RuleCardSet(cs);
 				return tmp;
 			}
-			else if (cardLog[16] == 1 && cardLog[17] == 1) {
-				char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
-				QByteArray barr(ch);
-				CARDSET cs(barr);
-				RuleCardSet tmp = RuleCardSet(cs);
-				return tmp;
-			}
-			else return RuleCardSet();
+		}
+		if (cardLog[16] == 1 && cardLog[17] == 1) {
+			char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
+			QByteArray barr(ch);
+			CARDSET cs(barr);
+			RuleCardSet tmp = RuleCardSet(cs);
+			return tmp;
 		}
 		else return RuleCardSet();
 	case(TRIPLEANDONE):
@@ -604,57 +673,325 @@ RuleCardSet RuleCardSet::findBigger(RuleCardSet& origin)
 					RuleCardSet tmp = RuleCardSet(cs);
 					return tmp;
 				}
-				else if (cardLog[16] == 1 && cardLog[17] == 1) {
-					char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
-					QByteArray barr(ch);
-					CARDSET cs(barr);
-					RuleCardSet tmp = RuleCardSet(cs);
-					return tmp;
-				}
-				else return RuleCardSet();
 			}
-			else return RuleCardSet();
+		}
+		if (cardLog[16] == 1 && cardLog[17] == 1) {
+			char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
+			QByteArray barr(ch);
+			CARDSET cs(barr);
+			RuleCardSet tmp = RuleCardSet(cs);
+			return tmp;
 		}
 		else return RuleCardSet();
-	case(STRAIGHT):
-		/*if (!contArr[0].empty()) {
-			std::pair<qint8, qint8> tmp;
-			while (!contArr[0].empty) {
-
-			}
+	case(TRIPLEANDTWO):
+		if (!contArr[2].empty()) {
 			qint8 max = contArr[2].back().second;
 
 			mySet zero;
 			zero.push(max);
-			std::queue<int> diff = (numSet[0] - zero);
+			std::queue<int> diff = (numSet[1] - zero);
 			if (diff.size() >= 1) {
-				qint8 acco = diff.front();
-				char ch[] = { max,(qint8)1,max,(qint8)1,max,(qint8)1,acco,(qint8)1,(qint8)0 };
+				qint8 acco1 = diff.front();
+				char ch[] = { max,(qint8)1,max,(qint8)1,max,(qint8)1,acco1,(qint8)1,acco1,(qint8)1,(qint8)0 };
 				QByteArray barr(ch);
 				CARDSET cs(barr);
 				RuleCardSet tmp = RuleCardSet(cs);
 				if (compSig < max) return tmp;
 				else if (!fourArr.empty()) {
 					qint8 min = fourArr.front();
-
 					char ch[] = { min,(qint8)1,min,(qint8)1,min,(qint8)1,min,(qint8)1,(qint8)0 };
 					QByteArray barr(ch);
 					CARDSET cs(barr);
 					RuleCardSet tmp = RuleCardSet(cs);
 					return tmp;
 				}
-				else if (cardLog[16] == 1 && cardLog[17] == 1) {
-					char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
-					QByteArray barr(ch);
+			}
+		}
+		if (cardLog[16] == 1 && cardLog[17] == 1) {
+			char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
+			QByteArray barr(ch);
+			CARDSET cs(barr);
+			RuleCardSet tmp = RuleCardSet(cs);
+			return tmp;
+		}
+		else return RuleCardSet();
+	case(STRAIGHT):
+		if (!contArr[0].empty()) {
+			std::pair<qint8, qint8> tmp;
+			while (!contArr[0].empty) {
+				if (contArr[0].front().second - contArr[0].back().first < originSubType - 1) {
+					contArr[0].pop();
+				}
+				else {
+					tmpArr.push(contArr[0].front());
+					contArr[0].pop();
+				}
+			}
+			if (!tmpArr.empty()) {
+				if (tmpArr.back().second > compSig) {
+					qint8 max = tmpArr.back().second;
+					QByteArray barr;
+					for (qint8 i = 0; i <= originSubType - 1; i++) {
+						barr.append(max - i);
+						barr.append((qint8)1);
+					}	
 					CARDSET cs(barr);
 					RuleCardSet tmp = RuleCardSet(cs);
 					return tmp;
 				}
-				else return RuleCardSet();
+			}
+			if (!fourArr.empty()) {
+				qint8 min = fourArr.front();
+
+				char ch[] = { min,(qint8)1,min,(qint8)1,min,(qint8)1,min,(qint8)1,(qint8)0 };
+				QByteArray barr(ch);
+				CARDSET cs(barr);
+				RuleCardSet tmp = RuleCardSet(cs);
+				return tmp;
+			}
+			else if (cardLog[16] == 1 && cardLog[17] == 1) {
+				char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
+				QByteArray barr(ch);
+				CARDSET cs(barr);
+				RuleCardSet tmp = RuleCardSet(cs);
+				return tmp;
 			}
 			else return RuleCardSet();
 		}
-		else*/ return RuleCardSet();
+		else return RuleCardSet();
+	case(CONTPAIR):
+		if (!contArr[1].empty()) {
+			std::pair<qint8, qint8> tmp;
+			while (!contArr[1].empty()) {
+				if (contArr[1].front().second - contArr[1].back().first < originSubType - 1) {
+					contArr[1].pop();
+				}
+				else {
+					tmpArr.push(contArr[1].front());
+					contArr[1].pop();
+				}
+			}
+			if (!tmpArr.empty()) {
+				if (tmpArr.back().second > compSig) {
+					qint8 max = tmpArr.back().second;
+					QByteArray barr;
+					for (qint8 i = 0; i <= originSubType - 1; i++) {
+						barr.append(max - i);
+						barr.append((qint8)1);
+						barr.append(max - i);
+						barr.append((qint8)1);
+					}
+					CARDSET cs(barr);
+					RuleCardSet tmp = RuleCardSet(cs);
+					return tmp;
+				}
+			}
+		}
+		if (!fourArr.empty()) {
+			qint8 min = fourArr.front();
+
+			char ch[] = { min,(qint8)1,min,(qint8)1,min,(qint8)1,min,(qint8)1,(qint8)0 };
+			QByteArray barr(ch);
+			CARDSET cs(barr);
+			RuleCardSet tmp = RuleCardSet(cs);
+			return tmp;
+		}
+		else if (cardLog[16] == 1 && cardLog[17] == 1) {
+			char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
+			QByteArray barr(ch);
+			CARDSET cs(barr);
+			RuleCardSet tmp = RuleCardSet(cs);
+			return tmp;
+		}
+		else return RuleCardSet();
+	case(CONTTRIPLE):
+		if (!contArr[2].empty()) {
+			std::pair<qint8, qint8> tmp;
+			while (!contArr[2].empty()) {
+				if (contArr[2].front().second - contArr[2].back().first < originSubType - 1) {
+					contArr[2].pop();
+				}
+				else {
+					tmpArr.push(contArr[2].front());
+					contArr[2].pop();
+				}
+			}
+			if (!tmpArr.empty()) {
+				if (tmpArr.back().second > compSig) {
+					qint8 max = tmpArr.back().second;
+					QByteArray barr;
+					for (qint8 i = 0; i <= originSubType - 1; i++) {
+						barr.append(max - i);
+						barr.append((qint8)1);
+						barr.append(max - i);
+						barr.append((qint8)1);
+						barr.append(max - i);
+						barr.append((qint8)1);
+					}
+					CARDSET cs(barr);
+					RuleCardSet tmp = RuleCardSet(cs);
+					return tmp;
+				}
+			}
+		}
+		if (!fourArr.empty()) {
+			qint8 min = fourArr.front();
+
+			char ch[] = { min,(qint8)1,min,(qint8)1,min,(qint8)1,min,(qint8)1,(qint8)0 };
+			QByteArray barr(ch);
+			CARDSET cs(barr);
+			RuleCardSet tmp = RuleCardSet(cs);
+			return tmp;
+		}
+		else if (cardLog[16] == 1 && cardLog[17] == 1) {
+			char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
+			QByteArray barr(ch);
+			CARDSET cs(barr);
+			RuleCardSet tmp = RuleCardSet(cs);
+			return tmp;
+		}
+		else return RuleCardSet();
+	case(CONTTRIPLEANDONE):
+		if (!contArr[2].empty()) {
+			std::pair<qint8, qint8> tmp;
+			while (!contArr[2].empty()) {
+				if (contArr[2].front().second - contArr[2].back().first < originSubType - 1) {
+					contArr[2].pop();
+				}
+				else {
+					tmpArr.push(contArr[2].front());
+					contArr[2].pop();
+				}
+			}
+			if (!tmpArr.empty()) {
+				if (tmpArr.back().second > compSig) {
+					mySet zero;
+					qint8 max = tmpArr.back().second;
+					QByteArray barr;
+					for (qint8 i = 0; i <= originSubType - 1; i++) {
+						barr.append(max - i);
+						barr.append((qint8)1);
+						barr.append(max - i);
+						barr.append((qint8)1);
+						barr.append(max - i);
+						barr.append((qint8)1);
+						zero.push(max - i);
+
+					}
+					std::queue<int> diff = (numSet[0] - zero);
+					if (diff.size() >= originSubType) {
+						for (qint8 i = 0; i <= originSubType - 1; i++) {
+							barr.append(diff.front());
+							diff.pop();
+							barr.append((qint8)1);
+						}
+						CARDSET cs(barr);
+						RuleCardSet tmp = RuleCardSet(cs);
+						return tmp;
+					}
+				}
+			}
+		}
+		if (!fourArr.empty()) {
+			qint8 min = fourArr.front();
+
+			char ch[] = { min,(qint8)1,min,(qint8)1,min,(qint8)1,min,(qint8)1,(qint8)0 };
+			QByteArray barr(ch);
+			CARDSET cs(barr);
+			RuleCardSet tmp = RuleCardSet(cs);
+			return tmp;
+		}
+		else if (cardLog[16] == 1 && cardLog[17] == 1) {
+			char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
+			QByteArray barr(ch);
+			CARDSET cs(barr);
+			RuleCardSet tmp = RuleCardSet(cs);
+			return tmp;
+		}
+		else return RuleCardSet();
+	case(CONTTRIPLEANDTWO):
+		if (!contArr[2].empty()) {
+			std::pair<qint8, qint8> tmp;
+			while (!contArr[2].empty()) {
+				if (contArr[2].front().second - contArr[2].back().first < originSubType - 1) {
+					contArr[2].pop();
+				}
+				else {
+					tmpArr.push(contArr[2].front());
+					contArr[2].pop();
+				}
+			}
+			if (!tmpArr.empty()) {
+				if (tmpArr.back().second > compSig) {
+					mySet zero;
+					qint8 max = tmpArr.back().second;
+					QByteArray barr;
+					for (qint8 i = 0; i <= originSubType - 1; i++) {
+						barr.append(max - i);
+						barr.append((qint8)1);
+						barr.append(max - i);
+						barr.append((qint8)1);
+						barr.append(max - i);
+						barr.append((qint8)1);
+						zero.push(max - i);
+
+					}
+					std::queue<int> diff = (numSet[1] - zero);
+					if (diff.size() >= originSubType) {
+						for (qint8 i = 0; i <= originSubType - 1; i++) {
+							barr.append(diff.front());
+							barr.append((qint8)1);
+							barr.append(diff.front());
+							barr.append((qint8)1);
+							diff.pop();
+						}
+						CARDSET cs(barr);
+						RuleCardSet tmp = RuleCardSet(cs);
+						return tmp;
+					}
+				}
+			}
+		}
+		if (!fourArr.empty()) {
+			qint8 min = fourArr.front();
+
+			char ch[] = { min,(qint8)1,min,(qint8)1,min,(qint8)1,min,(qint8)1,(qint8)0 };
+			QByteArray barr(ch);
+			CARDSET cs(barr);
+			RuleCardSet tmp = RuleCardSet(cs);
+			return tmp;
+		}
+		else if (cardLog[16] == 1 && cardLog[17] == 1) {
+			char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
+			QByteArray barr(ch);
+			CARDSET cs(barr);
+			RuleCardSet tmp = RuleCardSet(cs);
+			return tmp;
+		}
+		else return RuleCardSet();
+	case(BOMB):
+		if (!fourArr.empty()) {
+			qint8 min;
+			while ((min = fourArr.front()) <= compSig / 20){
+				fourArr.pop();
+				if (fourArr.empty()) break;
+			}
+			if (!fourArr.empty()) {
+				char ch[] = { min,(qint8)1,min,(qint8)1,min,(qint8)1,min,(qint8)1,(qint8)0 };
+				QByteArray barr(ch);
+				CARDSET cs(barr);
+				RuleCardSet tmp = RuleCardSet(cs);
+				return tmp;
+			}
+		}
+		if (cardLog[16] == 1 && cardLog[17] == 1) {
+			char ch[] = { (qint8)16,(qint8)1,(qint8)17,(qint8)1,(qint8)0 };
+			QByteArray barr(ch);
+			CARDSET cs(barr);
+			RuleCardSet tmp = RuleCardSet(cs);
+			return tmp;
+		}
+		else return RuleCardSet();
 	default:
 		return RuleCardSet();
 	}
