@@ -121,6 +121,9 @@ void Player::modelCommandSlot(std::shared_ptr<Signal> signal) {
 	else if (*status % 3 == 0 && signal->signalType == CONT) {
 		emit modelCommandSignal(signal);
 	}
+	else if (*status % 3 == 0 && signal->signalType == DISCONNECT) {
+		emit modelCommandSignal(signal);
+	}
 }
 
 void Player::modelNotificationSlot(std::shared_ptr<Signal> signal) {
