@@ -41,7 +41,9 @@ void Server::disconnectionSlot(void)
 		{
 			if (rooms.at(roomNum)->checkConnect(index) &&
 				rooms.at(roomNum)->getSocket(index)->state() == QAbstractSocket::UnconnectedState)
+			{
 				rooms.at(roomNum)->disconnectSocket(index);
+			}
 		}
 	}
 	
