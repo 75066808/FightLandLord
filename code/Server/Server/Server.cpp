@@ -1,22 +1,33 @@
 #include "Server.h"
 
-Server::Server(QWidget *parent) : QMainWindow(parent), tcpServer(this)
+Server::Server(QWidget *parent) : QMainWindow(parent), tcpServer(this), logFile("Log/log.txt")
 {
 	ui.setupUi(this);
 	connect(&tcpServer, SIGNAL(newConnection()), this, SLOT(connectionSlot()));
 	tcpServer.listen(QHostAddress::Any, PORT_NUM);
 }
 
+Server::~Server()
+{
+	
+}
 
 void Server::connectionSlot(void)
 {
 	qint32 roomNum;
 	std::shared_ptr<QTcpSocket> socket = std::shared_ptr<QTcpSocket>(tcpServer.nextPendingConnection());
 
+	logFile.open(QIODevice::Append | QIODevice::Text);
+
 	for (roomNum = 0;roomNum < rooms.size();roomNum++)
 	{
-		if (rooms.at(roomNum)->connectSocket(socket)) // has unfull room
+		if (rooms.at(roomNum)->connectSocket(socket, roomNum, logFile)) // has unfull room
 		{
+		
+			for (qint32 i = 0;i < rooms.size();i++)
+				rooms.at(i)->printRoomState(i, logFile);
+			logFile.write(QString("\n").toUtf8());
+			
 			connect(&*socket, SIGNAL(readyRead()), this, SLOT(serverNotificationSlot()));
 			connect(&*socket, SIGNAL(disconnected()), this, SLOT(disconnectionSlot()));
 			break;
@@ -26,27 +37,43 @@ void Server::connectionSlot(void)
 	if (roomNum == rooms.size()) // no unfull room
 	{
 		rooms.push_back(std::make_shared<GameRoom>());
-		rooms.at(roomNum)->connectSocket(socket);
+		rooms.at(roomNum)->connectSocket(socket, roomNum, logFile);
+
+		for (qint32 i = 0;i < rooms.size();i++)
+			rooms.at(i)->printRoomState(i, logFile);
+		logFile.write(QString("\n").toUtf8());
+
 		connect(&*socket, SIGNAL(readyRead()), this, SLOT(serverNotificationSlot()));
 		connect(&*socket, SIGNAL(disconnected()), this, SLOT(disconnectionSlot()));
 	}
+
+	logFile.close();
 
 }
 
 void Server::disconnectionSlot(void)
 {
+	logFile.open(QIODevice::Append | QIODevice::Text);
+
 	for (qint32 roomNum = 0;roomNum < rooms.size(); roomNum++) // for each room
 	{
 		for (qint32 index = 0;index < 3;index++) // check unconnected
 		{
 			if (rooms.at(roomNum)->checkConnect(index) &&
 				rooms.at(roomNum)->getSocket(index)->state() == QAbstractSocket::UnconnectedState)
-			{
-				rooms.at(roomNum)->disconnectSocket(index);
+			{			
+				rooms.at(roomNum)->disconnectSocket(index, roomNum, logFile);
+
+				for (qint32 i = 0;i < rooms.size();i++)
+					rooms.at(i)->printRoomState(i, logFile);
+
+				logFile.write(QString("\n").toUtf8());
 			}
 		}
 	}
 	
+	logFile.close();
+
 }
 
 void Server::serverNotificationSlot(void)

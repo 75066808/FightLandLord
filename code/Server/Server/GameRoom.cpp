@@ -26,14 +26,19 @@ GameRoom::~GameRoom()
 }
 
 
-bool GameRoom::connectSocket(std::shared_ptr<QTcpSocket> &tcpSocket)
+bool GameRoom::connectSocket(std::shared_ptr<QTcpSocket> &tcpSocket, qint32 roomNum, QFile &logFile)
 {
 	QByteArray data;
 
 	for (qint32 i = 0;i < 3;i++)
 	{
 		if (playerState[i] == 0) // find empty connect slot
-		{
+		{		
+			logFile.write(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss ").toUtf8());
+			logFile.write(QString("Connect ").toUtf8());
+			logFile.write((QString("Room-") + QString::number(roomNum)).toUtf8());
+			logFile.write((QString(" Index-") + QString::number(i) + QString("\n")).toUtf8());
+
 			tcpClient[i] = tcpSocket;
 			playerState[i] = 1;
 			data[0] = CONNECT_SUCCESS;
@@ -46,7 +51,7 @@ bool GameRoom::connectSocket(std::shared_ptr<QTcpSocket> &tcpSocket)
 }
 
 
-void GameRoom::disconnectSocket(qint8 index)
+void GameRoom::disconnectSocket(qint8 index, qint32 roomNum, QFile &logFile)
 {
 	QByteArray data;
 
@@ -70,6 +75,10 @@ void GameRoom::disconnectSocket(qint8 index)
 			playerState[i] = 1;
 	}
 
+	logFile.write(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss ").toUtf8());
+	logFile.write(QString("Dsisonnect ").toUtf8());
+	logFile.write((QString("Room-") + QString::number(roomNum)).toUtf8());
+	logFile.write((QString(" Index-") + QString::number(index) + QString("\n")).toUtf8());
 
 	skipPlayNum = 0;
 	skipLandLordNum = 0;
@@ -411,4 +420,18 @@ void GameRoom::chooseTimeOut(void)
 		counter--;
 		chooseTimer->start(TIME_COUNT);
 	}
+}
+
+void GameRoom::printRoomState(qint32 roomNum, QFile &logFile)
+{
+	logFile.write((QString("Room ") + QString::number(roomNum) + QString(": ")).toUtf8());
+	for (qint32 i = 0;i < 3;i++)
+	{
+		if (playerState[i] == 0)
+			logFile.write((QString::number(i) + QString("-") + QString("Disconnected ")).toUtf8());
+		else
+			logFile.write((QString::number(i) + QString("-") + QString("Connected ")).toUtf8());
+	}
+
+	logFile.write(QString("\n").toUtf8());
 }

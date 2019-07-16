@@ -15,12 +15,13 @@ class Server : public QMainWindow
 
 public:
 	Server(QWidget *parent = Q_NULLPTR);
+	~Server();
 private:
 	Ui::ServerClass ui;
 
 	QTcpServer tcpServer;
 	QVector<std::shared_ptr<GameRoom>> rooms;
-
+	QFile logFile;
 
 private slots:
 	void connectionSlot(void);
