@@ -2,6 +2,8 @@
 #include <QtNetwork/QTcpSocket>
 #include <QThread>
 #include <QTimer>  
+#include <QFile>
+#include <QTime>
 #include "common.h"
 
 #define TIME_TURN 15
@@ -16,8 +18,8 @@ public:
 	GameRoom();
 	~GameRoom();
 
-	bool connectSocket(std::shared_ptr<QTcpSocket>& tcpSocket);
-	void disconnectSocket(qint8 index);
+	bool connectSocket(std::shared_ptr<QTcpSocket>& tcpSocket, qint32 roomNum, QFile &logFile);
+	void disconnectSocket(qint8 index, qint32 roomNum, QFile &logFile);
 
 	bool checkConnect(qint8 index);
 	std::shared_ptr<QTcpSocket> getSocket(qint8 index);
@@ -34,6 +36,7 @@ public:
 	void dealCard(void);
 	void broadCastData(qint8 sender, QByteArray& data);
 	
+	void printRoomState(qint32 roomNum, QFile &logFile);
 
 private:
 	std::shared_ptr<QTcpSocket> tcpClient[3];  // client
