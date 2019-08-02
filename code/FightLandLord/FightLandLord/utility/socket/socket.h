@@ -2,7 +2,8 @@
 #include <QtNetwork>
 #include "../utility/common/common.h"
 
-#define IP_NUM "117.78.3.84"
+//#define IP_NUM "117.78.3.84"
+#define IP_NUM "127.0.0.1"
 #define PORT_NUM 6000
 
 class Socket : public QObject {
