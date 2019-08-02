@@ -72,13 +72,19 @@ window类对整个场景及所属物体、按钮进行初始化，载入背景�
 
 ## 1.     界面设计图
 
- ![](./UI_sketch.png)
+ ![](picture/UI_sketch.png)
 
 ## 2.     类图
 
-![](./classDiagram.png)
+![](picture/classDiagram.png)
 
 # 四、运行效果图
+
+   ![](picture/screenshots1.png)
+
+   ![](picture/screenshots2.png)
+
+   ![](picture/screenshots3.png)
 
 # 五、心得体会
 
